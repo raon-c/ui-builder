@@ -6,14 +6,10 @@
 ## 🏃 Active Tasks
 
 ### 🎯 현재 진행 중
-- [ ] **컴포넌트 카탈로그 UI** (복잡도 4)
-  - 카테고리별 컴포넌트 목록 표시 UI 구현
-  - 검색 및 필터링 기능
-  - 드래그 가능한 컴포넌트 팔레트
-  - 컴포넌트 미리보기 및 설명 표시
+_현재 진행할 작업이 없습니다. 아래 Completed Tasks에서 완료된 작업을 확인하거나 Sprint 2 백로그에서 다음 작업을 선택하세요._
 
 ### 🔨 Next Up
-- [ ] **ComponentRegistry 확장** (복잡도 3)
+_Sprint 2 작업 완료 후 Sprint 3 계획 수립_
 
 ## 🚧 Blockers
 - 없음
@@ -34,8 +30,8 @@
 ## 📊 Progress
 
 ### Sprint 2 Status
-- **Story Points**: 5/32 completed (15.6%)
-- **User Stories**: 0/3 completed (0%)
+- **Story Points**: 12/32 completed (37.5%)
+- **User Stories**: 1/3 completed (33.3%)
 - **Current Sprint**: 🟡 SPRINT 2 IN PROGRESS
 
 ### Sprint 1 - Completed ✅
@@ -45,6 +41,8 @@
 ### Completed Tasks (Sprint 2)
 - [x] **shadcn/ui 기본 컴포넌트 설치** (복잡도 2) - Input, Card, Select, Checkbox, Switch, Badge, Avatar 설치 및 테스트 (96cf61f)
 - [x] **shadcn/ui 어댑터 스키마 확장** (복잡도 3) - 7개 컴포넌트 Zod 스키마, 필드 메타데이터, 컴포넌트 래퍼 구현 (8c80cf8)
+- [x] **컴포넌트 카탈로그 UI** (복잡도 4) - 검색, 필터링, 그리드/리스트 뷰, 실시간 미리보기, 반응형 디자인 구현 (b83bcbd)
+- [x] **ComponentRegistry 확장** (복잡도 3) - 이벤트 시스템, 벌크 작업, 컴포넌트 검증, 의존성 관리, 성능 최적화 기능 구현
 
 ### Completed Tasks (Sprint 1)
 - [x] **필수 패키지 설치** (30분) - Zustand, @dnd-kit, Zod, Lucide React 등 핵심 패키지 설치

@@ -169,6 +169,242 @@ export default function Home() {
           </div>
         </div>
 
+        {/* AIDEV-NOTE: 확장된 ComponentRegistry 테스트 섹션 - Sprint 2 */}
+        <div className="flex flex-col gap-4 p-6 border rounded-lg bg-card">
+          <h2 className="text-lg font-semibold mb-2">
+            Enhanced Registry Test (Sprint 2)
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            확장된 ComponentRegistry의 이벤트 시스템, 검증, 통계 기능을
+            테스트합니다.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* 레지스트리 통계 */}
+            <div className="space-y-2">
+              <h3 className="font-medium">Registry Statistics</h3>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  try {
+                    const { getComponentRegistry } = await import(
+                      "@/lib/component-registry"
+                    );
+                    const registry = getComponentRegistry();
+
+                    if ("getStats" in registry) {
+                      const stats = (registry as any).getStats();
+                      console.log("📊 Registry Stats:", stats);
+                      alert(
+                        `통계 정보:\n총 컴포넌트: ${stats.totalComponents}\n카테고리별: ${JSON.stringify(stats.componentsByCategory, null, 2)}`,
+                      );
+                    } else {
+                      alert("Enhanced registry features not available");
+                    }
+                  } catch (error) {
+                    console.error("Stats check failed:", error);
+                    alert("통계 조회 실패!");
+                  }
+                }}
+              >
+                통계 조회
+              </Button>
+            </div>
+
+            {/* 이벤트 리스너 테스트 */}
+            <div className="space-y-2">
+              <h3 className="font-medium">Event System</h3>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  try {
+                    const { getComponentRegistry } = await import(
+                      "@/lib/component-registry"
+                    );
+                    const registry = getComponentRegistry();
+
+                    if ("addEventListener" in registry) {
+                      // 이벤트 리스너 추가
+                      const listener = (event: any) => {
+                        console.log("🎉 Registry Event:", event);
+                        alert(
+                          `이벤트 발생: ${event.type}\n컴포넌트: ${event.component?.type || "N/A"}`,
+                        );
+                      };
+
+                      (registry as any).addEventListener(
+                        "component-registered",
+                        listener,
+                      );
+
+                      // 테스트용 컴포넌트 등록
+                      const testWrapper = {
+                        type: "TestComponent",
+                        component: () => null,
+                        metadata: {
+                          type: "TestComponent",
+                          displayName: "테스트 컴포넌트",
+                          description: "이벤트 테스트용 컴포넌트",
+                          category: "Basic",
+                          icon: "Package",
+                          defaultProps: {},
+                          canHaveChildren: false,
+                          draggable: true,
+                          deletable: true,
+                        },
+                        propsSchema: {
+                          type: "TestComponent",
+                          schema: null,
+                          fields: [],
+                        },
+                      };
+
+                      registry.register(testWrapper as any);
+
+                      // 리스너 제거
+                      setTimeout(() => {
+                        (registry as any).removeEventListener(
+                          "component-registered",
+                          listener,
+                        );
+                        registry.unregister("TestComponent" as any);
+                      }, 2000);
+                    } else {
+                      alert("Enhanced registry features not available");
+                    }
+                  } catch (error) {
+                    console.error("Event test failed:", error);
+                    alert("이벤트 테스트 실패!");
+                  }
+                }}
+              >
+                이벤트 테스트
+              </Button>
+            </div>
+
+            {/* 벌크 작업 테스트 */}
+            <div className="space-y-2">
+              <h3 className="font-medium">Bulk Operations</h3>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  try {
+                    const { getComponentRegistry } = await import(
+                      "@/lib/component-registry"
+                    );
+                    const registry = getComponentRegistry();
+
+                    if ("registerMany" in registry) {
+                      const beforeCount = registry.getAll().length;
+
+                      // 여러 테스트 컴포넌트 생성
+                      const testWrappers = ["Test1", "Test2", "Test3"].map(
+                        (name) => ({
+                          type: name,
+                          component: () => null,
+                          metadata: {
+                            type: name,
+                            displayName: `${name} 컴포넌트`,
+                            description: `벌크 테스트용 ${name}`,
+                            category: "Basic",
+                            icon: "Package",
+                            defaultProps: {},
+                            canHaveChildren: false,
+                            draggable: true,
+                            deletable: true,
+                          },
+                          propsSchema: {
+                            type: name,
+                            schema: null,
+                            fields: [],
+                          },
+                        }),
+                      );
+
+                      // 벌크 등록
+                      (registry as any).registerMany(testWrappers);
+
+                      const afterCount = registry.getAll().length;
+                      alert(
+                        `벌크 등록 완료!\n이전: ${beforeCount}개 → 이후: ${afterCount}개`,
+                      );
+
+                      // 벌크 제거
+                      setTimeout(() => {
+                        (registry as any).unregisterMany([
+                          "Test1",
+                          "Test2",
+                          "Test3",
+                        ]);
+                        const finalCount = registry.getAll().length;
+                        console.log(
+                          `Bulk unregister completed. Final count: ${finalCount}`,
+                        );
+                      }, 3000);
+                    } else {
+                      alert("Enhanced registry features not available");
+                    }
+                  } catch (error) {
+                    console.error("Bulk test failed:", error);
+                    alert("벌크 작업 테스트 실패!");
+                  }
+                }}
+              >
+                벌크 작업 테스트
+              </Button>
+            </div>
+
+            {/* 검증 기능 테스트 */}
+            <div className="space-y-2">
+              <h3 className="font-medium">Validation</h3>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  try {
+                    const { getComponentRegistry } = await import(
+                      "@/lib/component-registry"
+                    );
+                    const registry = getComponentRegistry();
+
+                    if ("validateComponent" in registry) {
+                      // 잘못된 컴포넌트 검증
+                      const invalidWrapper = {
+                        type: "", // 빈 타입
+                        component: null, // null 컴포넌트
+                        metadata: null, // null 메타데이터
+                        propsSchema: null,
+                      };
+
+                      const result = (registry as any).validateComponent(
+                        invalidWrapper,
+                      );
+                      console.log("🔍 Validation Result:", result);
+
+                      alert(
+                        `검증 결과:\n유효성: ${result.isValid}\n에러: ${result.errors.length}개\n경고: ${result.warnings.length}개\n\n상세:\n${result.errors.join("\n")}`,
+                      );
+                    } else {
+                      alert("Enhanced registry features not available");
+                    }
+                  } catch (error) {
+                    console.error("Validation test failed:", error);
+                    alert("검증 테스트 실패!");
+                  }
+                }}
+              >
+                검증 테스트
+              </Button>
+            </div>
+          </div>
+
+          <div className="mt-4 p-3 bg-muted/50 rounded-md">
+            <p className="text-xs text-muted-foreground">
+              💡 확장된 기능: 이벤트 시스템, 벌크 작업, 컴포넌트 검증, 성능
+              최적화된 카테고리 조회, 통계 정보
+            </p>
+          </div>
+        </div>
+
         {/* AIDEV-NOTE: 새로운 shadcn/ui 컴포넌트 테스트 섹션 - Sprint 2 */}
         <div className="flex flex-col gap-6 p-6 border rounded-lg bg-card">
           <h2 className="text-lg font-semibold mb-2">
