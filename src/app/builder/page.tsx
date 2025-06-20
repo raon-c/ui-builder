@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DraggableComponent } from "@/components/builder/DraggableComponent";
 import { DroppableCanvasNode } from "@/components/builder/DroppableCanvasNode";
+import { PreviewModal } from "@/components/builder/PreviewModal";
 import {
   PropertyEditor,
   PropertyEditorEmpty,
@@ -130,6 +131,7 @@ export default function BuilderPage() {
   const [activeTab, setActiveTab] = useState<"structure" | "properties">(
     "structure",
   );
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const {
     currentScreen,
@@ -337,7 +339,11 @@ export default function BuilderPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsPreviewOpen(true)}
+            >
               미리보기
             </Button>
             <Button size="sm">저장</Button>
@@ -541,6 +547,13 @@ export default function BuilderPage() {
             </div>
           ) : null}
         </DragOverlay>
+
+        {/* 미리보기 모달 */}
+        <PreviewModal
+          screen={currentScreen}
+          isOpen={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+        />
       </div>
     </DndContext>
   );

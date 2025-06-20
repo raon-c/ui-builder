@@ -35,8 +35,8 @@ _Sprint 2 작업 완료 후 Sprint 3 계획 수립_
 - **Current Sprint**: 🟢 SPRINT 2 COMPLETED
 
 ### Sprint 3 Status
-- **Story Points**: 19/30 completed (63.3%)
-- **User Stories**: 2/3 completed (66.7%)
+- **Story Points**: 26/30 completed (86.7%)
+- **User Stories**: 3/3 completed (100%)
 - **Current Sprint**: 🟡 SPRINT 3 IN PROGRESS
 
 ### Sprint 1 - Completed ✅
@@ -47,6 +47,7 @@ _Sprint 2 작업 완료 후 Sprint 3 계획 수립_
 - [x] **빌더 레이아웃 구현** (복잡도 5) - 4-패널 레이아웃, react-resizable-panels, 프로젝트 라우팅, 컴포넌트 팔레트, 구조 트리 기본 구현
 - [x] **드래그 앤 드롭 기능 구현** (복잡도 6) - @dnd-kit 통합, 팔레트→캔버스 드래그, 캔버스 내 재배치, 시각적 피드백, 빌더 스토어 상태 관리
 - [x] **속성 편집기 구현** (복잡도 8) - 동적 폼 생성, 실시간 속성 편집, Structure/Property 탭 전환, 컴포넌트별 속성 정의, 자동 탭 전환
+- [x] **실시간 미리보기 구현** (복잡도 7) - 전체 화면 미리보기 모달, 반응형 디바이스 시뮬레이션, 편집 UI 제거된 순수 렌더링, 데스크톱/태블릿/모바일 뷰
 
 ### Completed Tasks (Sprint 2)
 - [x] **shadcn/ui 기본 컴포넌트 설치** (복잡도 2) - Input, Card, Select, Checkbox, Switch, Badge, Avatar 설치 및 테스트 (96cf61f)
