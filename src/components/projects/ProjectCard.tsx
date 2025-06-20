@@ -5,7 +5,14 @@
 
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
-import { Edit, ExternalLink, MoreVertical, Trash2 } from "lucide-react";
+import {
+  Edit,
+  ExternalLink,
+  MoreVertical,
+  Palette,
+  Trash2,
+} from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,7 +58,8 @@ export function ProjectCard({
 
   const handleCardClick = () => {
     if (!isMenuOpen) {
-      onOpen?.(project);
+      // 빌더로 직접 이동
+      window.location.href = `/builder/${project.id}`;
     }
   };
 
@@ -87,6 +95,18 @@ export function ProjectCard({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`/builder/${project.id}`}
+                  onClick={(e: React.MouseEvent) => {
+                    e.stopPropagation();
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <Palette className="mr-2 h-4 w-4" />
+                  빌더에서 편집
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={(e: React.MouseEvent) => {
                   e.stopPropagation();

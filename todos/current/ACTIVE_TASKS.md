@@ -6,7 +6,7 @@
 ## 🏃 Active Tasks
 
 ### 🎯 현재 진행 중
-_현재 진행할 작업이 없습니다. 아래 Completed Tasks에서 완료된 작업을 확인하거나 Sprint 2 백로그에서 다음 작업을 선택하세요._
+_현재 진행할 작업이 없습니다. 아래 Completed Tasks에서 완료된 작업을 확인하거나 다음 Sprint 작업을 선택하세요._
 
 ### 🔨 Next Up
 _Sprint 2 작업 완료 후 Sprint 3 계획 수립_
@@ -29,14 +29,22 @@ _Sprint 2 작업 완료 후 Sprint 3 계획 수립_
 
 ## 📊 Progress
 
-### Sprint 2 Status
-- **Story Points**: 12/32 completed (37.5%)
-- **User Stories**: 1/3 completed (33.3%)
-- **Current Sprint**: 🟡 SPRINT 2 IN PROGRESS
+### Sprint 2 Status ✅
+- **Story Points**: 32/32 completed (100% ✅ COMPLETED!)
+- **User Stories**: 3/3 completed (100%)
+- **Current Sprint**: 🟢 SPRINT 2 COMPLETED
+
+### Sprint 3 Status
+- **Story Points**: 5/30 completed (16.7%)
+- **User Stories**: 0/3 completed (0%)
+- **Current Sprint**: 🟡 SPRINT 3 IN PROGRESS
 
 ### Sprint 1 - Completed ✅
 - **Story Points**: 26/26 completed (100% ✅ COMPLETED!)
 - **User Stories**: 4/4 completed (100%)
+
+### Completed Tasks (Sprint 3)
+- [x] **빌더 레이아웃 구현** (복잡도 5) - 4-패널 레이아웃, react-resizable-panels, 프로젝트 라우팅, 컴포넌트 팔레트, 구조 트리 기본 구현
 
 ### Completed Tasks (Sprint 2)
 - [x] **shadcn/ui 기본 컴포넌트 설치** (복잡도 2) - Input, Card, Select, Checkbox, Switch, Badge, Avatar 설치 및 테스트 (96cf61f)

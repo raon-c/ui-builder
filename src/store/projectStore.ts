@@ -78,14 +78,49 @@ export const useProjectStore = create<ProjectState>()(
           screens: [
             {
               id: generateScreenId(),
-              name: "홈",
-              order: 0,
+              name: "메인 화면",
+              order: 1,
               viewport: "desktop",
+              background: "#ffffff",
               content: {
                 id: generateNodeId(),
                 type: "Container",
-                props: {},
-                children: [],
+                props: {
+                  padding: "lg",
+                  className: "min-h-screen bg-background",
+                },
+                children: [
+                  {
+                    id: generateNodeId(),
+                    type: "Heading",
+                    props: {
+                      level: 1,
+                      text: "환영합니다!",
+                      className: "text-center mb-4",
+                    },
+                    children: [],
+                  },
+                  {
+                    id: generateNodeId(),
+                    type: "Text",
+                    props: {
+                      text: "이곳에 컴포넌트를 드래그 앤 드롭하여 화면을 구성하세요.",
+                      className: "text-center text-muted-foreground mb-6",
+                    },
+                    children: [],
+                  },
+                  {
+                    id: generateNodeId(),
+                    type: "Button",
+                    props: {
+                      text: "시작하기",
+                      variant: "default",
+                      size: "lg",
+                      className: "mx-auto block",
+                    },
+                    children: [],
+                  },
+                ],
               },
             },
           ],
