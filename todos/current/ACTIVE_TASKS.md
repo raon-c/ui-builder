@@ -21,12 +21,18 @@
   ```
 
 ### 🔨 Next Up
-- [ ] **기본 타입 정의** (2시간)
-  - `/src/types/project.ts` 작성
-  - ARCHITECTURE.md 5.2절 참고
+- [ ] **기본 타입 정의** (복잡도 7)
+  - [ ] **Project 관련 타입 정의** (복잡도 3)
+    - `Project`, `ProjectSettings`, `PublishingInfo`
+  - [ ] **Screen & Canvas 타입 정의** (복잡도 3)
+    - `Screen`, `Canvas`, `Viewport`, `ElementNode`
+  - [ ] **Component 시스템 타입** (복잡도 2)
+    - `ComponentMetadata`, `ComponentProps`, `StyleVariant`
+  
 - [ ] **유틸리티 함수** (30분)
   - `/src/lib/utils.ts` - cn 함수
   - `/src/lib/nanoid.ts` - ID 생성
+  
 - [ ] **Button 컴포넌트 테스트** (30분)
   ```bash
   pnpm dlx shadcn@latest add button
