@@ -91,11 +91,13 @@ export default function Home() {
             </div>
             <div className="flex justify-between">
               <span className="font-medium">등록된 컴포넌트:</span>
-              <span>1개 (Button)</span>
+              <span>
+                7개 (Button, Input, Badge, Checkbox, Switch, Avatar, Label)
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="font-medium">카테고리:</span>
-              <span>Basic</span>
+              <span>Basic, Form, DataDisplay</span>
             </div>
           </div>
 

@@ -33,6 +33,7 @@ export type BuilderComponentType =
   | "Switch"
   | "NumberInput"
   | "DatePicker"
+  | "Label"
   // Data Display
   | "Table"
   | "Tag"
