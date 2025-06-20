@@ -6,13 +6,13 @@
 ## 🏃 Active Tasks
 - [x] **Project 관련 타입 정의** (복잡도 3)
   - `Project`, `ProjectSettings`, `PublishingInfo`
+- [x] **Component 시스템 타입** (복잡도 2)
+  - `ComponentMetadata`, `ComponentProps`, `StyleVariant`
 
 ### 🔨 Next Up
 - [ ] **기본 타입 정의** (복잡도 7)
   - [ ] **Screen & Canvas 타입 정의** (복잡도 3)
     - `Screen`, `Canvas`, `Viewport`, `ElementNode`
-  - [ ] **Component 시스템 타입** (복잡도 2)
-    - `ComponentMetadata`, `ComponentProps`, `StyleVariant`
   
 - [ ] **유틸리티 함수** (30분)
   - `/src/lib/utils.ts` - cn 함수
