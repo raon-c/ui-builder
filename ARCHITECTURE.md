@@ -91,20 +91,86 @@ flowchart LR
 /src
 ├── /app                 # Next.js App Router (라우팅)
 ├── /components          # 1. 빌더의 UI를 구성하는 전역 컴포넌트
-│   └── /ui              #    - shadcn/ui 기반 컴포넌트
+│   ├── /shadcn              #    - shadcn/ui 기반 컴포넌트 (기본)
+│   │   ├── button.tsx   #      - shadcn/ui CLI로 생성된 Button 컴포넌트
+│   │   ├── input.tsx    #      - shadcn/ui CLI로 생성된 Input 컴포넌트
+│   │   └── ...          #      - 기타 shadcn/ui 컴포넌트들\
+│   └── /company-ds      #    - 회사 자체 디자인 시스템 컴포넌트들 (예시)
+│       ├── button.tsx   #      - 회사 Button 컴포넌트
+│       ├── input.tsx    #      - 회사 Input 컴포넌트
+│       └── ...          #      - 기타 회사 컴포넌트들
 ├── /features            # 2. 도메인/기능별 로직
 │   ├── /builder         #    - 빌더 코어 로직 (캔버스, 속성편집기 등)
 │   └── /projects        #    - 프로젝트 대시보드
 ├── /adapters            # 3. 디자인 시스템 어댑터
 │   ├── /shadcn          #    - shadcn/ui 어댑터 (기본)
 │   │   ├── components.ts  #      - 컴포넌트 등록 및 매핑
-│   │   └── schema.ts      #      - 속성 편집 스키마 정의
-│   └── /mui             #    - Material-UI 어댑터 (POC) 
+│   │   ├── schema.ts      #      - 속성 편집 스키마 정의
+│   │   └── index.ts       #      - 어댑터 엔트리포인트
+│   ├── /mui             #    - Material-UI 어댑터 (POC) 
+│   │   ├── components.ts  #      - 컴포넌트 등록 및 매핑
+│   │   ├── schema.ts      #      - 속성 편집 스키마 정의
+│   │   └── index.ts       #      - 어댑터 엔트리포인트
+│   └── /company-ds      #    - 회사 디자인 시스템 어댑터 (예시)
 │       ├── components.ts  #      - 컴포넌트 등록 및 매핑
-│       └── schema.ts      #      - 속성 편집 스키마 정의
+│       ├── schema.ts      #      - 속성 편집 스키마 정의
+│       └── index.ts       #      - 어댑터 엔트리포인트
 ├── /lib                 # 전역 유틸리티 함수
 ├── /store               # Zustand 스토어 (상태 관리)
 └── /types               # 전역 타입 정의
+```
+
+#### 실제 디자인 라이브러리 컴포넌트 위치
+
+| 라이브러리 | 컴포넌트 위치 | 설치 방법 |
+| :--- | :--- | :--- |
+| **shadcn/ui** | `/src/components/ui/` | `npx shadcn-ui@latest add button input` 등으로 개별 컴포넌트 설치 |
+| **Material-UI** | `node_modules/@mui/material/` | `npm install @mui/material @emotion/react @emotion/styled` |
+| **회사 디자인 시스템** | `/src/components/company-ds/` | 사내 CLI 도구 또는 수동 복사 |
+| **Ant Design** | `node_modules/antd/` | `npm install antd` |
+
+#### 어댑터에서 실제 컴포넌트 매핑 예시
+
+```typescript
+// /src/adapters/shadcn/components.ts
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card } from '@/components/ui/card'
+
+export const shadcnComponentRegistry = {
+  Button: Button,
+  Input: Input,
+  Card: Card,
+  // 빌더에서 사용할 추상 타입 → 실제 shadcn/ui 컴포넌트 매핑
+}
+```
+
+```typescript
+// /src/adapters/mui/components.ts
+import { Button } from '@mui/material'
+import { TextField } from '@mui/material'
+import { Paper } from '@mui/material'
+
+export const muiComponentRegistry = {
+  Button: Button,
+  Input: TextField,    // MUI에서는 TextField가 Input 역할
+  Card: Paper,         // MUI에서는 Paper가 Card 역할
+  // 빌더에서 사용할 추상 타입 → 실제 MUI 컴포넌트 매핑
+}
+```
+
+```typescript
+// /src/adapters/company-ds/components.ts
+import { Button } from '@/components/company-ds/button'
+import { Input } from '@/components/company-ds/input'
+import { Card } from '@/components/company-ds/card'
+
+export const companyDsComponentRegistry = {
+  Button: Button,
+  Input: Input,
+  Card: Card,
+  // 빌더에서 사용할 추상 타입 → 실제 회사 DS 컴포넌트 매핑
+}
 ```
 
 ### 3.3. 스토리지 추상화 (Storage Abstraction)
@@ -191,6 +257,8 @@ export type ButtonPropsSchema = z.infer<typeof buttonSchema>;
 | 8 | **다른 어댑터** | `/adapters/mui/...` | 동일한 schema & 매핑을 추가해 라이브러리 전환 시 호환성 확보 |
 
 > 💡 **의존성 규칙**: 빌더 코어는 `ComponentRegistry` 인터페이스만 알며, 실제 React 컴포넌트와 스타일은 어댑터에서 주입됩니다. 따라서 새로운 컴포넌트를 추가해도 **코어 로직(캔버스·속성 UI)** 수정은 원칙적으로 필요하지 않습니다.
+
+> **💡 핵심**: 어댑터는 **실제 디자인 라이브러리 컴포넌트를 import**하여 빌더의 추상 타입과 매핑합니다. 이를 통해 동일한 빌더 데이터(`type: 'Button'`)가 선택된 어댑터에 따라 shadcn Button 또는 MUI Button으로 렌더링됩니다.
 
 ---
 
