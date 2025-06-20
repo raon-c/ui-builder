@@ -82,12 +82,14 @@ export function DroppableCanvasNode({
       case "Container":
         return (
           <div
-            className={`p-4 border-2 border-dashed border-gray-300 min-h-[100px] ${node.props.className || ""}`}
+            className={`border-2 border-dashed border-gray-300 ${
+              node.children.length === 0 ? "min-h-[60px] p-3" : "p-2"
+            } ${node.props.className || ""}`}
           >
-            <div className="text-xs text-gray-500 mb-2">📦 Container</div>
+            <div className="text-xs text-gray-500 mb-1">📦 Container</div>
             {node.children.length === 0 && (
-              <div className="text-center text-gray-400 text-sm">
-                컴포넌트를 여기에 드롭하세요
+              <div className="text-center text-gray-400 text-xs">
+                컴포넌트를 드롭하세요
               </div>
             )}
           </div>
@@ -139,12 +141,119 @@ export function DroppableCanvasNode({
       case "Card":
         return (
           <div
-            className={`border rounded-lg p-4 ${node.props.className || ""}`}
+            className={`border rounded-lg shadow-sm ${
+              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
+            } ${node.props.className || ""}`}
           >
-            <div className="text-xs text-gray-500 mb-2">🃏 Card</div>
+            <div className="text-xs text-gray-500 mb-1">🃏 Card</div>
             {node.children.length === 0 && (
-              <div className="text-center text-gray-400 text-sm">
-                컴포넌트를 여기에 드롭하세요
+              <div className="text-center text-gray-400 text-xs">
+                컴포넌트를 드롭하세요
+              </div>
+            )}
+          </div>
+        );
+
+      case "Grid": {
+        const cols = (node.props.cols as number) || 2;
+        const gap = (node.props.gap as number) || 4;
+        return (
+          <div
+            className={`grid gap-${gap} ${
+              cols === 1
+                ? "grid-cols-1"
+                : cols === 2
+                  ? "grid-cols-2"
+                  : cols === 3
+                    ? "grid-cols-3"
+                    : cols === 4
+                      ? "grid-cols-4"
+                      : "grid-cols-2"
+            } border-2 border-dashed border-blue-300 ${
+              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
+            } ${node.props.className || ""}`}
+          >
+            <div className="text-xs text-gray-500 mb-1 col-span-full">
+              ⚏ Grid ({cols}열)
+            </div>
+            {node.children.length === 0 && (
+              <div className="text-center text-gray-400 text-xs col-span-full">
+                컴포넌트를 드롭하세요
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      case "Flex": {
+        const direction = (node.props.direction as string) || "row";
+        return (
+          <div
+            className={`flex ${
+              direction === "column" ? "flex-col" : "flex-row"
+            } gap-2 border-2 border-dashed border-purple-300 ${
+              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
+            } ${node.props.className || ""}`}
+          >
+            <div className="text-xs text-gray-500 mb-1">
+              ↔ Flex ({direction})
+            </div>
+            {node.children.length === 0 && (
+              <div className="text-center text-gray-400 text-xs">
+                컴포넌트를 드롭하세요
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      case "Modal":
+        return (
+          <div
+            className={`border-2 border-dashed border-indigo-300 rounded-lg ${
+              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
+            } ${node.props.className || ""}`}
+          >
+            <div className="text-xs text-gray-500 mb-1">
+              🪟 Modal: {(node.props.title as string) || "모달"}
+            </div>
+            {node.children.length === 0 && (
+              <div className="text-center text-gray-400 text-xs">
+                모달 컨텐츠를 드롭하세요
+              </div>
+            )}
+          </div>
+        );
+
+      case "Drawer":
+        return (
+          <div
+            className={`border-2 border-dashed border-orange-300 rounded ${
+              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
+            } ${node.props.className || ""}`}
+          >
+            <div className="text-xs text-gray-500 mb-1">
+              📄 Drawer: {(node.props.title as string) || "드로어"}
+            </div>
+            {node.children.length === 0 && (
+              <div className="text-center text-gray-400 text-xs">
+                드로어 컨텐츠를 드롭하세요
+              </div>
+            )}
+          </div>
+        );
+
+      case "Tabs":
+        return (
+          <div
+            className={`border-2 border-dashed border-green-300 rounded ${
+              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
+            } ${node.props.className || ""}`}
+          >
+            <div className="text-xs text-gray-500 mb-1">📑 Tabs</div>
+            {node.children.length === 0 && (
+              <div className="text-center text-gray-400 text-xs">
+                탭 컨텐츠를 드롭하세요
               </div>
             )}
           </div>
@@ -171,7 +280,15 @@ export function DroppableCanvasNode({
   };
 
   // 자식 노드가 있는 컨테이너 타입인지 확인
-  const isContainer = ["Container", "Card", "Grid", "Flex"].includes(node.type);
+  const isContainer = [
+    "Container",
+    "Card",
+    "Grid",
+    "Flex",
+    "Modal",
+    "Drawer",
+    "Tabs",
+  ].includes(node.type);
 
   return (
     <div

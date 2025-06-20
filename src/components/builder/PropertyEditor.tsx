@@ -129,10 +129,19 @@ const COMPONENT_PROPERTIES: Record<
     { key: "className", label: "CSS 클래스", type: "text" },
   ],
 
-  // 나머지 컴포넌트들은 기본 속성만
-  Modal: [{ key: "title", label: "제목", type: "text" }],
-  Drawer: [{ key: "title", label: "제목", type: "text" }],
-  Tabs: [{ key: "defaultValue", label: "기본 탭", type: "text" }],
+  // Layout 컨테이너들
+  Modal: [
+    { key: "title", label: "모달 제목", type: "text" },
+    { key: "className", label: "CSS 클래스", type: "text" },
+  ],
+  Drawer: [
+    { key: "title", label: "드로어 제목", type: "text" },
+    { key: "className", label: "CSS 클래스", type: "text" },
+  ],
+  Tabs: [
+    { key: "defaultValue", label: "기본 탭", type: "text" },
+    { key: "className", label: "CSS 클래스", type: "text" },
+  ],
   Divider: [{ key: "className", label: "CSS 클래스", type: "text" }],
   Icon: [
     { key: "name", label: "아이콘 이름", type: "text" },

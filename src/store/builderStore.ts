@@ -234,13 +234,13 @@ function getDefaultProps(
 ): Record<string, unknown> {
   const defaultProps: Record<BuilderComponentType, Record<string, unknown>> = {
     // Layout
-    Container: { className: "p-4" },
-    Grid: { cols: 2, gap: 4 },
-    Flex: { direction: "row", gap: 2 },
-    Card: { className: "p-4" },
-    Modal: { title: "모달 제목" },
-    Drawer: { title: "드로어 제목" },
-    Tabs: { defaultValue: "tab1" },
+    Container: { className: "p-2" },
+    Grid: { cols: 2, gap: 4, className: "grid" },
+    Flex: { direction: "row", gap: 2, className: "flex" },
+    Card: { className: "p-3" },
+    Modal: { title: "모달 제목", className: "" },
+    Drawer: { title: "드로어 제목", className: "" },
+    Tabs: { defaultValue: "tab1", className: "" },
 
     // Basic
     Text: { text: "텍스트를 입력하세요", className: "" },
