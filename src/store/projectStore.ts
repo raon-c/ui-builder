@@ -5,6 +5,11 @@
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import {
+  generateNodeId,
+  generateProjectId,
+  generateScreenId,
+} from "@/lib/nanoid";
 import { createDefaultStorage } from "@/lib/storage";
 import type { Project } from "@/types/project";
 
@@ -67,17 +72,17 @@ export const useProjectStore = create<ProjectState>()(
 
         const newProject: Project = {
           schemaVersion: 1,
-          id: "", // generateProjectId()가 자동으로 생성
+          id: generateProjectId(),
           name,
           version: "1.0.0",
           screens: [
             {
-              id: "", // generateScreenId()가 자동으로 생성
+              id: generateScreenId(),
               name: "홈",
               order: 0,
               viewport: "desktop",
               content: {
-                id: "", // generateNodeId()가 자동으로 생성
+                id: generateNodeId(),
                 type: "Container",
                 props: {},
                 children: [],

@@ -3,7 +3,6 @@
 // AIDEV-NOTE: 프로젝트 CRUD 스토리지 구현 - StorageAdapter 기반
 // Project 타입과 연동하여 프로젝트 관리 기능 제공
 
-import { generateProjectId } from "@/lib/nanoid";
 import { type Project, projectSchema } from "@/types/project";
 import {
   type ProjectStorage,
@@ -105,16 +104,15 @@ export class ProjectStorageImpl implements ProjectStorage {
       // 프로젝트 데이터 검증
       const validProject = projectSchema.parse(project);
 
+      // ID는 이미 Zustand store에서 생성됨
+        throw new StorageError("Project ID is required", "INVALID_DATA");
+      }
+
       // 기존 프로젝트 데이터 조회
       const projectsData =
         (await this.adapter.getItem<Record<string, Project>>(
           STORAGE_KEYS.PROJECTS,
         )) || {};
-
-      // 새 프로젝트인 경우 ID 생성
-      if (!validProject.id) {
-        validProject.id = generateProjectId();
-      }
 
       // 타임스탬프 업데이트
       const now = new Date().toISOString();
