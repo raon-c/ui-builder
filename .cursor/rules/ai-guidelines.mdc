@@ -7,14 +7,18 @@ alwaysApply: true
 
 이 규칙은 **AI 어시스턴트와 인간 기여자 모두**가 코드베이스를 탐색·수정할 때 따라야 할 공통 가드레일을 정의합니다. 모든 상세 지침은 반드시 아래 파일들을 순서대로 확인하십시오.
 
-1. **코딩 규칙 & 워크플로우** → [AGENTS.md](mdc:AGENTS.md)  
-2. **기술 아키텍처** → [ARCHITECTURE.md](mdc:ARCHITECTURE.md)  
-3. **제품 요구사항** → [PRD.md](mdc:PRD.md)
+1. **현재 작업 목록** → `todos/current/ACTIVE_TASKS.md`
+2. **코딩 규칙 & 워크플로우** → [AGENTS.md](mdc:AGENTS.md)  
+3. **기술 아키텍처** → [ARCHITECTURE.md](mdc:ARCHITECTURE.md)  
+4. **제품 요구사항** → [PRD.md](mdc:PRD.md)
 
 ---
 
 ## 1. 기본 원칙
 - 작업을 시작하기 전에 **반드시** `AGENTS.md`의 골든 규칙과 빌드·테스트 절차를 숙지합니다.
+- 작업을 시작하기 전에 **반드시** `todos/current/ACTIVE_TASKS.md`에서 현재 진행할 작업 1개를 확인합니다.
+- 선택한 작업에만 집중하며, 작업 범위를 임의로 확대하지 않습니다.
+- `AGENTS.md`의 골든 규칙과 빌드·테스트 절차를 숙지합니다.
 - `AGENTS.md`가 정의한 범위 밖의 변경(예: 디렉터리 구조, 스토리지 추상화 방식)에는 **ARCHITECTURE.md** 업데이트가 필요합니다.
 
 ## 2. 문서 수정 플로우
@@ -27,9 +31,12 @@ alwaysApply: true
 > **중요**: 아키텍처 변경 시, `ARCHITECTURE.md`의 *Revision History*를 **반드시** 업데이트하여 변경 이력을 명확히 기록하십시오.
 
 ## 3. AI 작업 체크리스트 (요약)
-1. `AGENTS.md` 확인 → 지침 준수 여부 판단
-2. 코드/문서 수정 → 커밋 메시지에 변경 이유 명시
-3. 아키텍처 영향 시 → `ARCHITECTURE.md` Revision History 항목 추가
-4. PR 생성 → 인간 리뷰어 지정
+1. **`todos/current/ACTIVE_TASKS.md` 확인** → 현재 진행할 작업 1개 선택
+2. `AGENTS.md` 확인 → 지침 준수 여부 판단
+3. **선택한 작업에만 집중** → 작업 범위 확대 금지
+4. 코드/문서 수정 → 커밋 메시지에 변경 이유 명시
+5. **작업 완료 시 체크박스 업데이트** → `todos/current/ACTIVE_TASKS.md`
+6. 아키텍처 영향 시 → `ARCHITECTURE.md` Revision History 항목 추가
+7. PR 생성 → 인간 리뷰어 지정
 
 이 규칙 파일은 가벼운 참조용입니다. 세부 사항은 각 마크다운 문서를 직접 확인하세요.
