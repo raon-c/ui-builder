@@ -1,9 +1,8 @@
 "use client";
 
 // AIDEV-NOTE: 스토리지 모듈 통합 인덱스 - 외부에서 사용할 스토리지 API 제공
-// LocalStorageAdapter와 ProjectStorageImpl을 조합하여 완전한 스토리지 솔루션 제공
 
-// 스토리지 타입들도 재export
+// 스토리지 타입들 재export
 export type {
   ProjectStorage,
   StorageAdapter,
@@ -13,16 +12,17 @@ export type {
   StorageEventType,
   StorageUsage,
 } from "@/types/storage";
-// 기본 스토리지 설정
+
 export { DEFAULT_STORAGE_CONFIG, STORAGE_KEYS } from "@/types/storage";
-export { LocalStorageAdapter } from "./localStorage";
-export { ProjectStorageImpl } from "./projectStorage";
 
 /**
  * 기본 스토리지 인스턴스 생성 헬퍼
  * MVP용 localStorage 기반 스토리지 구성
  */
-export function createDefaultStorage(debug = false) {
+export async function createDefaultStorage(debug = false) {
+  const { LocalStorageAdapter } = await import("./localStorage");
+  const { ProjectStorageImpl } = await import("./projectStorage");
+
   const adapter = new LocalStorageAdapter({ debug });
   const projectStorage = new ProjectStorageImpl(adapter);
 
@@ -37,7 +37,7 @@ export function createDefaultStorage(debug = false) {
  * 개발 환경에서 스토리지 기능 검증용
  */
 export async function testStorage() {
-  const { projectStorage } = createDefaultStorage(true);
+  const { projectStorage } = await createDefaultStorage(true);
 
   try {
     // 기본 CRUD 테스트

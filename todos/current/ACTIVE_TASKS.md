@@ -4,10 +4,10 @@
 **Sprint 1**: 기초 설정 및 프로젝트 관리 (Week 1-2)
 
 ## 🏃 Active Tasks
-- [ ] **스토리지 추상화 구현** (복잡도 5)
-  - StorageAdapter 인터페이스 및 LocalStorageAdapter 구현
-  - 프로젝트 CRUD 기능
-  - 에러 처리 및 검증
+- [ ] **프로젝트 대시보드 UI** (복잡도 8)
+  - 프로젝트 목록 페이지 구현
+  - 프로젝트 생성/삭제 모달
+  - Zustand 스토어 연동
 
 ### 🔨 Next Up
 _다음 작업 대기 중_
@@ -31,9 +31,9 @@ _다음 작업 대기 중_
 ## 📊 Progress
 
 ### Sprint 1 Status
-- **Story Points**: 13/26 completed (50.0%)
-- **User Stories**: 2/4 completed (50%)
-- **Current Story**: 3️⃣ 스토리지 추상화 구현 (5 points) - 🟡 READY
+- **Story Points**: 18/26 completed (69.2%)
+- **User Stories**: 3/4 completed (75%)
+- **Current Story**: 4️⃣ 프로젝트 대시보드 UI (8 points) - 🟡 READY
 
 ### Completed Tasks
 - [x] **필수 패키지 설치** (30분) - Zustand, @dnd-kit, Zod, Lucide React 등 핵심 패키지 설치
@@ -46,4 +46,5 @@ _다음 작업 대기 중_
 - [x] **Screen & Canvas 타입 정의** (복잡도 3) - `Screen`, `CanvasNode` 타입이 project.ts에서 완료됨
 - [x] **Button 컴포넌트 테스트** (30분) - shadcn/ui Button 설치 및 동작 확인 (795c11c)
 - [x] **shadcn 어댑터 패턴 구현** (복잡도 4) - ComponentRegistry, ShadcnAdapter 클래스, 스키마 정의 (df6357c)
-- [x] **"use client" 지시자 적용** - static export 호환성 확보 (076e7ef) 
+- [x] **"use client" 지시자 적용** - static export 호환성 확보 (076e7ef)
+- [x] **스토리지 추상화 구현** (복잡도 5) - StorageAdapter, LocalStorageAdapter, ProjectStorageImpl, 에러 처리 및 백업 기능 (b4ca067) 
