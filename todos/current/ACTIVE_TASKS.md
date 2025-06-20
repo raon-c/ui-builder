@@ -6,19 +6,13 @@
 ## 🏃 Active Tasks
 
 ### 🎯 현재 진행 중
-- [ ] **Zod 스키마 기반 동적 속성 편집기 고도화** (복잡도 6)
-  - 현재 PropertyEditor를 Zod 스키마 기반으로 완전히 리팩토링
-  - shadcn 컴포넌트별 스키마에서 동적 폼 생성
-  - 실시간 검증 및 에러 표시
-  - Variant/State 편집 UI 구현
-  - 중첩 객체 속성 지원
-
-### 🔨 Next Up
 - [ ] **화면 관리 기능 구현** (복잡도 5)
   - 화면 추가/삭제/이름 변경 UI
   - 화면 순서 변경 (드래그 앤 드롭)
   - 화면 간 네비게이션 개선
   - 화면 복사 기능
+
+### 🔨 Next Up
 - [ ] **프로젝트 Import/Export 기능** (복잡도 4)
   - JSON 내보내기 기능
   - JSON 가져오기 및 스키마 검증
@@ -44,14 +38,13 @@
 ## 📊 Progress
 
 ### Sprint 4 Status
-- **Story Points**: 0/15 completed (0%)
-- **User Stories**: 0/3 completed (0%)
-- **Current Sprint**: 🔴 SPRINT 4 STARTING
+- **Story Points**: 6/15 completed (40%)
+- **User Stories**: 1/3 completed (33.3%)
+- **Current Sprint**: 🟡 SPRINT 4 IN PROGRESS
 
 ### Sprint 3 Status ✅
 - **Story Points**: 26/30 completed (86.7% ✅ NEARLY COMPLETED!)
 - **User Stories**: 3/3 completed (100%)
-- **Current Sprint**: 🟢 SPRINT 3 NEARLY COMPLETED
 
 ### Sprint 2 Status ✅
 - **Story Points**: 32/32 completed (100% ✅ COMPLETED!)
@@ -60,6 +53,9 @@
 ### Sprint 1 Status ✅
 - **Story Points**: 26/26 completed (100% ✅ COMPLETED!)
 - **User Stories**: 4/4 completed (100%)
+
+### Completed Tasks (Sprint 4)
+- [x] **Zod 스키마 기반 동적 속성 편집기 고도화** (복잡도 6) - 속성 그룹화, 실시간 검증, 에러 표시, 변경사항 추적, 되돌리기/재설정 기능, 향상된 UX 구현
 
 ### Completed Tasks (Sprint 3)
 - [x] **빌더 레이아웃 구현** (복잡도 5) - 4-패널 레이아웃, react-resizable-panels, 프로젝트 라우팅, 컴포넌트 팔레트, 구조 트리 기본 구현

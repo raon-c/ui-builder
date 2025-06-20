@@ -11,7 +11,7 @@ import {
   generateScreenId,
 } from "@/lib/nanoid";
 import { createDefaultStorage } from "@/lib/storage";
-import type { Project } from "@/types/project";
+import type { Project, Screen } from "@/types/project";
 
 interface ProjectState {
   // 상태
@@ -19,12 +19,27 @@ interface ProjectState {
   isLoading: boolean;
   error: string | null;
 
-  // 액션
+  // 프로젝트 액션
   loadProjects: () => Promise<void>;
   createProject: (name: string, description?: string) => Promise<void>;
   updateProject: (id: string, updates: Partial<Project>) => Promise<void>;
   deleteProject: (id: string) => Promise<void>;
   clearError: () => void;
+
+  // 화면 관리 액션
+  addScreen: (projectId: string, screenName: string) => Promise<void>;
+  updateScreen: (
+    projectId: string,
+    screenId: string,
+    updates: Partial<Screen>,
+  ) => Promise<void>;
+  deleteScreen: (projectId: string, screenId: string) => Promise<void>;
+  duplicateScreen: (projectId: string, screenId: string) => Promise<void>;
+  reorderScreens: (
+    projectId: string,
+    oldIndex: number,
+    newIndex: number,
+  ) => Promise<void>;
 }
 
 export const useProjectStore = create<ProjectState>()(
@@ -216,6 +231,277 @@ export const useProjectStore = create<ProjectState>()(
       set((state) => {
         state.error = null;
       });
+    },
+
+    // 화면 추가
+    addScreen: async (projectId: string, screenName: string) => {
+      set((state) => {
+        state.error = null;
+      });
+
+      try {
+        const { projectStorage } = await createDefaultStorage();
+        const project = await projectStorage.getProject(projectId);
+
+        if (!project) {
+          throw new Error("프로젝트를 찾을 수 없습니다.");
+        }
+
+        const newScreen: Screen = {
+          id: generateScreenId(),
+          name: screenName,
+          order: project.screens.length + 1,
+          viewport: "desktop",
+          background: "#ffffff",
+          content: {
+            id: generateNodeId(),
+            type: "Container",
+            props: {
+              padding: "lg",
+              className: "min-h-screen bg-background",
+            },
+            children: [],
+          },
+        };
+
+        const updatedProject = {
+          ...project,
+          screens: [...project.screens, newScreen],
+          updatedAt: new Date().toISOString(),
+        };
+
+        await projectStorage.saveProject(updatedProject);
+
+        // 로컬 상태 업데이트
+        set((state) => {
+          const index = state.projects.findIndex((p) => p.id === projectId);
+          if (index !== -1) {
+            state.projects[index] = updatedProject;
+          }
+        });
+      } catch (error) {
+        set((state) => {
+          state.error =
+            error instanceof Error
+              ? error.message
+              : "화면 추가에 실패했습니다.";
+        });
+      }
+    },
+
+    // 화면 업데이트
+    updateScreen: async (
+      projectId: string,
+      screenId: string,
+      updates: Partial<Screen>,
+    ) => {
+      set((state) => {
+        state.error = null;
+      });
+
+      try {
+        const { projectStorage } = await createDefaultStorage();
+        const project = await projectStorage.getProject(projectId);
+
+        if (!project) {
+          throw new Error("프로젝트를 찾을 수 없습니다.");
+        }
+
+        const screenIndex = project.screens.findIndex((s) => s.id === screenId);
+        if (screenIndex === -1) {
+          throw new Error("화면을 찾을 수 없습니다.");
+        }
+
+        const updatedScreens = [...project.screens];
+        updatedScreens[screenIndex] = {
+          ...updatedScreens[screenIndex],
+          ...updates,
+        };
+
+        const updatedProject = {
+          ...project,
+          screens: updatedScreens,
+          updatedAt: new Date().toISOString(),
+        };
+
+        await projectStorage.saveProject(updatedProject);
+
+        // 로컬 상태 업데이트
+        set((state) => {
+          const index = state.projects.findIndex((p) => p.id === projectId);
+          if (index !== -1) {
+            state.projects[index] = updatedProject;
+          }
+        });
+      } catch (error) {
+        set((state) => {
+          state.error =
+            error instanceof Error
+              ? error.message
+              : "화면 업데이트에 실패했습니다.";
+        });
+      }
+    },
+
+    // 화면 삭제
+    deleteScreen: async (projectId: string, screenId: string) => {
+      set((state) => {
+        state.error = null;
+      });
+
+      try {
+        const { projectStorage } = await createDefaultStorage();
+        const project = await projectStorage.getProject(projectId);
+
+        if (!project) {
+          throw new Error("프로젝트를 찾을 수 없습니다.");
+        }
+
+        if (project.screens.length <= 1) {
+          throw new Error("최소 하나의 화면은 유지되어야 합니다.");
+        }
+
+        const updatedScreens = project.screens.filter((s) => s.id !== screenId);
+
+        // 순서 재정렬
+        updatedScreens.forEach((screen, index) => {
+          screen.order = index + 1;
+        });
+
+        const updatedProject = {
+          ...project,
+          screens: updatedScreens,
+          updatedAt: new Date().toISOString(),
+        };
+
+        await projectStorage.saveProject(updatedProject);
+
+        // 로컬 상태 업데이트
+        set((state) => {
+          const index = state.projects.findIndex((p) => p.id === projectId);
+          if (index !== -1) {
+            state.projects[index] = updatedProject;
+          }
+        });
+      } catch (error) {
+        set((state) => {
+          state.error =
+            error instanceof Error
+              ? error.message
+              : "화면 삭제에 실패했습니다.";
+        });
+      }
+    },
+
+    // 화면 복사
+    duplicateScreen: async (projectId: string, screenId: string) => {
+      set((state) => {
+        state.error = null;
+      });
+
+      try {
+        const { projectStorage } = await createDefaultStorage();
+        const project = await projectStorage.getProject(projectId);
+
+        if (!project) {
+          throw new Error("프로젝트를 찾을 수 없습니다.");
+        }
+
+        const sourceScreen = project.screens.find((s) => s.id === screenId);
+        if (!sourceScreen) {
+          throw new Error("복사할 화면을 찾을 수 없습니다.");
+        }
+
+        // 깊은 복사 함수 (노드 ID 새로 생성)
+        const cloneNodeWithNewIds = (node: any): any => ({
+          ...node,
+          id: generateNodeId(),
+          children: node.children?.map(cloneNodeWithNewIds) || [],
+        });
+
+        const duplicatedScreen: Screen = {
+          ...sourceScreen,
+          id: generateScreenId(),
+          name: `${sourceScreen.name} 복사본`,
+          order: project.screens.length + 1,
+          content: cloneNodeWithNewIds(sourceScreen.content),
+        };
+
+        const updatedProject = {
+          ...project,
+          screens: [...project.screens, duplicatedScreen],
+          updatedAt: new Date().toISOString(),
+        };
+
+        await projectStorage.saveProject(updatedProject);
+
+        // 로컬 상태 업데이트
+        set((state) => {
+          const index = state.projects.findIndex((p) => p.id === projectId);
+          if (index !== -1) {
+            state.projects[index] = updatedProject;
+          }
+        });
+      } catch (error) {
+        set((state) => {
+          state.error =
+            error instanceof Error
+              ? error.message
+              : "화면 복사에 실패했습니다.";
+        });
+      }
+    },
+
+    // 화면 순서 변경
+    reorderScreens: async (
+      projectId: string,
+      oldIndex: number,
+      newIndex: number,
+    ) => {
+      set((state) => {
+        state.error = null;
+      });
+
+      try {
+        const { projectStorage } = await createDefaultStorage();
+        const project = await projectStorage.getProject(projectId);
+
+        if (!project) {
+          throw new Error("프로젝트를 찾을 수 없습니다.");
+        }
+
+        const updatedScreens = [...project.screens];
+        const [movedScreen] = updatedScreens.splice(oldIndex, 1);
+        updatedScreens.splice(newIndex, 0, movedScreen);
+
+        // 순서 재정렬
+        updatedScreens.forEach((screen, index) => {
+          screen.order = index + 1;
+        });
+
+        const updatedProject = {
+          ...project,
+          screens: updatedScreens,
+          updatedAt: new Date().toISOString(),
+        };
+
+        await projectStorage.saveProject(updatedProject);
+
+        // 로컬 상태 업데이트
+        set((state) => {
+          const index = state.projects.findIndex((p) => p.id === projectId);
+          if (index !== -1) {
+            state.projects[index] = updatedProject;
+          }
+        });
+      } catch (error) {
+        set((state) => {
+          state.error =
+            error instanceof Error
+              ? error.message
+              : "화면 순서 변경에 실패했습니다.";
+        });
+      }
     },
   })),
 );

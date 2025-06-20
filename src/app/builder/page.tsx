@@ -27,6 +27,7 @@ import {
   PropertyEditor,
   PropertyEditorEmpty,
 } from "@/components/builder/PropertyEditor";
+import { ScreenManager } from "@/components/builder/ScreenManager";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -357,33 +358,11 @@ export default function BuilderPage() {
             <Panel defaultSize={20} minSize={15} maxSize={30}>
               <div className="h-full flex flex-col border-r bg-card">
                 {/* 화면 목록 */}
-                <div className="p-4 border-b">
-                  <h3 className="font-medium mb-3">화면 목록</h3>
-                  <div className="space-y-1">
-                    {currentProject.screens.map((screen) => (
-                      <Button
-                        key={screen.id}
-                        variant={
-                          selectedScreenId === screen.id ? "default" : "ghost"
-                        }
-                        onClick={() => setSelectedScreenId(screen.id)}
-                        className="w-full justify-start px-3 py-2 h-auto text-sm"
-                      >
-                        {screen.name}
-                      </Button>
-                    ))}
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full mt-3"
-                    onClick={() => {
-                      console.log("화면 추가 기능 구현 예정");
-                    }}
-                  >
-                    + 화면 추가
-                  </Button>
-                </div>
+                <ScreenManager
+                  project={currentProject}
+                  selectedScreenId={selectedScreenId}
+                  onScreenSelect={setSelectedScreenId}
+                />
 
                 {/* 컴포넌트 팔레트 */}
                 <div className="flex-1 p-4 overflow-y-auto">
