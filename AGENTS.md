@@ -114,6 +114,7 @@ export const Canvas = memo(function Canvas(props: CanvasProps) { ... })
 * **AI 커밋 태깅**: 예) `feat: add badge component [AI]`
 * **메시지**: *왜* 변경했는지 설명, PRD/Architecture 섹션 링크
 * **커밋 내역 문서화**: 작업 내역 옆에 커밋 로그 작성
+* **언어**: 커밋 메시지들은 한글로 작성합니다.
 
 ```markdown
 - [x] **MUI 어댑터 스키마구현** ( {commit-hash} )
