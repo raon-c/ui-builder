@@ -4,14 +4,14 @@
 **Sprint 1**: 기초 설정 및 프로젝트 관리 (Week 1-2)
 
 ## 🏃 Active Tasks
-_현재 활성 작업 없음 - 다음 단계로 진행_
-
-### 🔨 Next Up
-- [ ] **Button 컴포넌트 테스트** (30분)
+- [x] **Button 컴포넌트 테스트** (30분)
   ```bash
   pnpm dlx shadcn@latest add button
   ```
   - 메인 페이지에 추가하여 작동 확인
+
+### 🔨 Next Up
+_다음 작업 대기 중_
 
 ## 🚧 Blockers
 - 없음

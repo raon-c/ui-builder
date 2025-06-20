@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -12,6 +13,38 @@ export default function Home() {
           height={38}
           priority
         />
+
+        {/* AIDEV-NOTE: Button 컴포넌트 테스트 섹션 - shadcn/ui 동작 확인 */}
+        <div className="flex flex-col gap-4 p-6 border rounded-lg bg-card">
+          <h2 className="text-lg font-semibold mb-2">Button Component Test</h2>
+
+          {/* Variant 테스트 */}
+          <div className="flex flex-wrap gap-2">
+            <Button variant="default">Default</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="destructive">Destructive</Button>
+            <Button variant="outline">Outline</Button>
+            <Button variant="ghost">Ghost</Button>
+            <Button variant="link">Link</Button>
+          </div>
+
+          {/* Size 테스트 */}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button size="sm">Small</Button>
+            <Button size="default">Default</Button>
+            <Button size="lg">Large</Button>
+            <Button size="icon">⭐</Button>
+          </div>
+
+          {/* State 테스트 */}
+          <div className="flex flex-wrap gap-2">
+            <Button disabled>Disabled</Button>
+            <Button variant="outline" disabled>
+              Disabled Outline
+            </Button>
+          </div>
+        </div>
+
         <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}
