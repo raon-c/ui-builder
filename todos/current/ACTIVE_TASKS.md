@@ -4,12 +4,11 @@
 **Sprint 1**: 기초 설정 및 프로젝트 관리 (Week 1-2)
 
 ## 🏃 Active Tasks
-_현재 활성 작업 없음 - 다음 단계로 진행_
+- [x] **Project 관련 타입 정의** (복잡도 3)
+  - `Project`, `ProjectSettings`, `PublishingInfo`
 
 ### 🔨 Next Up
 - [ ] **기본 타입 정의** (복잡도 7)
-  - [ ] **Project 관련 타입 정의** (복잡도 3)
-    - `Project`, `ProjectSettings`, `PublishingInfo`
   - [ ] **Screen & Canvas 타입 정의** (복잡도 3)
     - `Screen`, `Canvas`, `Viewport`, `ElementNode`
   - [ ] **Component 시스템 타입** (복잡도 2)
