@@ -90,6 +90,56 @@ export default function Home() {
           </Button>
         </div>
 
+        {/* AIDEV-NOTE: 스토리지 시스템 테스트 섹션 - LocalStorage & ProjectStorage 동작 확인 */}
+        <div className="flex flex-col gap-4 p-6 border rounded-lg bg-card">
+          <h2 className="text-lg font-semibold mb-2">Storage System Test</h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            localStorage 기반 프로젝트 CRUD 기능을 테스트합니다.
+          </p>
+
+          <div className="space-y-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                import("@/lib/storage").then(async (module) => {
+                  console.log("🧪 Starting storage test...");
+                  const success = await module.testStorage();
+                  if (success) {
+                    alert("✅ 스토리지 테스트 성공! 콘솔을 확인하세요.");
+                  } else {
+                    alert("❌ 스토리지 테스트 실패! 콘솔을 확인하세요.");
+                  }
+                });
+              }}
+            >
+              스토리지 CRUD 테스트
+            </Button>
+
+            <Button
+              variant="secondary"
+              onClick={() => {
+                import("@/lib/storage").then(async (module) => {
+                  const { createDefaultStorage } = module;
+                  const { projectStorage } = createDefaultStorage(true);
+
+                  try {
+                    const usage = await projectStorage.getStorageUsage();
+                    console.log("📊 Storage Usage:", usage);
+                    alert(
+                      `스토리지 사용량: ${Math.round(usage.used / 1024)}KB / ${Math.round(usage.total / 1024)}KB (${Math.round(usage.usage * 100)}%)`,
+                    );
+                  } catch (error) {
+                    console.error("Storage usage check failed:", error);
+                    alert("스토리지 사용량 확인 실패!");
+                  }
+                });
+              }}
+            >
+              스토리지 사용량 확인
+            </Button>
+          </div>
+        </div>
+
         <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}
