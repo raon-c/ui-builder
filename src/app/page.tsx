@@ -1,9 +1,38 @@
 "use client";
 
 import Image from "next/image";
+import { useId } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 
 export default function Home() {
+  const emailId = useId();
+  const passwordId = useId();
+  const termsId = useId();
+  const marketingId = useId();
+  const notificationsId = useId();
+  const darkModeId = useId();
+  const profilePublicId = useId();
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -135,6 +164,172 @@ export default function Home() {
             >
               스토리지 사용량 확인
             </Button>
+          </div>
+        </div>
+
+        {/* AIDEV-NOTE: 새로운 shadcn/ui 컴포넌트 테스트 섹션 - Sprint 2 */}
+        <div className="flex flex-col gap-6 p-6 border rounded-lg bg-card">
+          <h2 className="text-lg font-semibold mb-2">
+            New Components Test (Sprint 2)
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            새로 설치한 shadcn/ui 컴포넌트들의 동작을 확인합니다.
+          </p>
+
+          {/* Input 컴포넌트 테스트 */}
+          <div className="space-y-2">
+            <h3 className="font-medium">Input Components</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor={emailId}>Email</Label>
+                <Input
+                  id={emailId}
+                  type="email"
+                  placeholder="Enter your email"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor={passwordId}>Password</Label>
+                <Input
+                  id={passwordId}
+                  type="password"
+                  placeholder="Enter your password"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Select 컴포넌트 테스트 */}
+          <div className="space-y-2">
+            <h3 className="font-medium">Select Component</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Framework</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a framework" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="next">Next.js</SelectItem>
+                    <SelectItem value="react">React</SelectItem>
+                    <SelectItem value="vue">Vue.js</SelectItem>
+                    <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Size</Label>
+                <Select>
+                  <SelectTrigger size="sm">
+                    <SelectValue placeholder="Select size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sm">Small</SelectItem>
+                    <SelectItem value="md">Medium</SelectItem>
+                    <SelectItem value="lg">Large</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          {/* Checkbox & Switch 테스트 */}
+          <div className="space-y-2">
+            <h3 className="font-medium">Checkbox & Switch</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id={termsId} />
+                  <Label htmlFor={termsId}>Accept terms and conditions</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id={marketingId} defaultChecked />
+                  <Label htmlFor={marketingId}>Receive marketing emails</Label>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <Switch id={notificationsId} />
+                  <Label htmlFor={notificationsId}>Push notifications</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch id={darkModeId} defaultChecked />
+                  <Label htmlFor={darkModeId}>Dark mode</Label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Badge 컴포넌트 테스트 */}
+          <div className="space-y-2">
+            <h3 className="font-medium">Badge Variants</h3>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="default">Default</Badge>
+              <Badge variant="secondary">Secondary</Badge>
+              <Badge variant="destructive">Destructive</Badge>
+              <Badge variant="outline">Outline</Badge>
+            </div>
+          </div>
+
+          {/* Avatar 컴포넌트 테스트 */}
+          <div className="space-y-2">
+            <h3 className="font-medium">Avatar Component</h3>
+            <div className="flex gap-4 items-center">
+              <Avatar>
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="@shadcn"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <Avatar>
+                <AvatarImage src="/nonexistent.jpg" alt="Fallback test" />
+                <AvatarFallback>FB</AvatarFallback>
+              </Avatar>
+              <Avatar className="h-12 w-12">
+                <AvatarFallback>LG</AvatarFallback>
+              </Avatar>
+            </div>
+          </div>
+
+          {/* Card 컴포넌트 테스트 */}
+          <div className="space-y-2">
+            <h3 className="font-medium">Card Component</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Card Title</CardTitle>
+                  <CardDescription>Card description goes here</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>This is the card content area.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    Profile <Badge variant="secondary">New</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <Avatar>
+                      <AvatarFallback>JD</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium">John Doe</p>
+                      <p className="text-sm text-muted-foreground">
+                        john@example.com
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Switch id={profilePublicId} />
+                    <Label htmlFor={profilePublicId}>Make profile public</Label>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
 

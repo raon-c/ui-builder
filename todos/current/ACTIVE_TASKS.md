@@ -1,13 +1,20 @@
 # 현재 진행 중인 작업
 
 ## 🎯 Current Sprint
-**Sprint 1**: 기초 설정 및 프로젝트 관리 (Week 1-2)
+**Sprint 2**: 어댑터 패턴 & 컴포넌트 시스템 (Week 3-4)
 
 ## 🏃 Active Tasks
-_현재 활성 작업 없음 - Sprint 1 완료!_
+
+### 🎯 현재 진행 중
+- [ ] **shadcn/ui 기본 컴포넌트 설치** (복잡도 2)
+  - Input, Card, Select, Checkbox, Switch, Badge, Avatar 컴포넌트 설치
+  - 각 컴포넌트의 variants 및 props 확인
+  - 테스트 페이지에서 동작 확인
 
 ### 🔨 Next Up
-_Sprint 2 준비 중..._
+- [ ] **shadcn/ui 어댑터 스키마 확장** (복잡도 3)
+- [ ] **컴포넌트 카탈로그 UI** (복잡도 4)
+- [ ] **ComponentRegistry 확장** (복잡도 3)
 
 ## 🚧 Blockers
 - 없음
@@ -19,7 +26,7 @@ _Sprint 2 준비 중..._
 - **"use client" 지시자 필수** - 모든 React 컴포넌트와 클라이언트 로직
 
 ## 🔗 References
-- [Sprint 1 상세 작업](../sprint-1/README.md)
+- [Sprint 2 상세 작업](../sprint-2/README.md)
 - [MVP 로드맵](../MVP_ROADMAP.md)
 - [ARCHITECTURE.md](../../ARCHITECTURE.md#5-빌더-데이터-구조)
 
@@ -27,12 +34,16 @@ _Sprint 2 준비 중..._
 
 ## 📊 Progress
 
-### Sprint 1 Status
+### Sprint 2 Status
+- **Story Points**: 0/32 completed (0%)
+- **User Stories**: 0/3 completed (0%)
+- **Current Sprint**: 🟡 SPRINT 2 IN PROGRESS
+
+### Sprint 1 - Completed ✅
 - **Story Points**: 26/26 completed (100% ✅ COMPLETED!)
 - **User Stories**: 4/4 completed (100%)
-- **Current Sprint**: 🎉 SPRINT 1 COMPLETED
 
-### Completed Tasks
+### Completed Tasks (Sprint 1)
 - [x] **필수 패키지 설치** (30분) - Zustand, @dnd-kit, Zod, Lucide React 등 핵심 패키지 설치
 - [x] **TypeScript 설정** (20분) - strict 모드 및 path alias 확인 완료
 - [x] **디렉터리 구조 생성** (10분) - 컴포넌트, 어댑터, 스토어 등 폴더 구조 생성
@@ -45,4 +56,5 @@ _Sprint 2 준비 중..._
 - [x] **shadcn 어댑터 패턴 구현** (복잡도 4) - ComponentRegistry, ShadcnAdapter 클래스, 스키마 정의 (df6357c)
 - [x] **"use client" 지시자 적용** - static export 호환성 확보 (076e7ef)
 - [x] **스토리지 추상화 구현** (복잡도 5) - StorageAdapter, LocalStorageAdapter, ProjectStorageImpl, 에러 처리 및 백업 기능 (b4ca067)
-- [x] **프로젝트 대시보드 UI** (복잡도 8) - Zustand 스토어, 프로젝트 카드, 생성/삭제 모달, 반응형 디자인 완료 (bba9ff1) 
+- [x] **프로젝트 대시보드 UI** (복잡도 8) - Zustand 스토어, 프로젝트 카드, 생성/삭제 모달, 반응형 디자인 완료 (bba9ff1)
+- [x] **프로젝트 생성 에러 수정** - ID 생성 로직 수정으로 "Failed to save project new" 에러 해결 (16b8a44) 
