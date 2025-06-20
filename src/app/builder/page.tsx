@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DraggableComponent } from "@/components/builder/DraggableComponent";
 import { DroppableCanvasNode } from "@/components/builder/DroppableCanvasNode";
+import { ImportExportManager } from "@/components/builder/ImportExportManager";
 import { PreviewModal } from "@/components/builder/PreviewModal";
 import {
   PropertyEditor,
@@ -340,6 +341,7 @@ export default function BuilderPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            <ImportExportManager project={currentProject} />
             <Button
               variant="outline"
               size="sm"
