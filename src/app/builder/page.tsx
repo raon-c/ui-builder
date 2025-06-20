@@ -22,6 +22,10 @@ import { useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DraggableComponent } from "@/components/builder/DraggableComponent";
 import { DroppableCanvasNode } from "@/components/builder/DroppableCanvasNode";
+import {
+  PropertyEditor,
+  PropertyEditorEmpty,
+} from "@/components/builder/PropertyEditor";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -123,11 +127,15 @@ export default function BuilderPage() {
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [selectedScreenId, setSelectedScreenId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"structure" | "properties">(
+    "structure",
+  );
 
   const {
     currentScreen,
     setCurrentScreen,
     selectedNodeId,
+    findNode,
     addNode,
     moveNode,
     setDraggedComponentType,
@@ -175,6 +183,13 @@ export default function BuilderPage() {
       }
     }
   }, [currentProject, selectedScreenId, setCurrentScreen]);
+
+  // 노드 선택 시 속성 탭으로 자동 전환
+  useEffect(() => {
+    if (selectedNodeId) {
+      setActiveTab("properties");
+    }
+  }, [selectedNodeId]);
 
   // 드래그 시작
   const handleDragStart = (event: DragStartEvent) => {
@@ -461,26 +476,55 @@ export default function BuilderPage() {
                 <div className="h-12 border-b flex">
                   <Button
                     variant="ghost"
-                    className="flex-1 px-4 py-3 text-sm font-medium bg-primary text-primary-foreground rounded-none"
+                    onClick={() => setActiveTab("structure")}
+                    className={`flex-1 px-4 py-3 text-sm font-medium rounded-none ${
+                      activeTab === "structure"
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-muted"
+                    }`}
                   >
                     구조
                   </Button>
                   <Button
                     variant="ghost"
-                    className="flex-1 px-4 py-3 text-sm font-medium hover:bg-muted rounded-none"
+                    onClick={() => setActiveTab("properties")}
+                    className={`flex-1 px-4 py-3 text-sm font-medium rounded-none ${
+                      activeTab === "properties"
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-muted"
+                    }`}
                   >
                     속성
                   </Button>
                 </div>
 
-                {/* 구조 트리 */}
-                <div className="flex-1 p-4 overflow-y-auto">
-                  <h3 className="font-medium mb-3">화면 구조</h3>
-                  {currentScreen ? (
-                    <StructureTree node={currentScreen.content} />
+                {/* 탭 콘텐츠 */}
+                <div className="flex-1 overflow-y-auto">
+                  {activeTab === "structure" ? (
+                    <div className="p-4">
+                      <h3 className="font-medium mb-3">화면 구조</h3>
+                      {currentScreen ? (
+                        <StructureTree node={currentScreen.content} />
+                      ) : (
+                        <div className="text-sm text-muted-foreground">
+                          화면을 선택하세요
+                        </div>
+                      )}
+                    </div>
                   ) : (
-                    <div className="text-sm text-muted-foreground">
-                      화면을 선택하세요
+                    <div className="p-4">
+                      {selectedNodeId && currentScreen ? (
+                        (() => {
+                          const selectedNode = findNode(selectedNodeId);
+                          return selectedNode ? (
+                            <PropertyEditor node={selectedNode} />
+                          ) : (
+                            <PropertyEditorEmpty />
+                          );
+                        })()
+                      ) : (
+                        <PropertyEditorEmpty />
+                      )}
                     </div>
                   )}
                 </div>
