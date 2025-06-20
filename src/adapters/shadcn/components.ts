@@ -1,3 +1,5 @@
+"use client";
+
 // AIDEV-NOTE: shadcn/ui 컴포넌트 매핑 - 실제 React 컴포넌트와 빌더 타입 연결
 // 어댑터 패턴의 핵심 - 추상 타입을 실제 컴포넌트로 매핑
 

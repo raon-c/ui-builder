@@ -65,12 +65,39 @@ CI 파이프라인: `pnpm lint` → `pnpm test` → `pnpm build` → GitHub Page
 
 * **Language**: TypeScript *strict mode* (`"strict": true`)
 * **Framework**: React 19 + Hooks (함수형 컴포넌트)
+* **Static Export**: Next.js static export 모드 - **모든 React 컴포넌트와 클라이언트 사이드 로직에 `"use client"` 지시자 필수**
 * **Styling**: Tailwind 유틸리티 클래스 (프로토타입 제외한 인라인 스타일 금지)
 * **State**: Zustand
 * **Schema Validation**: Zod (런타임·컴파일타임 동시 보장)
 * **Naming**: `PascalCase`(컴포넌트), `camelCase`(변수·함수), `SCREAMING_SNAKE`(상수)
 * **File Organization**: 기능 폴더 내부에 컴포넌트·스타일·테스트를 **co-locate**
 * **Error Handling**: Fail-fast – 명시적 오류 throw 후 `ErrorBoundary`로 표면화
+
+### 3.1. "use client" 지시자 규칙
+
+Next.js static export 모드 호환성을 위해 다음 파일들에는 **반드시** `"use client"` 지시자를 파일 최상단에 추가해야 합니다:
+
+* **React 컴포넌트**: `.tsx` 파일의 모든 컴포넌트
+* **클라이언트 로직**: 브라우저 API 사용하는 모든 `.ts/.tsx` 파일
+* **어댑터 파일**: `src/adapters/` 하위의 모든 파일 (React 컴포넌트 참조)
+* **Zustand 스토어**: 클라이언트 상태 관리 파일
+* **이벤트 핸들러**: `onClick`, `onChange` 등 사용하는 파일
+
+```typescript
+"use client";
+
+import React from "react";
+// ... 나머지 imports
+
+export function MyComponent() {
+  // 컴포넌트 구현
+}
+```
+
+**예외 사항**:
+- 순수 타입 정의 파일 (`src/types/`)
+- 유틸리티 함수만 있는 파일 (단, 브라우저 API 미사용)
+- `layout.tsx` (metadata 포함으로 서버 컴포넌트 유지)
 
 ---
 

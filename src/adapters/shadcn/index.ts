@@ -1,3 +1,5 @@
+"use client";
+
 // AIDEV-NOTE: shadcn/ui 어댑터 엔트리포인트 - DesignLibraryAdapter 구현
 // 어댑터 패턴의 최상위 인터페이스, 컴포넌트 등록 및 초기화 관리
 
