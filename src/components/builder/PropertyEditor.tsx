@@ -643,7 +643,8 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
       return filtered;
     });
 
-    // 실시간으로 캔버스 업데이트 (검증 통과 시에만)
+    if (!error) {
+      // 실시간으로 캔버스 업데이트 (검증 통과 시에만)
       updateNodeProps(node.id, newFormData);
     }
   };
