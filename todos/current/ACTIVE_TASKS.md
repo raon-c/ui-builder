@@ -6,14 +6,13 @@
 ## 🏃 Active Tasks
 
 ### 🎯 현재 진행 중
-- [ ] **shadcn/ui 어댑터 스키마 확장** (복잡도 3)
-  - 새로 설치한 컴포넌트들의 Zod 스키마 정의
-  - Input, Card, Select, Checkbox, Switch, Badge, Avatar 스키마 추가
-  - 각 컴포넌트의 props와 variants 매핑
-  - shadcn/components.ts 및 schema.ts 업데이트
+- [ ] **컴포넌트 카탈로그 UI** (복잡도 4)
+  - 카테고리별 컴포넌트 목록 표시 UI 구현
+  - 검색 및 필터링 기능
+  - 드래그 가능한 컴포넌트 팔레트
+  - 컴포넌트 미리보기 및 설명 표시
 
 ### 🔨 Next Up
-- [ ] **컴포넌트 카탈로그 UI** (복잡도 4)
 - [ ] **ComponentRegistry 확장** (복잡도 3)
 
 ## 🚧 Blockers
@@ -35,7 +34,7 @@
 ## 📊 Progress
 
 ### Sprint 2 Status
-- **Story Points**: 2/32 completed (6.3%)
+- **Story Points**: 5/32 completed (15.6%)
 - **User Stories**: 0/3 completed (0%)
 - **Current Sprint**: 🟡 SPRINT 2 IN PROGRESS
 
@@ -45,6 +44,7 @@
 
 ### Completed Tasks (Sprint 2)
 - [x] **shadcn/ui 기본 컴포넌트 설치** (복잡도 2) - Input, Card, Select, Checkbox, Switch, Badge, Avatar 설치 및 테스트 (96cf61f)
+- [x] **shadcn/ui 어댑터 스키마 확장** (복잡도 3) - 7개 컴포넌트 Zod 스키마, 필드 메타데이터, 컴포넌트 래퍼 구현 (8c80cf8)
 
 ### Completed Tasks (Sprint 1)
 - [x] **필수 패키지 설치** (30분) - Zustand, @dnd-kit, Zod, Lucide React 등 핵심 패키지 설치
