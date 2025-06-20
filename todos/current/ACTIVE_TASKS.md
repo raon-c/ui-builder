@@ -1,15 +1,29 @@
 # 현재 진행 중인 작업
 
 ## 🎯 Current Sprint
-**Sprint 2**: 어댑터 패턴 & 컴포넌트 시스템 (Week 3-4)
+**Sprint 4**: 속성 편집 & 화면 관리 (Week 7-8)
 
 ## 🏃 Active Tasks
 
 ### 🎯 현재 진행 중
-_현재 진행할 작업이 없습니다. 아래 Completed Tasks에서 완료된 작업을 확인하거나 다음 Sprint 작업을 선택하세요._
+- [ ] **Zod 스키마 기반 동적 속성 편집기 고도화** (복잡도 6)
+  - 현재 PropertyEditor를 Zod 스키마 기반으로 완전히 리팩토링
+  - shadcn 컴포넌트별 스키마에서 동적 폼 생성
+  - 실시간 검증 및 에러 표시
+  - Variant/State 편집 UI 구현
+  - 중첩 객체 속성 지원
 
 ### 🔨 Next Up
-_Sprint 2 작업 완료 후 Sprint 3 계획 수립_
+- [ ] **화면 관리 기능 구현** (복잡도 5)
+  - 화면 추가/삭제/이름 변경 UI
+  - 화면 순서 변경 (드래그 앤 드롭)
+  - 화면 간 네비게이션 개선
+  - 화면 복사 기능
+- [ ] **프로젝트 Import/Export 기능** (복잡도 4)
+  - JSON 내보내기 기능
+  - JSON 가져오기 및 스키마 검증
+  - 버전 호환성 관리
+  - 내보내기/가져오기 UI
 
 ## 🚧 Blockers
 - 없음
@@ -21,7 +35,7 @@ _Sprint 2 작업 완료 후 Sprint 3 계획 수립_
 - **"use client" 지시자 필수** - 모든 React 컴포넌트와 클라이언트 로직
 
 ## 🔗 References
-- [Sprint 2 상세 작업](../sprint-2/README.md)
+- [Sprint 4 상세 작업](../sprint-4/README.md)
 - [MVP 로드맵](../MVP_ROADMAP.md)
 - [ARCHITECTURE.md](../../ARCHITECTURE.md#5-빌더-데이터-구조)
 
@@ -29,17 +43,21 @@ _Sprint 2 작업 완료 후 Sprint 3 계획 수립_
 
 ## 📊 Progress
 
+### Sprint 4 Status
+- **Story Points**: 0/15 completed (0%)
+- **User Stories**: 0/3 completed (0%)
+- **Current Sprint**: 🔴 SPRINT 4 STARTING
+
+### Sprint 3 Status ✅
+- **Story Points**: 26/30 completed (86.7% ✅ NEARLY COMPLETED!)
+- **User Stories**: 3/3 completed (100%)
+- **Current Sprint**: 🟢 SPRINT 3 NEARLY COMPLETED
+
 ### Sprint 2 Status ✅
 - **Story Points**: 32/32 completed (100% ✅ COMPLETED!)
 - **User Stories**: 3/3 completed (100%)
-- **Current Sprint**: 🟢 SPRINT 2 COMPLETED
 
-### Sprint 3 Status
-- **Story Points**: 26/30 completed (86.7%)
-- **User Stories**: 3/3 completed (100%)
-- **Current Sprint**: 🟡 SPRINT 3 IN PROGRESS
-
-### Sprint 1 - Completed ✅
+### Sprint 1 Status ✅
 - **Story Points**: 26/26 completed (100% ✅ COMPLETED!)
 - **User Stories**: 4/4 completed (100%)
 
