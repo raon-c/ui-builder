@@ -45,6 +45,49 @@ export default function Home() {
           </div>
         </div>
 
+        {/* AIDEV-NOTE: 어댑터 패턴 테스트 섹션 - ComponentRegistry 동작 확인 */}
+        <div className="flex flex-col gap-4 p-6 border rounded-lg bg-card">
+          <h2 className="text-lg font-semibold mb-2">Adapter Pattern Test</h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            개발자 도구 콘솔에서 어댑터 초기화 로그를 확인하세요.
+          </p>
+
+          {/* 어댑터 정보 표시 */}
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="font-medium">어댑터:</span>
+              <span>shadcn/ui v1.0.0</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium">등록된 컴포넌트:</span>
+              <span>1개 (Button)</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium">카테고리:</span>
+              <span>Basic</span>
+            </div>
+          </div>
+
+          <Button
+            variant="outline"
+            onClick={() => {
+              // 어댑터 테스트를 위한 임시 코드
+              import("@/adapters/shadcn").then(
+                ({ initializeShadcnAdapter }) => {
+                  const adapter = initializeShadcnAdapter();
+                  console.log("Adapter initialized:", adapter);
+                  console.log(
+                    "Registered components:",
+                    adapter.registry.getAll(),
+                  );
+                },
+              );
+            }}
+          >
+            어댑터 초기화 테스트
+          </Button>
+        </div>
+
         <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}

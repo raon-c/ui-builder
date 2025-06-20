@@ -9,6 +9,10 @@
   pnpm dlx shadcn@latest add button
   ```
   - 메인 페이지에 추가하여 작동 확인
+- [x] **shadcn 어댑터 패턴 구현** (복잡도 4)
+  - Button 컴포넌트를 ComponentRegistry에 등록
+  - shadcn 어댑터 기본 구조 생성
+  - 스키마 및 메타데이터 정의
 
 ### 🔨 Next Up
 _다음 작업 대기 중_
