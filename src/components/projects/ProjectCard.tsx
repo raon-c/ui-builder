@@ -59,7 +59,7 @@ export function ProjectCard({
   const handleCardClick = () => {
     if (!isMenuOpen) {
       // 빌더로 직접 이동
-      window.location.href = `/builder/${project.id}`;
+      window.location.href = `/builder?id=${project.id}`;
     }
   };
 
@@ -97,7 +97,7 @@ export function ProjectCard({
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem asChild>
                 <Link
-                  href={`/builder/${project.id}`}
+                  href={`/builder?id=${project.id}`}
                   onClick={(e: React.MouseEvent) => {
                     e.stopPropagation();
                     setIsMenuOpen(false);

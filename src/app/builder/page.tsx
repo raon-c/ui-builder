@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
@@ -13,10 +13,11 @@ import type { Project } from "@/types/project";
 /**
  * 빌더 메인 페이지
  * 4-패널 레이아웃: 좌측(컴포넌트 팔레트) + 중앙(캔버스) + 우측(구조/속성)
+ * 쿼리 파라미터로 projectId를 받아서 처리 (static export 호환)
  */
 export default function BuilderPage() {
-  const params = useParams();
-  const projectId = params.projectId as string;
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("id");
 
   const { projects, loadProjects, isLoading } = useProjectStore();
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
@@ -41,6 +42,28 @@ export default function BuilderPage() {
     }
   }, [projects, projectId]);
 
+  // 프로젝트 ID가 없는 경우
+  if (!projectId) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <div className="text-lg font-medium">프로젝트 ID가 필요합니다</div>
+          <div className="text-sm text-muted-foreground mt-2">
+            URL에 ?id=프로젝트ID 파라미터를 추가해주세요.
+          </div>
+          <Button
+            className="mt-4"
+            onClick={() => {
+              window.location.href = "/projects";
+            }}
+          >
+            프로젝트 목록으로 이동
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -62,8 +85,13 @@ export default function BuilderPage() {
           <div className="text-sm text-muted-foreground mt-2">
             프로젝트 ID: {projectId}
           </div>
-          <Button className="mt-4" onClick={() => window.history.back()}>
-            이전으로 돌아가기
+          <Button
+            className="mt-4"
+            onClick={() => {
+              window.location.href = "/projects";
+            }}
+          >
+            프로젝트 목록으로 이동
           </Button>
         </div>
       </div>
@@ -82,7 +110,9 @@ export default function BuilderPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => window.history.back()}
+            onClick={() => {
+              window.location.href = "/projects";
+            }}
           >
             ← 프로젝트 목록
           </Button>
