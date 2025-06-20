@@ -11,6 +11,7 @@
 | 0.1 | 2025-06-20 | raon.c | 최초 작성 (MVP 기준) |
 | 0.2 | 2025-06-21 | raon.c | 스토리지 추상화 / GitHub Pages 배포 반영 |
 | 0.3 | 2025-06-22 | raon.c | UI 빌더 레이아웃(Structure/Property 탭) & 어댑터 전환 흐름 추가 |
+| 0.4 | 2025-06-22 | raon.c | 기술 스택 섹션 추가, 최신 버전 업데이트 (Next.js 15+, Zustand 5+, Zod 4+, Tailwind 4+), biome 도입, IndexedDB 저장소 옵션 추가 |
 
 ---
 
@@ -23,7 +24,66 @@
 
 ---
 
-## 2. 최상위 아키텍처 (High-Level Architecture - MVP)
+## 2. 기술 스택 (Technology Stack)
+
+MVP 단계에서 사용되는 핵심 기술 스택을 다음과 같이 정의합니다.
+
+### 2.1. 프론트엔드 (Frontend)
+
+| 카테고리 | 기술 | 버전 | 선택 이유 |
+| :--- | :--- | :--- | :--- |
+| **프레임워크** | Next.js | 15+ | Static Export 지원, React 기반, 개발 경험 우수 |
+| **언어** | TypeScript | 5+ | 타입 안정성, 개발 생산성 향상 |
+| **상태 관리** | Zustand | 5+ | 가벼움, 간단한 API, 미들웨어 지원 |
+| **Drag & Drop** | dnd-kit | latest | 접근성 우수, 모던한 API, 커스터마이징 용이 |
+| **스키마 검증** | Zod | 4+ | 런타임 타입 검증, TypeScript 통합 |
+| **스타일링** | Tailwind CSS | 4+ | 유틸리티 퍼스트, shadcn/ui와 호환성 |
+
+### 2.2. UI 라이브러리 (Design Systems)
+
+| 라이브러리 | 용도 | 설치 방식 | 우선순위 |
+| :--- | :--- | :--- | :--- |
+| **shadcn/ui** | 기본 디자인 시스템 | CLI 기반 소스 복사 | Primary |
+| **Material-UI** | 대안 디자인 시스템 (POC) | npm 패키지 | Secondary |
+| **Lucide React** | 아이콘 | npm 패키지 | Primary |
+
+### 2.3. 개발 도구 (Development Tools)
+
+| 카테고리 | 도구 | 용도 |
+| :--- | :--- | :--- |
+| **패키지 매니저** | pnpm | 의존성 관리, 빠른 설치 |
+| **린터** | biome | 코드 품질, 포맷팅, 빠른 속도 |
+| **타입 체킹** | TypeScript Compiler | 컴파일 타임 타입 검증 |
+| **빌드 도구** | Next.js built-in | 번들링, 최적화 |
+
+### 2.4. 테스트 (Testing)
+
+| 수준 | 도구 | 용도 |
+| :--- | :--- | :--- |
+| **단위 테스트** | Vitest | 빠른 실행, ESM 지원 |
+| **컴포넌트 테스트** | @testing-library/react | React 컴포넌트 테스트 |
+| **UI 테스트** | Storybook | 컴포넌트 문서화, 시각적 테스트 |
+| **E2E 테스트** | Playwright | 브라우저 자동화, 통합 테스트 |
+
+### 2.5. 배포 & CI/CD (Deployment)
+
+| 카테고리 | 도구/서비스 | 용도 |
+| :--- | :--- | :--- |
+| **호스팅** | GitHub Pages | 정적 사이트 배포 |
+| **CI/CD** | GitHub Actions | 자동화된 빌드, 테스트, 배포 |
+| **도메인** | GitHub Pages 기본 | `username.github.io/repository` |
+
+### 2.6. 데이터 저장 (Data Storage - MVP)
+
+| 저장소 | 용도 | 제한사항 |
+| :--- | :--- | :--- |
+| **localStorage** | 프로젝트 데이터, 사용자 설정 | 브라우저별 5-10MB 제한 |
+| **sessionStorage** | 임시 상태 (Undo/Redo 히스토리) | 세션 종료 시 삭제 |
+| **IndexedDB** | 프로젝트 데이터 영구 저장 | 고용량의 데이터 저장 필요시 |
+
+---
+
+## 3. 최상위 아키텍처 (High-Level Architecture - MVP)
 
 MVP 단계에서는 클라이언트 측 렌더링과 로컬 저장을 사용하는 순수 프론트엔드 아키텍처를 따릅니다.
 
@@ -46,14 +106,14 @@ flowchart TD
 
 ---
 
-## 3. 프론트엔드 아키텍처 (Frontend Architecture)
+## 4. 프론트엔드 아키텍처 (Frontend Architecture)
 
 - **프레임워크**: Next.js (React) — *Static Export 모드 (`next export`)*
 - **상태 관리**: Zustand
 - **Drag & Drop**: dnd-kit
 - **데이터 영속성 (MVP)**: `localStorage` *(스토리지 추상화 계층 위에 구현)*
 
-### 3.1. 디자인 시스템 아키텍처: 어댑터 패턴
+### 4.1. 디자인 시스템 아키텍처: 어댑터 패턴
 
 특정 UI 라이브러리(예: `shadcn/ui`, `Material-UI`)에 종속되지 않는 유연한 구조를 위해 **어댑터 패턴**을 도입합니다.
 
@@ -83,7 +143,7 @@ flowchart LR
 
 > **장점**: `Material-UI`용 어댑터를 새로 만들어 갈아 끼우기만 하면, 빌더 코어 로직 수정 없이 전체 UI의 룩앤필(Look-and-Feel)을 변경할 수 있습니다.
 
-### 3.2. 디렉토리 구조 (Feature-based)
+### 4.2. 디렉토리 구조 (Feature-based)
 
 어댑터 패턴을 반영하여 디렉토리 구조를 다음과 같이 정의합니다.
 
@@ -124,7 +184,7 @@ flowchart LR
 
 | 라이브러리 | 컴포넌트 위치 | 설치 방법 |
 | :--- | :--- | :--- |
-| **shadcn/ui** | `/src/components/ui/` | `npx shadcn-ui@latest add button input` 등으로 개별 컴포넌트 설치 |
+| **shadcn/ui** | `/src/components/shadcn/` | `npx shadcn-ui@latest add button input` 등으로 개별 컴포넌트 설치 |
 | **Material-UI** | `node_modules/@mui/material/` | `npm install @mui/material @emotion/react @emotion/styled` |
 | **회사 디자인 시스템** | `/src/components/company-ds/` | 사내 CLI 도구 또는 수동 복사 |
 | **Ant Design** | `node_modules/antd/` | `npm install antd` |
@@ -133,9 +193,9 @@ flowchart LR
 
 ```typescript
 // /src/adapters/shadcn/components.ts
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card } from '@/components/ui/card'
+import { Button } from '@/components/shadcn/button'
+import { Input } from '@/components/shadcn/input'
+import { Card } from '@/components/shadcn/card'
 
 export const shadcnComponentRegistry = {
   Button: Button,
@@ -173,7 +233,7 @@ export const companyDsComponentRegistry = {
 }
 ```
 
-### 3.3. 스토리지 추상화 (Storage Abstraction)
+### 4.3. 스토리지 추상화 (Storage Abstraction)
 
 `localStorage` 구현은 MVP의 기본 저장소이지만, **스토리지 계층을 인터페이스로 추상화**하여 언제든 다른 저장소(IndexedDB, REST API, Supabase 등)로 교체할 수 있습니다.
 
@@ -202,7 +262,7 @@ export const localStorageAdapter: StorageAdapter = {
 
 향후 백엔드 도입 시에는 `StorageAdapter`를 구현하는 `remoteStorageAdapter`를 추가하고 런타임 환경에 따라 주입합니다.
 
-### 3.3. UI 빌더 레이아웃 & 상호작용 흐름
+### 4.4. UI 빌더 레이아웃 & 상호작용 흐름
 
 아래 구성은 PRD Epic 2 요구사항을 구현하기 위한 **최소 책임 분리(Separation of Concerns)** 구조입니다.
 
@@ -221,7 +281,7 @@ flowchart LR
 * **StructureTab**: 현재 화면의 루트 노드 자식들을 1-depth 리스트로 표시. 항목 클릭 시 해당 노드를 선택하고 `PropertyTab`을 자동 전환한다.
 * **PropertyTab**: 선택된 노드의 속성을 **Zod** 스키마 기반 동적 폼으로 표시·편집한다.
 
-### 3.4. Variant & State 스키마 설계 지침
+### 4.5. Variant & State 스키마 설계 지침
 
 각 어댑터의 `schema.ts` 파일은 **Zod**를 사용해 Variant/State를 정의한다. Zod 스키마는 타입 안정성을 보장하며, PRD 표준(버튼 variant, size 등)을 그대로 따르되 DX를 향상한다.
 
@@ -241,7 +301,7 @@ export type ButtonPropsSchema = z.infer<typeof buttonSchema>;
 
 > **런타임 주입**: `DesignLibraryProvider`(React Context)에서 *현재 선택된 어댑터*의 `ComponentRegistry`와 `SchemaRegistry`를 제공한다. 라이브러리 변경 시 Provider만 교체하면 Canvas & Panel이 자동으로 재렌더링된다.
 
-### 3.5. 새 컴포넌트 추가 플로우 (Adapter Pattern 기반)
+### 4.6. 새 컴포넌트 추가 플로우 (Adapter Pattern 기반)
 
 아래 절차는 **빌더 코어**에 완전히 새로운 컴포넌트(`Badge` 예시)를 도입할 때 수행하는 표준 순서입니다. 의존성 역방향(코어←어댑터←라이브러리)을 유지해, 코어 수정은 최소화하고 확장성을 보장합니다.
 
@@ -262,11 +322,11 @@ export type ButtonPropsSchema = z.infer<typeof buttonSchema>;
 
 ---
 
-## 4. 빌더 데이터 구조 (Builder Data Structure)
+## 5. 빌더 데이터 구조 (Builder Data Structure)
 
 > **목표**: 화면 빌더 상태를 **명시적·유연·버저닝 가능** 하게 정의하여, 저장소(localStorage → Remote), 멀티 콜라보레이션, 디자인 라이브러리 교체 시에도 데이터 손실 없이 진화할 수 있도록 합니다.
 
-### 4.1. 식별자 & 버전 관리
+### 5.1. 식별자 & 버전 관리
 
 | 항목 | 규칙 |
 | :--- | :--- |
@@ -274,7 +334,7 @@ export type ButtonPropsSchema = z.infer<typeof buttonSchema>;
 | **스키마 버전** | `schemaVersion: number` 필드 추가. 마이그레이션 시 버전 증가 후 런타임 마이그레이터로 호환성 유지 |
 | **엔티티 버전** | 각 엔티티(`Project`, `Screen`, `CanvasNode`)에 `updatedAt` 보존. 노드 단위 Undo/Redo를 위한 patch log는 Zustand 미들웨어가 관리 |
 
-### 4.2. 타입 정의 (TypeScript)
+### 5.2. 타입 정의 (TypeScript)
 
 ```typescript
 // /types/project.ts
@@ -337,13 +397,13 @@ export interface Project {
 }
 ```
 
-### 4.3. 스토리지 구조
+### 5.3. 스토리지 구조
 
 - **Key**: `builder.projects` – `Project[]`
 - **Key**: `builder.recentProjectId` – 마지막으로 열린 프로젝트 복구용
 - (선택) `builder.prefs` – 에디터 UI(언어, 다크모드) 로컬 설정
 
-### 4.4. 예시 JSON (발췌)
+### 5.4. 예시 JSON (발췌)
 
 ```jsonc
 {
@@ -405,7 +465,7 @@ export interface Project {
 
 ---
 
-## 5. 백엔드 아키텍처 (Post-MVP)
+## 6. 백엔드 아키텍처 (Post-MVP)
 
 > **[안내]** MVP 단계에서는 백엔드 서버를 구축하지 않습니다.
 > 아래 내용은 MVP 이후 확장성을 고려한 설계안입니다.
@@ -413,7 +473,7 @@ export interface Project {
 
 ---
 
-## 6. 데이터베이스 스키마 (Post-MVP)
+## 7. 데이터베이스 스키마 (Post-MVP)
 
 > **[안내]** MVP 단계에서는 데이터베이스를 사용하지 않습니다.
 > 아래 내용은 향후 데이터베이스 도입 시 참고할 스키마입니다.
@@ -421,7 +481,7 @@ export interface Project {
 
 ---
 
-## 7. DevOps 및 배포 (Deployment & CI/CD)
+## 8. DevOps 및 배포 (Deployment & CI/CD)
 
 - **프론트엔드 배포**: **GitHub Pages** (정적 사이트 — `next build && next export` 결과물을 `/docs` 또는 `gh-pages` 브랜치로 배포)
 - **CI/CD**: GitHub Actions
@@ -435,7 +495,7 @@ export interface Project {
 
 Chrome, Edge, Safari, Firefox 등 **Evergreen 브라우저 최신 2버전**을 공식 지원합니다. (IE 미지원)
 
-## 8. 테스트 전략 (Quality Assurance)
+## 9. 테스트 전략 (Quality Assurance)
 
 | 수준 | 도구 | 주요 내용 |
 | :--- | :--- | :--- |
