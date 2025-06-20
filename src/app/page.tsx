@@ -117,22 +117,20 @@ export default function Home() {
 
             <Button
               variant="secondary"
-              onClick={() => {
-                import("@/lib/storage").then(async (module) => {
+              onClick={async () => {
+                try {
+                  const module = await import("@/lib/storage");
                   const { createDefaultStorage } = module;
-                  const { projectStorage } = createDefaultStorage(true);
-
-                  try {
-                    const usage = await projectStorage.getStorageUsage();
-                    console.log("📊 Storage Usage:", usage);
-                    alert(
-                      `스토리지 사용량: ${Math.round(usage.used / 1024)}KB / ${Math.round(usage.total / 1024)}KB (${Math.round(usage.usage * 100)}%)`,
-                    );
-                  } catch (error) {
-                    console.error("Storage usage check failed:", error);
-                    alert("스토리지 사용량 확인 실패!");
-                  }
-                });
+                  const { projectStorage } = await createDefaultStorage(true);
+                  const usage = await projectStorage.getStorageUsage();
+                  console.log("📊 Storage Usage:", usage);
+                  alert(
+                    `스토리지 사용량: ${Math.round(usage.used / 1024)}KB / ${Math.round(usage.total / 1024)}KB (${Math.round(usage.usage * 100)}%)`,
+                  );
+                } catch (error) {
+                  console.error("Storage usage check failed:", error);
+                  alert("스토리지 사용량 확인 실패!");
+                }
               }}
             >
               스토리지 사용량 확인
