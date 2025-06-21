@@ -10,7 +10,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Eye, EyeOff, Move, Trash2 } from "lucide-react";
+import { Move, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { isContainerComponent } from "@/lib/utils";
@@ -110,13 +110,11 @@ export function DroppableCanvasNode({
       case "Container":
         return (
           <div
-            className={`border-2 border-dashed border-gray-300 ${
-              node.children.length === 0 ? "min-h-[60px] p-3" : "p-2"
-            } ${node.props.className || ""}`}
+            className={`border-2 border-dashed border-gray-300 p-2 ${node.props.className || ""}`}
           >
             <div className="text-xs text-gray-500 mb-1">📦 Container</div>
             {node.children.length === 0 && (
-              <div className="text-center text-gray-400 text-xs">
+              <div className="text-center text-gray-400 text-xs py-2">
                 컴포넌트를 드롭하세요
               </div>
             )}
@@ -169,13 +167,11 @@ export function DroppableCanvasNode({
       case "Card":
         return (
           <div
-            className={`border rounded-lg shadow-sm ${
-              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
-            } ${node.props.className || ""}`}
+            className={`border rounded-lg shadow-sm p-2 ${node.props.className || ""}`}
           >
             <div className="text-xs text-gray-500 mb-1">🃏 Card</div>
             {node.children.length === 0 && (
-              <div className="text-center text-gray-400 text-xs">
+              <div className="text-center text-gray-400 text-xs py-2">
                 컴포넌트를 드롭하세요
               </div>
             )}
@@ -197,15 +193,13 @@ export function DroppableCanvasNode({
                     : cols === 4
                       ? "grid-cols-4"
                       : "grid-cols-2"
-            } border-2 border-dashed border-blue-300 ${
-              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
-            } ${node.props.className || ""}`}
+            } border-2 border-dashed border-blue-300 p-2 ${node.props.className || ""}`}
           >
             <div className="text-xs text-gray-500 mb-1 col-span-full">
               ⚏ Grid ({cols}열)
             </div>
             {node.children.length === 0 && (
-              <div className="text-center text-gray-400 text-xs col-span-full">
+              <div className="text-center text-gray-400 text-xs py-2 col-span-full">
                 컴포넌트를 드롭하세요
               </div>
             )}
@@ -219,15 +213,13 @@ export function DroppableCanvasNode({
           <div
             className={`flex ${
               direction === "column" ? "flex-col" : "flex-row"
-            } gap-2 border-2 border-dashed border-purple-300 ${
-              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
-            } ${node.props.className || ""}`}
+            } gap-2 border-2 border-dashed border-purple-300 p-2 ${node.props.className || ""}`}
           >
             <div className="text-xs text-gray-500 mb-1">
               ↔ Flex ({direction})
             </div>
             {node.children.length === 0 && (
-              <div className="text-center text-gray-400 text-xs">
+              <div className="text-center text-gray-400 text-xs py-2">
                 컴포넌트를 드롭하세요
               </div>
             )}
@@ -238,15 +230,13 @@ export function DroppableCanvasNode({
       case "Modal":
         return (
           <div
-            className={`border-2 border-dashed border-indigo-300 rounded-lg ${
-              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
-            } ${node.props.className || ""}`}
+            className={`border-2 border-dashed border-indigo-300 rounded-lg p-2 ${node.props.className || ""}`}
           >
             <div className="text-xs text-gray-500 mb-1">
               🪟 Modal: {(node.props.title as string) || "모달"}
             </div>
             {node.children.length === 0 && (
-              <div className="text-center text-gray-400 text-xs">
+              <div className="text-center text-gray-400 text-xs py-2">
                 모달 컨텐츠를 드롭하세요
               </div>
             )}
@@ -256,15 +246,13 @@ export function DroppableCanvasNode({
       case "Drawer":
         return (
           <div
-            className={`border-2 border-dashed border-orange-300 rounded ${
-              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
-            } ${node.props.className || ""}`}
+            className={`border-2 border-dashed border-orange-300 rounded p-2 ${node.props.className || ""}`}
           >
             <div className="text-xs text-gray-500 mb-1">
               📄 Drawer: {(node.props.title as string) || "드로어"}
             </div>
             {node.children.length === 0 && (
-              <div className="text-center text-gray-400 text-xs">
+              <div className="text-center text-gray-400 text-xs py-2">
                 드로어 컨텐츠를 드롭하세요
               </div>
             )}
@@ -274,13 +262,11 @@ export function DroppableCanvasNode({
       case "Tabs":
         return (
           <div
-            className={`border-2 border-dashed border-green-300 rounded ${
-              node.children.length === 0 ? "min-h-[50px] p-3" : "p-2"
-            } ${node.props.className || ""}`}
+            className={`border-2 border-dashed border-green-300 rounded p-2 ${node.props.className || ""}`}
           >
             <div className="text-xs text-gray-500 mb-1">📑 Tabs</div>
             {node.children.length === 0 && (
-              <div className="text-center text-gray-400 text-xs">
+              <div className="text-center text-gray-400 text-xs py-2">
                 탭 컨텐츠를 드롭하세요
               </div>
             )}

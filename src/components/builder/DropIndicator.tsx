@@ -35,4 +35,4 @@ export function DropIndicator({ isVisible, position }: DropIndicatorProps) {
       )}
     </div>
   );
-} 
+}

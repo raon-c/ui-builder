@@ -307,7 +307,9 @@ export const useProjectStore = create<ProjectState>()(
           throw new Error("프로젝트를 찾을 수 없습니다.");
         }
 
-        const screenIndex = project.screens.findIndex((s: Screen) => s.id === screenId);
+        const screenIndex = project.screens.findIndex(
+          (s: Screen) => s.id === screenId,
+        );
         if (screenIndex === -1) {
           throw new Error("화면을 찾을 수 없습니다.");
         }
@@ -407,7 +409,9 @@ export const useProjectStore = create<ProjectState>()(
           throw new Error("프로젝트를 찾을 수 없습니다.");
         }
 
-        const sourceScreen = project.screens.find((s: Screen) => s.id === screenId);
+        const sourceScreen = project.screens.find(
+          (s: Screen) => s.id === screenId,
+        );
         if (!sourceScreen) {
           throw new Error("복사할 화면을 찾을 수 없습니다.");
         }

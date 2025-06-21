@@ -98,7 +98,9 @@ describe("projectStore", () => {
     });
 
     it("should handle loading errors", async () => {
-      mockProjectStorage.getAllProjects.mockRejectedValue(new Error("Storage error"));
+      mockProjectStorage.getAllProjects.mockRejectedValue(
+        new Error("Storage error"),
+      );
 
       const { result } = renderHook(() => useProjectStore());
 
@@ -129,7 +131,9 @@ describe("projectStore", () => {
     });
 
     it("should handle creation errors", async () => {
-      mockProjectStorage.saveProject.mockRejectedValue(new Error("Storage full"));
+      mockProjectStorage.saveProject.mockRejectedValue(
+        new Error("Storage full"),
+      );
 
       const { result } = renderHook(() => useProjectStore());
 
@@ -204,12 +208,16 @@ describe("projectStore", () => {
         await result.current.deleteProject("test-project-1");
       });
 
-      expect(mockProjectStorage.deleteProject).toHaveBeenCalledWith("test-project-1");
+      expect(mockProjectStorage.deleteProject).toHaveBeenCalledWith(
+        "test-project-1",
+      );
       expect(result.current.projects).toHaveLength(0);
     });
 
     it("should handle deletion errors", async () => {
-      mockProjectStorage.deleteProject.mockRejectedValue(new Error("Delete failed"));
+      mockProjectStorage.deleteProject.mockRejectedValue(
+        new Error("Delete failed"),
+      );
 
       const { result } = renderHook(() => useProjectStore());
       act(() => {

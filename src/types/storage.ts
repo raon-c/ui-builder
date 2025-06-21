@@ -160,4 +160,4 @@ export interface StorageEvent {
   error?: StorageError;
   data?: unknown;
   timestamp: number;
-} 
+}

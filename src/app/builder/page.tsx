@@ -33,7 +33,6 @@ import { ScreenManager } from "@/components/builder/ScreenManager";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { areSiblings, isContainerComponent } from "@/lib/utils";
 import { useBuilderStore } from "@/store/builderStore";
 import { useProjectStore } from "@/store/projectStore";
 import type { BuilderComponentType } from "@/types/component";

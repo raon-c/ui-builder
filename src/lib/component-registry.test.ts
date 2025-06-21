@@ -244,7 +244,7 @@ describe("AdvancedComponentRegistry", () => {
       };
 
       const result = registry.validateComponent(wrapperWithoutOptionals);
-      
+
       expect(result.isValid).toBe(true);
       expect(result.warnings).toContain("Description is recommended");
       expect(result.warnings).toContain("Icon is recommended");
