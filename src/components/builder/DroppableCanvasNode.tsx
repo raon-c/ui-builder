@@ -71,6 +71,14 @@ export function DroppableCanvasNode({
     setSelectedNode(isSelected ? null : node.id);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      setSelectedNode(isSelected ? null : node.id);
+    }
+  };
+
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     removeNode(node.id);
@@ -294,13 +302,23 @@ export function DroppableCanvasNode({
     <div
       ref={isRoot ? setDropRef : setSortableRef}
       style={isRoot ? undefined : style}
-      className={`relative group ${isDragging ? "opacity-50" : ""} ${
-        isSelected ? "ring-2 ring-blue-500" : ""
-      } ${isOver || isDraggedOver ? "ring-2 ring-green-400 ring-dashed" : ""}`}
+      className={`relative group transition-all duration-200 ${
+        isDragging ? "opacity-50 scale-95 rotate-2 z-50" : ""
+      } ${isSelected ? "ring-2 ring-blue-500 ring-offset-2" : ""} ${
+        isOver || isDraggedOver
+          ? "ring-2 ring-green-400 ring-dashed ring-offset-1 bg-green-50/50"
+          : ""
+      } ${
+        isHovered && !isSelected && !isDragging
+          ? "ring-1 ring-gray-300 ring-offset-1"
+          : ""
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
-      {...(isRoot ? {} : attributes)}
+      onKeyDown={handleKeyDown}
+      aria-label={`${node.type} 컴포넌트${isSelected ? " (선택됨)" : ""}`}
+      {...(isRoot ? {} : { ...attributes, role: "button", tabIndex: 0 })}
     >
       {/* 노드 컨트롤 (호버 시 표시) */}
       {!isRoot && (isHovered || isSelected) && (

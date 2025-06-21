@@ -7,6 +7,7 @@ import {
   type DragOverEvent,
   DragOverlay,
   type DragStartEvent,
+  defaultDropAnimationSideEffects,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -522,12 +523,62 @@ function BuilderPageContent() {
         </div>
 
         {/* 드래그 오버레이 */}
-        <DragOverlay>
-          {activeId ? (
-            <div className="bg-white border-2 border-blue-500 rounded-lg p-2 shadow-lg">
-              <div className="text-sm font-medium">드래그 중...</div>
-            </div>
-          ) : null}
+        <DragOverlay
+          dropAnimation={{
+            sideEffects: defaultDropAnimationSideEffects({
+              styles: {
+                active: {
+                  opacity: "0.5",
+                },
+              },
+            }),
+          }}
+        >
+          {activeId
+            ? (() => {
+                // 팔레트 아이템인지 확인
+                if (activeId.startsWith("palette-")) {
+                  const componentType = activeId.replace(
+                    "palette-",
+                    "",
+                  ) as BuilderComponentType;
+                  const paletteItem = COMPONENT_PALETTE.find(
+                    (c) => c.componentType === componentType,
+                  );
+
+                  if (paletteItem) {
+                    return (
+                      <div className="flex items-center p-3 bg-white rounded-lg shadow-lg border-2 border-blue-500 cursor-grabbing">
+                        <div className="text-lg mr-3">{paletteItem.icon}</div>
+                        <span className="text-sm font-medium text-gray-700">
+                          {paletteItem.name}
+                        </span>
+                      </div>
+                    );
+                  }
+                }
+
+                // 캔버스 노드인 경우
+                const node = findNode(activeId);
+                if (node) {
+                  return (
+                    <div className="bg-white border-2 border-blue-500 rounded-lg p-2 shadow-lg opacity-90">
+                      <div className="text-xs text-gray-500 mb-1">
+                        📦 {node.type}
+                      </div>
+                      <div className="text-sm font-medium">이동 중...</div>
+                    </div>
+                  );
+                }
+
+                // 기본 fallback
+                return (
+                  <div className="bg-white border-2 border-blue-500 rounded-lg p-2 shadow-lg">
+                    <div className="text-sm font-medium">드래그 중...</div>
+                  </div>
+                );
+              })()
+            : null}
         </DragOverlay>
 
         {/* 미리보기 모달 */}
