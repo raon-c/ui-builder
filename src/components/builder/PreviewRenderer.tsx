@@ -301,9 +301,12 @@ export function PreviewRenderer({
             <h4 className="font-medium">
               {(node.props.title as string) || "알림"}
             </h4>
-            {node.props.description && (
-              <p className="text-sm mt-1">{String(node.props.description)}</p>
-            )}
+            {(() => {
+              const description = node.props.description;
+              return description ? (
+                <p className="text-sm mt-1">{String(description)}</p>
+              ) : null;
+            })()}
           </div>
         );
 

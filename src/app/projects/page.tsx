@@ -61,14 +61,12 @@ export default function ProjectsPage() {
   };
 
   const handleOpenProject = (project: Project) => {
-    // TODO: 프로젝트 편집 페이지로 이동
-    console.log("Opening project:", project.name);
-    alert(`"${project.name}" 프로젝트를 열 예정입니다. (구현 예정)`);
+    // 빌더 페이지로 이동 (실제 구현됨)
+    window.location.href = `/builder?id=${project.id}`;
   };
 
   const handleEditProject = (project: Project) => {
-    // TODO: 프로젝트 이름 변경 모달
-    console.log("Editing project:", project.name);
+    // 프로젝트 이름 변경 기능 (향후 구현 예정)
     alert(`"${project.name}" 프로젝트 편집 기능은 구현 예정입니다.`);
   };
 

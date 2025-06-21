@@ -11,13 +11,17 @@ import type { ComponentWrapper } from "@/types/component";
 
 export default function ComponentCatalogPage() {
   const handleComponentSelect = (component: ComponentWrapper) => {
-    console.log("🎯 Selected component:", component.type);
-    // TODO: 향후 빌더로 이동하거나 다른 액션 처리
+    // 컴포넌트 선택 시 빌더로 이동 (향후 구현 예정)
+    alert(
+      `${component.metadata.displayName} 컴포넌트가 선택되었습니다. 빌더 연동 기능은 구현 예정입니다.`,
+    );
   };
 
   const handleComponentPreview = (component: ComponentWrapper) => {
-    console.log("👀 Preview component:", component.type);
-    // TODO: 향후 미리보기 모달이나 상세 페이지 표시
+    // 컴포넌트 미리보기 모달 (향후 구현 예정)
+    alert(
+      `${component.metadata.displayName} 컴포넌트 미리보기 기능은 구현 예정입니다.`,
+    );
   };
 
   return (

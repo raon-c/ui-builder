@@ -54,12 +54,10 @@ export function ComponentCatalog({
   const handleComponentSelect = (component: ComponentWrapper) => {
     setSelectedComponent(component);
     onComponentSelect?.(component);
-    console.log("Selected component:", component.type);
   };
 
   const handleComponentPreview = (component: ComponentWrapper) => {
     onComponentPreview?.(component);
-    console.log("Preview component:", component.type);
   };
 
   if (isLoading) {

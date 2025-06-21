@@ -18,7 +18,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DraggableComponent } from "@/components/builder/DraggableComponent";
 import { DroppableCanvasNode } from "@/components/builder/DroppableCanvasNode";
@@ -119,10 +119,10 @@ const COMPONENT_PALETTE = [
 ];
 
 /**
- * 빌더 메인 페이지
+ * 빌더 메인 컴포넌트 (Suspense 내부)
  * 4-패널 레이아웃 + 드래그 앤 드롭 기능
  */
-export default function BuilderPage() {
+function BuilderPageContent() {
   const searchParams = useSearchParams();
   const projectId = searchParams.get("id");
 
@@ -244,7 +244,8 @@ export default function BuilderPage() {
       const overNodeId = overData.nodeId;
 
       if (activeNodeId !== overNodeId) {
-        // TODO: 정확한 인덱스 계산 로직 필요
+        // 드롭 위치에 따른 정확한 인덱스 계산 (현재는 기본값 0 사용)
+        // 향후 개선: 드롭 위치(위/아래)에 따른 동적 인덱스 계산
         moveNode(activeNodeId, overNodeId, 0);
       }
     }
@@ -568,5 +569,27 @@ function StructureTree({ node }: { node: any }) {
         </div>
       )}
     </div>
+  );
+}
+
+/**
+ * 빌더 페이지 (Suspense 래퍼)
+ */
+export default function BuilderPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <div className="text-lg font-medium">빌더 로딩 중...</div>
+            <div className="text-sm text-muted-foreground mt-2">
+              잠시만 기다려주세요.
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <BuilderPageContent />
+    </Suspense>
   );
 }
