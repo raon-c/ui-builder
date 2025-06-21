@@ -307,7 +307,7 @@ export const useProjectStore = create<ProjectState>()(
           throw new Error("프로젝트를 찾을 수 없습니다.");
         }
 
-        const screenIndex = project.screens.findIndex((s) => s.id === screenId);
+        const screenIndex = project.screens.findIndex((s: Screen) => s.id === screenId);
         if (screenIndex === -1) {
           throw new Error("화면을 찾을 수 없습니다.");
         }
@@ -361,12 +361,12 @@ export const useProjectStore = create<ProjectState>()(
           throw new Error("최소 하나의 화면은 유지되어야 합니다.");
         }
 
-        const updatedScreens = project.screens.filter((s) => s.id !== screenId);
-
-        // 순서 재정렬
-        updatedScreens.forEach((screen, index) => {
-          screen.order = index + 1;
-        });
+        const updatedScreens = project.screens
+          .filter((s: Screen) => s.id !== screenId)
+          .map((screen: Screen, index: number) => ({
+            ...screen,
+            order: index + 1,
+          }));
 
         const updatedProject = {
           ...project,
@@ -407,7 +407,7 @@ export const useProjectStore = create<ProjectState>()(
           throw new Error("프로젝트를 찾을 수 없습니다.");
         }
 
-        const sourceScreen = project.screens.find((s) => s.id === screenId);
+        const sourceScreen = project.screens.find((s: Screen) => s.id === screenId);
         if (!sourceScreen) {
           throw new Error("복사할 화면을 찾을 수 없습니다.");
         }
@@ -474,14 +474,17 @@ export const useProjectStore = create<ProjectState>()(
         const [movedScreen] = updatedScreens.splice(oldIndex, 1);
         updatedScreens.splice(newIndex, 0, movedScreen);
 
-        // 순서 재정렬
-        updatedScreens.forEach((screen, index) => {
-          screen.order = index + 1;
-        });
+        // 순서 재정렬 - 새 객체로 생성하면서 order 업데이트
+        const reorderedScreens = updatedScreens.map(
+          (screen: Screen, index: number) => ({
+            ...screen,
+            order: index + 1,
+          }),
+        );
 
         const updatedProject = {
           ...project,
-          screens: updatedScreens,
+          screens: reorderedScreens,
           updatedAt: new Date().toISOString(),
         };
 
