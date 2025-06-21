@@ -33,6 +33,7 @@ import { ScreenManager } from "@/components/builder/ScreenManager";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { areSiblings, isContainerComponent } from "@/lib/utils";
 import { useBuilderStore } from "@/store/builderStore";
 import { useProjectStore } from "@/store/projectStore";
 import type { BuilderComponentType } from "@/types/component";
@@ -143,6 +144,7 @@ function BuilderPageContent() {
     findNode,
     addNode,
     moveNode,
+    reorderNodes,
     setDraggedComponentType,
     setDragOverNode,
   } = useBuilderStore();
@@ -226,13 +228,23 @@ function BuilderPageContent() {
     setDraggedComponentType(null);
     setDragOverNode(null);
 
-    if (!over) return;
+    if (!over || !currentScreen) return;
 
     const activeData = active.data.current;
     const overData = over.data.current;
 
     // 컴포넌트 팔레트에서 캔버스로 드래그
     if (activeData?.type === "component" && overData?.type === "canvas-node") {
+      const targetNode = findNode(overData.nodeId);
+
+      if (!targetNode || !isContainerComponent(targetNode.type)) {
+        // 타겟이 컨테이너가 아니면 드롭 불가
+        console.warn(
+          `${targetNode?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`,
+        );
+        return;
+      }
+
       addNode(overData.nodeId, activeData.componentType);
     }
 
@@ -245,8 +257,18 @@ function BuilderPageContent() {
       const overNodeId = overData.nodeId;
 
       if (activeNodeId !== overNodeId) {
-        // 드롭 위치에 따른 정확한 인덱스 계산 (현재는 기본값 0 사용)
-        // 향후 개선: 드롭 위치(위/아래)에 따른 동적 인덱스 계산
+        const activeNode = findNode(activeNodeId);
+        const overNode = findNode(overNodeId);
+
+        if (!activeNode || !overNode) return;
+
+        if (!isContainerComponent(overNode.type)) {
+          // 타겟이 컨테이너가 아니면 드롭 불가
+          console.warn(`${overNode.type} 컴포넌트는 자식을 가질 수 없습니다.`);
+          return;
+        }
+
+        // 컨테이너의 첫 번째 위치에 추가
         moveNode(activeNodeId, overNodeId, 0);
       }
     }

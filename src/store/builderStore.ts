@@ -6,6 +6,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { generateNodeId } from "@/lib/nanoid";
+import { isContainerComponent } from "@/lib/utils";
 import type { BuilderComponentType } from "@/types/component";
 import type { CanvasNode, Screen } from "@/types/project";
 
@@ -34,6 +35,7 @@ interface BuilderState {
   ) => void;
   removeNode: (nodeId: string) => void;
   moveNode: (nodeId: string, newParentId: string, newIndex: number) => void;
+  reorderNodes: (nodeId: string, newIndex: number) => void;
   updateNodeProps: (nodeId: string, props: Record<string, unknown>) => void;
 
   // 드래그 앤 드롭 상태
@@ -77,6 +79,15 @@ export const useBuilderStore = create<BuilderState>()(
       set((state) => {
         if (!state.currentScreen) return;
 
+        const parent = findNodeInTree(state.currentScreen.content, parentId);
+        if (!parent) return;
+
+        if (!isContainerComponent(parent.type)) {
+          // 부모가 컨테이너 타입이 아니면 자식 추가 불가
+          console.warn(`${parent.type} 컴포넌트는 자식을 가질 수 없습니다.`);
+          return;
+        }
+
         const newNode: CanvasNode = {
           id: generateNodeId(),
           type: componentType,
@@ -84,17 +95,14 @@ export const useBuilderStore = create<BuilderState>()(
           children: [],
         };
 
-        const parent = findNodeInTree(state.currentScreen.content, parentId);
-        if (parent) {
-          if (index !== undefined) {
-            parent.children.splice(index, 0, newNode);
-          } else {
-            parent.children.push(newNode);
-          }
-
-          // 새로 추가된 노드를 선택
-          state.selectedNodeId = newNode.id;
+        if (index !== undefined) {
+          parent.children.splice(index, 0, newNode);
+        } else {
+          parent.children.push(newNode);
         }
+
+        // 새로 추가된 노드를 선택
+        state.selectedNodeId = newNode.id;
       });
     },
 
@@ -110,23 +118,47 @@ export const useBuilderStore = create<BuilderState>()(
       });
     },
 
-    // 노드 이동
+    // 노드 이동 (다른 부모로)
     moveNode: (nodeId: string, newParentId: string, newIndex: number) => {
       set((state) => {
         if (!state.currentScreen) return;
+
+        const newParent = findNodeInTree(
+          state.currentScreen.content,
+          newParentId,
+        );
+        if (!newParent || !isContainerComponent(newParent.type)) {
+          console.warn(
+            `${newParent?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`,
+          );
+          return;
+        }
 
         // 기존 위치에서 노드 제거
         const node = removeNodeFromTree(state.currentScreen.content, nodeId);
         if (!node) return;
 
         // 새 위치에 노드 추가
-        const newParent = findNodeInTree(
-          state.currentScreen.content,
-          newParentId,
+        newParent.children.splice(newIndex, 0, node);
+      });
+    },
+
+    // 같은 부모 내에서 순서 변경
+    reorderNodes: (nodeId: string, newIndex: number) => {
+      set((state) => {
+        if (!state.currentScreen) return;
+
+        const parent = findParentOfNode(state.currentScreen.content, nodeId);
+        if (!parent) return;
+
+        const currentIndex = parent.children.findIndex(
+          (child: CanvasNode) => child.id === nodeId,
         );
-        if (newParent) {
-          newParent.children.splice(newIndex, 0, node);
-        }
+        if (currentIndex === -1 || currentIndex === newIndex) return;
+
+        // 노드를 새 위치로 이동
+        const [movedNode] = parent.children.splice(currentIndex, 1);
+        parent.children.splice(newIndex, 0, movedNode);
       });
     },
 
@@ -203,6 +235,23 @@ function removeNodeFromTree(
     if (found) return found;
   }
 
+  return null;
+}
+
+/**
+ * 노드의 부모 찾기
+ */
+function findParentOfNode(
+  root: CanvasNode,
+  targetId: string,
+): CanvasNode | null {
+  for (const child of root.children) {
+    if (child.id === targetId) {
+      return root;
+    }
+    const found = findParentOfNode(child, targetId);
+    if (found) return found;
+  }
   return null;
 }
 

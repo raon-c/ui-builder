@@ -13,6 +13,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Eye, EyeOff, Move, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { isContainerComponent } from "@/lib/utils";
 import { useBuilderStore } from "@/store/builderStore";
 import type { CanvasNode } from "@/types/project";
 
@@ -27,12 +28,22 @@ export function DroppableCanvasNode({
   isRoot = false,
   depth = 0,
 }: DroppableCanvasNodeProps) {
-  const { selectedNodeId, setSelectedNode, removeNode, dragOverNodeId } =
-    useBuilderStore();
+  const {
+    selectedNodeId,
+    setSelectedNode,
+    removeNode,
+    dragOverNodeId,
+    draggedComponentType,
+  } = useBuilderStore();
   const [isHovered, setIsHovered] = useState(false);
 
   const isSelected = selectedNodeId === node.id;
   const isDraggedOver = dragOverNodeId === node.id;
+  
+  // 현재 노드가 드롭을 허용하는지 확인
+  const canAcceptDrop = isContainerComponent(node.type);
+  const isInvalidDropTarget =
+    isDraggedOver && draggedComponentType && !canAcceptDrop;
 
   // 드롭 가능한 영역 설정
   const { setNodeRef: setDropRef, isOver } = useDroppable({
@@ -305,9 +316,11 @@ export function DroppableCanvasNode({
       className={`relative group transition-all duration-200 ${
         isDragging ? "opacity-50 scale-95 rotate-2 z-50" : ""
       } ${isSelected ? "ring-2 ring-blue-500 ring-offset-2" : ""} ${
-        isOver || isDraggedOver
-          ? "ring-2 ring-green-400 ring-dashed ring-offset-1 bg-green-50/50"
-          : ""
+        isInvalidDropTarget
+          ? "ring-2 ring-red-400 ring-dashed ring-offset-1 bg-red-50/50"
+          : isOver || isDraggedOver
+            ? "ring-2 ring-green-400 ring-dashed ring-offset-1 bg-green-50/50"
+            : ""
       } ${
         isHovered && !isSelected && !isDragging
           ? "ring-1 ring-gray-300 ring-offset-1"
