@@ -14,7 +14,7 @@
 - [ ] **A3** Expiry & Version Check (2 SP)
 - [ ] **B1** Lint Rule Consolidation (3 SP)
 - [ ] **B2** Path/Naming Refactor (2 SP)
-- [ ] **B3** Dead Code Cleanup (3 SP)
+- [x] **B3** Dead Code Cleanup (3 SP) ✅ **deprecated 코드 정리 완료**
 - [x] **C1** Test Environment Setup (1 SP)
 - [x] **C2** Core Unit Tests (3 SP) ✅ **62개 테스트 모두 통과**
 - [ ] **C3** GitHub Actions CI (2 SP)
@@ -98,10 +98,10 @@
 - [x] **프로젝트 생성 에러 수정** - ID 생성 로직 수정으로 "Failed to save project new" 에러 해결 (16b8a44)
 
 ### Sprint 5 Status 🟡
-- **Story Points**: 4/30 completed (13.3%)
+- **Story Points**: 7/30 completed (23.3%)
 - **User Stories**: 0/2 completed (0%)
 - **Current Sprint**: 🟡 **SPRINT 5 IN PROGRESS**
-- **완료 작업**: C1 (Test Environment Setup), C2 (Core Unit Tests)
+- **완료 작업**: C1 (Test Environment Setup), C2 (Core Unit Tests), B3 (Dead Code Cleanup)
 - **진행 중**: 다음 작업 대기 중
 
 ## 🚧 Blockers
@@ -175,6 +175,6 @@
 - [x] **프로젝트 생성 에러 수정** - ID 생성 로직 수정으로 "Failed to save project new" 에러 해결 (16b8a44)
 
 ### Sprint 5 Status 🟡
-- **Story Points**: 4/30 completed (13.3%)
+- **Story Points**: 7/30 completed (23.3%)
 - **User Stories**: 0/2 completed (0%)
 - **Current Sprint**: 🟡 **SPRINT 5 IN PROGRESS** 
