@@ -23,6 +23,13 @@ interface BuilderState {
   // 드래그 오버 상태 (드롭 존 하이라이트용)
   dragOverNodeId: string | null;
 
+  // 드롭 위치 정보
+  dropPosition: {
+    parentId: string | null;
+    index: number;
+    position: "top" | "bottom" | "inside";
+  } | null;
+
   // 액션들
   setCurrentScreen: (screen: Screen) => void;
   setSelectedNode: (nodeId: string | null) => void;
@@ -33,14 +40,28 @@ interface BuilderState {
     componentType: BuilderComponentType,
     index?: number,
   ) => void;
+  addNodeAtDropPosition: (componentType: BuilderComponentType) => void;
   removeNode: (nodeId: string) => void;
   moveNode: (nodeId: string, newParentId: string, newIndex: number) => void;
+  moveNodeAtDropPosition: (nodeId: string) => void;
   reorderNodes: (nodeId: string, newIndex: number) => void;
   updateNodeProps: (nodeId: string, props: Record<string, unknown>) => void;
 
   // 드래그 앤 드롭 상태
   setDraggedComponentType: (type: BuilderComponentType | null) => void;
   setDragOverNode: (nodeId: string | null) => void;
+  setDropPosition: (
+    position: {
+      parentId: string | null;
+      index: number;
+      position: "top" | "bottom" | "inside";
+    } | null,
+  ) => void;
+  calculateDropPosition: (
+    activeId: string,
+    overId: string,
+    clientY: number,
+  ) => void;
 
   // 유틸리티
   findNode: (nodeId: string) => CanvasNode | null;
@@ -54,6 +75,7 @@ export const useBuilderStore = create<BuilderState>()(
     selectedNodeId: null,
     draggedComponentType: null,
     dragOverNodeId: null,
+    dropPosition: null,
 
     // 현재 화면 설정
     setCurrentScreen: (screen: Screen) => {
@@ -106,6 +128,35 @@ export const useBuilderStore = create<BuilderState>()(
       });
     },
 
+    // dropPosition을 사용해서 정확한 위치에 노드 추가
+    addNodeAtDropPosition: (componentType: BuilderComponentType) => {
+      set((state) => {
+        if (!state.currentScreen || !state.dropPosition) return;
+
+        const { parentId, index } = state.dropPosition;
+        if (!parentId) return;
+
+        const parent = findNodeInTree(state.currentScreen.content, parentId);
+        if (!parent || !isContainerComponent(parent.type)) {
+          console.warn(
+            `${parent?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`,
+          );
+          return;
+        }
+
+        const newNode: CanvasNode = {
+          id: generateNodeId(),
+          type: componentType,
+          props: getDefaultProps(componentType),
+          children: [],
+        };
+
+        parent.children.splice(index, 0, newNode);
+        state.selectedNodeId = newNode.id;
+        state.dropPosition = null; // 드롭 완료 후 리셋
+      });
+    },
+
     // 노드 제거
     removeNode: (nodeId: string) => {
       set((state) => {
@@ -140,6 +191,32 @@ export const useBuilderStore = create<BuilderState>()(
 
         // 새 위치에 노드 추가
         newParent.children.splice(newIndex, 0, node);
+      });
+    },
+
+    // dropPosition을 사용해서 정확한 위치로 노드 이동
+    moveNodeAtDropPosition: (nodeId: string) => {
+      set((state) => {
+        if (!state.currentScreen || !state.dropPosition) return;
+
+        const { parentId, index } = state.dropPosition;
+        if (!parentId) return;
+
+        const newParent = findNodeInTree(state.currentScreen.content, parentId);
+        if (!newParent || !isContainerComponent(newParent.type)) {
+          console.warn(
+            `${newParent?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`,
+          );
+          return;
+        }
+
+        // 기존 위치에서 노드 제거
+        const node = removeNodeFromTree(state.currentScreen.content, nodeId);
+        if (!node) return;
+
+        // 새 위치에 노드 추가
+        newParent.children.splice(index, 0, node);
+        state.dropPosition = null; // 드롭 완료 후 리셋
       });
     },
 
@@ -184,6 +261,47 @@ export const useBuilderStore = create<BuilderState>()(
     setDragOverNode: (nodeId: string | null) => {
       set((state) => {
         state.dragOverNodeId = nodeId;
+      });
+    },
+
+    setDropPosition: (position) => {
+      set((state) => {
+        state.dropPosition = position;
+      });
+    },
+
+    calculateDropPosition: (
+      activeId: string,
+      overId: string,
+      clientY: number,
+    ) => {
+      set((state) => {
+        if (!state.currentScreen) return;
+
+        const overNode = findNodeInTree(state.currentScreen.content, overId);
+        if (!overNode) return;
+
+        // 컨테이너인 경우 내부 드롭, 아닌 경우 형제로 드롭
+        if (isContainerComponent(overNode.type)) {
+          state.dropPosition = {
+            parentId: overId,
+            index: overNode.children.length, // 마지막 위치
+            position: "inside",
+          };
+        } else {
+          // 형제 노드로 드롭 - 부모를 찾아서 인덱스 계산
+          const parent = findParentOfNode(state.currentScreen.content, overId);
+          if (parent) {
+            const siblingIndex = parent.children.findIndex(
+              (child: CanvasNode) => child.id === overId,
+            );
+            state.dropPosition = {
+              parentId: parent.id,
+              index: siblingIndex + 1, // 다음 위치에 삽입
+              position: "bottom",
+            };
+          }
+        }
       });
     },
 

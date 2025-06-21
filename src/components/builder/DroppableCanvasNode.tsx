@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { isContainerComponent } from "@/lib/utils";
 import { useBuilderStore } from "@/store/builderStore";
 import type { CanvasNode } from "@/types/project";
+import { DropIndicator } from "./DropIndicator";
 
 interface DroppableCanvasNodeProps {
   node: CanvasNode;
@@ -34,16 +35,24 @@ export function DroppableCanvasNode({
     removeNode,
     dragOverNodeId,
     draggedComponentType,
+    dropPosition,
   } = useBuilderStore();
   const [isHovered, setIsHovered] = useState(false);
 
   const isSelected = selectedNodeId === node.id;
   const isDraggedOver = dragOverNodeId === node.id;
-  
+
   // 현재 노드가 드롭을 허용하는지 확인
   const canAcceptDrop = isContainerComponent(node.type);
   const isInvalidDropTarget =
     isDraggedOver && draggedComponentType && !canAcceptDrop;
+
+  // 드롭 인디케이터 표시 여부 확인
+  const shouldShowDropIndicator =
+    dropPosition && dropPosition.parentId === node.id;
+  const dropIndicatorPosition = shouldShowDropIndicator
+    ? dropPosition.position
+    : "inside";
 
   // 드롭 가능한 영역 설정
   const { setNodeRef: setDropRef, isOver } = useDroppable({
@@ -355,6 +364,12 @@ export function DroppableCanvasNode({
           </Button>
         </div>
       )}
+
+      {/* 드롭 인디케이터 */}
+      <DropIndicator
+        isVisible={shouldShowDropIndicator || false}
+        position={dropIndicatorPosition as "top" | "bottom" | "inside"}
+      />
 
       {/* 노드 콘텐츠 */}
       <div ref={setDropRef}>{renderNodeContent()}</div>

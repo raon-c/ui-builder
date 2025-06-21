@@ -143,10 +143,15 @@ function BuilderPageContent() {
     selectedNodeId,
     findNode,
     addNode,
+    addNodeAtDropPosition,
     moveNode,
+    moveNodeAtDropPosition,
     reorderNodes,
     setDraggedComponentType,
     setDragOverNode,
+    calculateDropPosition,
+    setDropPosition,
+    dropPosition,
   } = useBuilderStore();
 
   // 드래그 앤 드롭 센서 설정
@@ -211,12 +216,22 @@ function BuilderPageContent() {
 
   // 드래그 오버
   const handleDragOver = (event: DragOverEvent) => {
-    const { over } = event;
+    const { over, activatorEvent } = event;
 
     if (over?.data.current?.type === "canvas-node") {
       setDragOverNode(over.data.current.nodeId);
+
+      if (activatorEvent && "clientY" in activatorEvent) {
+        // 마우스 Y 위치를 기반으로 드롭 위치 계산
+        calculateDropPosition(
+          activeId || "",
+          over.data.current.nodeId,
+          (activatorEvent as MouseEvent).clientY,
+        );
+      }
     } else {
       setDragOverNode(null);
+      setDropPosition(null);
     }
   };
 
@@ -228,24 +243,17 @@ function BuilderPageContent() {
     setDraggedComponentType(null);
     setDragOverNode(null);
 
-    if (!over || !currentScreen) return;
+    if (!over || !currentScreen || !dropPosition) {
+      setDropPosition(null);
+      return;
+    }
 
     const activeData = active.data.current;
     const overData = over.data.current;
 
     // 컴포넌트 팔레트에서 캔버스로 드래그
     if (activeData?.type === "component" && overData?.type === "canvas-node") {
-      const targetNode = findNode(overData.nodeId);
-
-      if (!targetNode || !isContainerComponent(targetNode.type)) {
-        // 타겟이 컨테이너가 아니면 드롭 불가
-        console.warn(
-          `${targetNode?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`,
-        );
-        return;
-      }
-
-      addNode(overData.nodeId, activeData.componentType);
+      addNodeAtDropPosition(activeData.componentType);
     }
 
     // 캔버스 내에서 노드 재배치
@@ -257,21 +265,12 @@ function BuilderPageContent() {
       const overNodeId = overData.nodeId;
 
       if (activeNodeId !== overNodeId) {
-        const activeNode = findNode(activeNodeId);
-        const overNode = findNode(overNodeId);
-
-        if (!activeNode || !overNode) return;
-
-        if (!isContainerComponent(overNode.type)) {
-          // 타겟이 컨테이너가 아니면 드롭 불가
-          console.warn(`${overNode.type} 컴포넌트는 자식을 가질 수 없습니다.`);
-          return;
-        }
-
-        // 컨테이너의 첫 번째 위치에 추가
-        moveNode(activeNodeId, overNodeId, 0);
+        moveNodeAtDropPosition(activeNodeId);
       }
     }
+
+    // 드롭 완료 후 상태 리셋
+    setDropPosition(null);
   };
 
   if (!projectId) {
