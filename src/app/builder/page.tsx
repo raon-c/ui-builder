@@ -33,6 +33,7 @@ import {
   PropertyEditorEmpty,
 } from "@/components/builder/PropertyEditor";
 import { ScreenManager } from "@/components/builder/ScreenManager";
+import { ShareModal } from "@/components/builder/ShareModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -138,6 +139,7 @@ function BuilderPageContent() {
     "structure",
   );
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   const {
     currentScreen,
@@ -351,6 +353,13 @@ function BuilderPageContent() {
 
           <div className="flex items-center gap-2">
             <ImportExportManager project={currentProject} />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsShareOpen(true)}
+            >
+              공유
+            </Button>
             <Button
               variant="outline"
               size="sm"
@@ -593,6 +602,13 @@ function BuilderPageContent() {
           screen={currentScreen}
           isOpen={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
+        />
+
+        {/* 공유 모달 */}
+        <ShareModal
+          project={currentProject}
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
         />
       </div>
     </DndContext>
