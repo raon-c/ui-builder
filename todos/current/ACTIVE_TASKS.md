@@ -12,7 +12,7 @@
 - [x] **A1** Share API & Modal (5 SP) ✅ **공유 링크 생성 및 모달 구현 완료**
 - [x] **A2** Viewer Page (3 SP) ✅ **읽기 전용 뷰어 페이지 구현 완료**
 - [x] **A3** Expiry & Version Check (2 SP) ✅ **만료 시간 및 버전 체크 기능 구현 완료**
-- [ ] **B1** Lint Rule Consolidation (3 SP)
+- [x] **B1** Lint Rule Consolidation (3 SP) ✅ **Biome 린트 규칙 통합 및 최적화 완료**
 - [ ] **B2** Path/Naming Refactor (2 SP)
 - [x] **B3** Dead Code Cleanup (3 SP) ✅ **deprecated 코드 정리 완료**
 - [x] **C1** Test Environment Setup (1 SP)
@@ -48,10 +48,10 @@
 ## 📊 Progress
 
 ### Sprint 5 Status 🟡
-- **Story Points**: 19/30 completed (63.3%)
+- **Story Points**: 22/30 completed (73.3%)
 - **User Stories**: 2/2 completed (100%)
 - **Current Sprint**: 🟡 **SPRINT 5 IN PROGRESS**
-- **완료 작업**: C1 (Test Environment Setup), C2 (Core Unit Tests), B3 (Dead Code Cleanup), E1 (Performance & Accessibility fixes), A1 (Share API & Modal), A2 (Viewer Page), A3 (Expiry & Version Check)
+- **완료 작업**: C1 (Test Environment Setup), C2 (Core Unit Tests), B3 (Dead Code Cleanup), E1 (Performance & Accessibility fixes), A1 (Share API & Modal), A2 (Viewer Page), A3 (Expiry & Version Check), B1 (Lint Rule Consolidation)
 - **진행 중**: 다음 작업 대기 중
 
 ### Sprint 4 Status ✅
