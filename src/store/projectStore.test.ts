@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createDefaultStorage } from "@/lib/storage/index";
+import { createDefaultStorage } from "@/lib/storage";
 import type { Project } from "@/types/project";
 import { useProjectStore } from "./projectStore";
 
