@@ -31,7 +31,7 @@ interface BuilderState {
   } | null;
 
   // 액션들
-  setCurrentScreen: (screen: Screen) => void;
+  setCurrentScreen: (screen: Screen | null) => void;
   setSelectedNode: (nodeId: string | null) => void;
 
   // 노드 조작
@@ -78,7 +78,7 @@ export const useBuilderStore = create<BuilderState>()(
     dropPosition: null,
 
     // 현재 화면 설정
-    setCurrentScreen: (screen: Screen) => {
+    setCurrentScreen: (screen: Screen | null) => {
       set((state) => {
         state.currentScreen = screen;
         state.selectedNodeId = null; // 화면 변경 시 선택 해제

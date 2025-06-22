@@ -8,7 +8,6 @@ import {
   CheckCircle,
   Copy,
   Download,
-  ExternalLink,
   FileText,
   Upload,
 } from "lucide-react";
