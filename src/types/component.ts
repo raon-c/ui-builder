@@ -48,12 +48,7 @@ export type BuilderComponentType =
 /**
  * 컴포넌트 카테고리 분류
  */
-export type ComponentCategory =
-  | "Layout"
-  | "Basic"
-  | "Form"
-  | "DataDisplay"
-  | "Feedback";
+export type ComponentCategory = "Layout" | "Basic" | "Form" | "DataDisplay" | "Feedback";
 
 /**
  * 컴포넌트 메타데이터
@@ -105,14 +100,7 @@ export interface ComponentFieldMetadata {
   /** 필드 설명 (툴팁) */
   description?: string;
   /** 입력 타입 */
-  inputType:
-    | "text"
-    | "textarea"
-    | "number"
-    | "boolean"
-    | "select"
-    | "color"
-    | "slider";
+  inputType: "text" | "textarea" | "number" | "boolean" | "select" | "color" | "slider";
   /** select 타입일 경우 선택 옵션 */
   options?: Array<{ label: string; value: string | number | boolean }>;
   /** 필드 그룹 (탭 분리용) */
@@ -229,9 +217,7 @@ export interface ComponentRegistryStats {
 /**
  * 레지스트리 이벤트 리스너
  */
-export type ComponentRegistryEventListener = (
-  event: ComponentRegistryEvent,
-) => void;
+export type ComponentRegistryEventListener = (event: ComponentRegistryEvent) => void;
 
 /**
  * 컴포넌트 레지스트리 (확장된 인터페이스)
@@ -281,16 +267,10 @@ export interface ComponentRegistry {
 
   // === 이벤트 시스템 ===
   /** 이벤트 리스너 추가 */
-  addEventListener(
-    type: ComponentRegistryEventType,
-    listener: ComponentRegistryEventListener,
-  ): void;
+  addEventListener(type: ComponentRegistryEventType, listener: ComponentRegistryEventListener): void;
 
   /** 이벤트 리스너 제거 */
-  removeEventListener(
-    type: ComponentRegistryEventType,
-    listener: ComponentRegistryEventListener,
-  ): void;
+  removeEventListener(type: ComponentRegistryEventType, listener: ComponentRegistryEventListener): void;
 
   // === 성능 최적화 ===
   /** 카테고리별 인덱스 재구성 */

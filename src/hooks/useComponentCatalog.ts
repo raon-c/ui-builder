@@ -12,9 +12,7 @@ import type { ComponentCategory, ComponentWrapper } from "@/types/component";
 export function useComponentCatalog() {
   const [components, setComponents] = useState<ComponentWrapper[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<
-    ComponentCategory | "all"
-  >("all");
+  const [selectedCategory, setSelectedCategory] = useState<ComponentCategory | "all">("all");
   const [isLoading, setIsLoading] = useState(true);
 
   // shadcn 어댑터에서 컴포넌트 로드
@@ -68,9 +66,7 @@ export function useComponentCatalog() {
 
     // 카테고리 필터링
     if (selectedCategory !== "all") {
-      filtered = filtered.filter(
-        (component) => component.metadata.category === selectedCategory,
-      );
+      filtered = filtered.filter((component) => component.metadata.category === selectedCategory);
     }
 
     // 검색 필터링 (이름, 설명에서 검색)
@@ -130,8 +126,7 @@ export function useComponentCatalog() {
     setSelectedCategory,
 
     // 유틸리티
-    getComponentsByCategory: (category: ComponentCategory) =>
-      componentsByCategory[category],
+    getComponentsByCategory: (category: ComponentCategory) => componentsByCategory[category],
     getTotalComponentCount: () => components.length,
     getFilteredComponentCount: () => filteredComponents.length,
   };

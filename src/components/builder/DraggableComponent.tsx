@@ -15,12 +15,7 @@ interface DraggableComponentProps {
   category: string;
 }
 
-export function DraggableComponent({
-  componentType,
-  name,
-  icon,
-  category,
-}: DraggableComponentProps) {
+export function DraggableComponent({ componentType, name, icon, category }: DraggableComponentProps) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `palette-${componentType}`,
     data: {
@@ -35,9 +30,7 @@ export function DraggableComponent({
       ref={setNodeRef}
       variant="outline"
       className={`p-2 h-auto cursor-grab active:cursor-grabbing transition-all duration-200 ${
-        isDragging
-          ? "opacity-50 scale-95 shadow-lg"
-          : "hover:shadow-md hover:scale-105 hover:bg-gray-50"
+        isDragging ? "opacity-50 scale-95 shadow-lg" : "hover:shadow-md hover:scale-105 hover:bg-gray-50"
       }`}
       {...listeners}
       {...attributes}

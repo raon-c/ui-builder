@@ -2,10 +2,7 @@
 // 모든 설치된 컴포넌트의 실제 variants와 PRD 표준을 반영
 
 import { z } from "zod";
-import type {
-  ComponentFieldMetadata,
-  ComponentPropsSchema,
-} from "@/types/component";
+import type { ComponentFieldMetadata, ComponentPropsSchema } from "@/types/component";
 
 /**
  * Button 컴포넌트 스키마
@@ -17,9 +14,7 @@ export const buttonSchema = z.object({
   disabled: z.boolean().optional().default(false),
 
   // shadcn/ui 고유 variants
-  variant: z
-    .enum(["default", "destructive", "outline", "secondary", "ghost", "link"])
-    .default("default"),
+  variant: z.enum(["default", "destructive", "outline", "secondary", "ghost", "link"]).default("default"),
   size: z.enum(["default", "sm", "lg", "icon"]).default("default"),
 
   // 추가 props
@@ -31,9 +26,7 @@ export const buttonSchema = z.object({
  * Input 컴포넌트 스키마
  */
 export const inputSchema = z.object({
-  type: z
-    .enum(["text", "email", "password", "number", "tel", "url", "search"])
-    .default("text"),
+  type: z.enum(["text", "email", "password", "number", "tel", "url", "search"]).default("text"),
   placeholder: z.string().optional().default(""),
   disabled: z.boolean().optional().default(false),
   readOnly: z.boolean().optional().default(false),
@@ -119,9 +112,7 @@ export const switchSchema = z.object({
  */
 export const badgeSchema = z.object({
   children: z.string().default("Badge"),
-  variant: z
-    .enum(["default", "secondary", "destructive", "outline"])
-    .default("default"),
+  variant: z.enum(["default", "secondary", "destructive", "outline"]).default("default"),
   asChild: z.boolean().optional().default(false),
 });
 

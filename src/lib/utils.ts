@@ -9,9 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * 컴포넌트가 자식을 가질 수 있는 컨테이너 타입인지 확인
  */
-export function isContainerComponent(
-  componentType: BuilderComponentType | string,
-): boolean {
+export function isContainerComponent(componentType: BuilderComponentType | string): boolean {
   const containerTypes: BuilderComponentType[] = [
     // Layout containers
     "Container",
@@ -29,11 +27,7 @@ export function isContainerComponent(
 /**
  * 두 노드가 형제 관계인지 확인
  */
-export function areSiblings(
-  nodeId1: string,
-  nodeId2: string,
-  rootNode: any,
-): boolean {
+export function areSiblings(nodeId1: string, nodeId2: string, rootNode: any): boolean {
   // 노드의 부모를 찾는 함수
   function findParent(root: any, targetId: string): any {
     if (root.children) {

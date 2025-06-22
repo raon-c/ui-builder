@@ -30,10 +30,7 @@ export class ShadcnAdapter implements DesignLibraryAdapter {
       this.registry.register(componentWrapper);
     }
 
-    console.log(
-      `[ShadcnAdapter] ${this.registry.size()}개 컴포넌트 등록 완료:`,
-      this.registry.getTypes(),
-    );
+    console.log(`[ShadcnAdapter] ${this.registry.size()}개 컴포넌트 등록 완료:`, this.registry.getTypes());
   }
 
   /**

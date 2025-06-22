@@ -35,11 +35,7 @@ interface BuilderState {
   setSelectedNode: (nodeId: string | null) => void;
 
   // 노드 조작
-  addNode: (
-    parentId: string,
-    componentType: BuilderComponentType,
-    index?: number,
-  ) => void;
+  addNode: (parentId: string, componentType: BuilderComponentType, index?: number) => void;
   addNodeAtDropPosition: (componentType: BuilderComponentType) => void;
   removeNode: (nodeId: string) => void;
   moveNode: (nodeId: string, newParentId: string, newIndex: number) => void;
@@ -57,11 +53,7 @@ interface BuilderState {
       position: "top" | "bottom" | "inside";
     } | null,
   ) => void;
-  calculateDropPosition: (
-    activeId: string,
-    overId: string,
-    clientY: number,
-  ) => void;
+  calculateDropPosition: (activeId: string, overId: string, clientY: number) => void;
 
   // 유틸리티
   findNode: (nodeId: string) => CanvasNode | null;
@@ -93,11 +85,7 @@ export const useBuilderStore = create<BuilderState>()(
     },
 
     // 새 노드 추가
-    addNode: (
-      parentId: string,
-      componentType: BuilderComponentType,
-      index?: number,
-    ) => {
+    addNode: (parentId: string, componentType: BuilderComponentType, index?: number) => {
       set((state) => {
         if (!state.currentScreen) return;
 
@@ -138,9 +126,7 @@ export const useBuilderStore = create<BuilderState>()(
 
         const parent = findNodeInTree(state.currentScreen.content, parentId);
         if (!parent || !isContainerComponent(parent.type)) {
-          console.warn(
-            `${parent?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`,
-          );
+          console.warn(`${parent?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`);
           return;
         }
 
@@ -174,14 +160,9 @@ export const useBuilderStore = create<BuilderState>()(
       set((state) => {
         if (!state.currentScreen) return;
 
-        const newParent = findNodeInTree(
-          state.currentScreen.content,
-          newParentId,
-        );
+        const newParent = findNodeInTree(state.currentScreen.content, newParentId);
         if (!newParent || !isContainerComponent(newParent.type)) {
-          console.warn(
-            `${newParent?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`,
-          );
+          console.warn(`${newParent?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`);
           return;
         }
 
@@ -204,9 +185,7 @@ export const useBuilderStore = create<BuilderState>()(
 
         const newParent = findNodeInTree(state.currentScreen.content, parentId);
         if (!newParent || !isContainerComponent(newParent.type)) {
-          console.warn(
-            `${newParent?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`,
-          );
+          console.warn(`${newParent?.type || "Unknown"} 컴포넌트는 자식을 가질 수 없습니다.`);
           return;
         }
 
@@ -228,9 +207,7 @@ export const useBuilderStore = create<BuilderState>()(
         const parent = findParentOfNode(state.currentScreen.content, nodeId);
         if (!parent) return;
 
-        const currentIndex = parent.children.findIndex(
-          (child: CanvasNode) => child.id === nodeId,
-        );
+        const currentIndex = parent.children.findIndex((child: CanvasNode) => child.id === nodeId);
         if (currentIndex === -1 || currentIndex === newIndex) return;
 
         // 노드를 새 위치로 이동
@@ -270,11 +247,7 @@ export const useBuilderStore = create<BuilderState>()(
       });
     },
 
-    calculateDropPosition: (
-      activeId: string,
-      overId: string,
-      clientY: number,
-    ) => {
+    calculateDropPosition: (activeId: string, overId: string, clientY: number) => {
       set((state) => {
         if (!state.currentScreen) return;
 
@@ -292,9 +265,7 @@ export const useBuilderStore = create<BuilderState>()(
           // 형제 노드로 드롭 - 부모를 찾아서 인덱스 계산
           const parent = findParentOfNode(state.currentScreen.content, overId);
           if (parent) {
-            const siblingIndex = parent.children.findIndex(
-              (child: CanvasNode) => child.id === overId,
-            );
+            const siblingIndex = parent.children.findIndex((child: CanvasNode) => child.id === overId);
             state.dropPosition = {
               parentId: parent.id,
               index: siblingIndex + 1, // 다음 위치에 삽입
@@ -340,10 +311,7 @@ function findNodeInTree(root: CanvasNode, targetId: string): CanvasNode | null {
 /**
  * 트리에서 노드 제거하고 반환
  */
-function removeNodeFromTree(
-  root: CanvasNode,
-  targetId: string,
-): CanvasNode | null {
+function removeNodeFromTree(root: CanvasNode, targetId: string): CanvasNode | null {
   for (let i = 0; i < root.children.length; i++) {
     if (root.children[i].id === targetId) {
       return root.children.splice(i, 1)[0];
@@ -359,10 +327,7 @@ function removeNodeFromTree(
 /**
  * 노드의 부모 찾기
  */
-function findParentOfNode(
-  root: CanvasNode,
-  targetId: string,
-): CanvasNode | null {
+function findParentOfNode(root: CanvasNode, targetId: string): CanvasNode | null {
   for (const child of root.children) {
     if (child.id === targetId) {
       return root;
@@ -376,11 +341,7 @@ function findParentOfNode(
 /**
  * 노드 경로 가져오기
  */
-function getNodePathInTree(
-  root: CanvasNode,
-  targetId: string,
-  path: string[] = [],
-): string[] {
+function getNodePathInTree(root: CanvasNode, targetId: string, path: string[] = []): string[] {
   if (root.id === targetId) {
     return [...path, root.id];
   }
@@ -396,9 +357,7 @@ function getNodePathInTree(
 /**
  * 컴포넌트 타입별 기본 props
  */
-function getDefaultProps(
-  componentType: BuilderComponentType,
-): Record<string, unknown> {
+function getDefaultProps(componentType: BuilderComponentType): Record<string, unknown> {
   const defaultProps: Record<BuilderComponentType, Record<string, unknown>> = {
     // Layout
     Container: { className: "p-2" },

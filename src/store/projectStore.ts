@@ -5,11 +5,7 @@
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import {
-  generateNodeId,
-  generateProjectId,
-  generateScreenId,
-} from "@/lib/nanoid";
+import { generateNodeId, generateProjectId, generateScreenId } from "@/lib/nanoid";
 import { createDefaultStorage } from "@/lib/storage";
 import type { Project, Screen } from "@/types/project";
 
@@ -28,18 +24,10 @@ interface ProjectState {
 
   // 화면 관리 액션
   addScreen: (projectId: string, screenName: string) => Promise<void>;
-  updateScreen: (
-    projectId: string,
-    screenId: string,
-    updates: Partial<Screen>,
-  ) => Promise<void>;
+  updateScreen: (projectId: string, screenId: string, updates: Partial<Screen>) => Promise<void>;
   deleteScreen: (projectId: string, screenId: string) => Promise<void>;
   duplicateScreen: (projectId: string, screenId: string) => Promise<void>;
-  reorderScreens: (
-    projectId: string,
-    oldIndex: number,
-    newIndex: number,
-  ) => Promise<void>;
+  reorderScreens: (projectId: string, oldIndex: number, newIndex: number) => Promise<void>;
 }
 
 export const useProjectStore = create<ProjectState>()(
@@ -66,10 +54,7 @@ export const useProjectStore = create<ProjectState>()(
         });
       } catch (error) {
         set((state) => {
-          state.error =
-            error instanceof Error
-              ? error.message
-              : "프로젝트를 불러오는데 실패했습니다.";
+          state.error = error instanceof Error ? error.message : "프로젝트를 불러오는데 실패했습니다.";
           state.isLoading = false;
         });
       }
@@ -154,10 +139,7 @@ export const useProjectStore = create<ProjectState>()(
         await get().loadProjects();
       } catch (error) {
         set((state) => {
-          state.error =
-            error instanceof Error
-              ? error.message
-              : "프로젝트 생성에 실패했습니다.";
+          state.error = error instanceof Error ? error.message : "프로젝트 생성에 실패했습니다.";
           state.isLoading = false;
         });
       }
@@ -194,10 +176,7 @@ export const useProjectStore = create<ProjectState>()(
         });
       } catch (error) {
         set((state) => {
-          state.error =
-            error instanceof Error
-              ? error.message
-              : "프로젝트 업데이트에 실패했습니다.";
+          state.error = error instanceof Error ? error.message : "프로젝트 업데이트에 실패했습니다.";
         });
       }
     },
@@ -218,10 +197,7 @@ export const useProjectStore = create<ProjectState>()(
         });
       } catch (error) {
         set((state) => {
-          state.error =
-            error instanceof Error
-              ? error.message
-              : "프로젝트 삭제에 실패했습니다.";
+          state.error = error instanceof Error ? error.message : "프로젝트 삭제에 실패했습니다.";
         });
       }
     },
@@ -281,20 +257,13 @@ export const useProjectStore = create<ProjectState>()(
         });
       } catch (error) {
         set((state) => {
-          state.error =
-            error instanceof Error
-              ? error.message
-              : "화면 추가에 실패했습니다.";
+          state.error = error instanceof Error ? error.message : "화면 추가에 실패했습니다.";
         });
       }
     },
 
     // 화면 업데이트
-    updateScreen: async (
-      projectId: string,
-      screenId: string,
-      updates: Partial<Screen>,
-    ) => {
+    updateScreen: async (projectId: string, screenId: string, updates: Partial<Screen>) => {
       set((state) => {
         state.error = null;
       });
@@ -307,9 +276,7 @@ export const useProjectStore = create<ProjectState>()(
           throw new Error("프로젝트를 찾을 수 없습니다.");
         }
 
-        const screenIndex = project.screens.findIndex(
-          (s: Screen) => s.id === screenId,
-        );
+        const screenIndex = project.screens.findIndex((s: Screen) => s.id === screenId);
         if (screenIndex === -1) {
           throw new Error("화면을 찾을 수 없습니다.");
         }
@@ -337,10 +304,7 @@ export const useProjectStore = create<ProjectState>()(
         });
       } catch (error) {
         set((state) => {
-          state.error =
-            error instanceof Error
-              ? error.message
-              : "화면 업데이트에 실패했습니다.";
+          state.error = error instanceof Error ? error.message : "화면 업데이트에 실패했습니다.";
         });
       }
     },
@@ -387,10 +351,7 @@ export const useProjectStore = create<ProjectState>()(
         });
       } catch (error) {
         set((state) => {
-          state.error =
-            error instanceof Error
-              ? error.message
-              : "화면 삭제에 실패했습니다.";
+          state.error = error instanceof Error ? error.message : "화면 삭제에 실패했습니다.";
         });
       }
     },
@@ -409,9 +370,7 @@ export const useProjectStore = create<ProjectState>()(
           throw new Error("프로젝트를 찾을 수 없습니다.");
         }
 
-        const sourceScreen = project.screens.find(
-          (s: Screen) => s.id === screenId,
-        );
+        const sourceScreen = project.screens.find((s: Screen) => s.id === screenId);
         if (!sourceScreen) {
           throw new Error("복사할 화면을 찾을 수 없습니다.");
         }
@@ -448,20 +407,13 @@ export const useProjectStore = create<ProjectState>()(
         });
       } catch (error) {
         set((state) => {
-          state.error =
-            error instanceof Error
-              ? error.message
-              : "화면 복사에 실패했습니다.";
+          state.error = error instanceof Error ? error.message : "화면 복사에 실패했습니다.";
         });
       }
     },
 
     // 화면 순서 변경
-    reorderScreens: async (
-      projectId: string,
-      oldIndex: number,
-      newIndex: number,
-    ) => {
+    reorderScreens: async (projectId: string, oldIndex: number, newIndex: number) => {
       set((state) => {
         state.error = null;
       });
@@ -479,12 +431,10 @@ export const useProjectStore = create<ProjectState>()(
         updatedScreens.splice(newIndex, 0, movedScreen);
 
         // 순서 재정렬 - 새 객체로 생성하면서 order 업데이트
-        const reorderedScreens = updatedScreens.map(
-          (screen: Screen, index: number) => ({
-            ...screen,
-            order: index + 1,
-          }),
-        );
+        const reorderedScreens = updatedScreens.map((screen: Screen, index: number) => ({
+          ...screen,
+          order: index + 1,
+        }));
 
         const updatedProject = {
           ...project,
@@ -503,10 +453,7 @@ export const useProjectStore = create<ProjectState>()(
         });
       } catch (error) {
         set((state) => {
-          state.error =
-            error instanceof Error
-              ? error.message
-              : "화면 순서 변경에 실패했습니다.";
+          state.error = error instanceof Error ? error.message : "화면 순서 변경에 실패했습니다.";
         });
       }
     },

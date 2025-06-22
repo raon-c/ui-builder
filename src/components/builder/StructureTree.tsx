@@ -19,11 +19,7 @@ interface StructureTreeNodeProps {
   isRoot?: boolean;
 }
 
-function StructureTreeNode({
-  node,
-  depth = 0,
-  isRoot = false,
-}: StructureTreeNodeProps) {
+function StructureTreeNode({ node, depth = 0, isRoot = false }: StructureTreeNodeProps) {
   const { selectedNodeId, setSelectedNode, removeNode } = useBuilderStore();
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -32,14 +28,7 @@ function StructureTreeNode({
   const canHaveChildren = isContainerComponent(node.type);
 
   // Sortable 훅 (루트 노드는 드래그 불가)
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: node.id,
     disabled: isRoot,
     data: {
@@ -135,17 +124,8 @@ function StructureTreeNode({
       >
         {/* 확장/축소 버튼 */}
         {hasChildren && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-4 w-4 p-0 mr-1"
-            onClick={handleToggleExpand}
-          >
-            {isExpanded ? (
-              <ChevronDown className="h-3 w-3" />
-            ) : (
-              <ChevronRight className="h-3 w-3" />
-            )}
+          <Button variant="ghost" size="sm" className="h-4 w-4 p-0 mr-1" onClick={handleToggleExpand}>
+            {isExpanded ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
           </Button>
         )}
 
@@ -170,9 +150,7 @@ function StructureTreeNode({
         <span className="flex-1 text-sm font-medium truncate">
           {node.type || "Root"}
           {canHaveChildren && hasChildren && (
-            <span className="text-xs text-gray-500 ml-1">
-              ({node.children?.length})
-            </span>
+            <span className="text-xs text-gray-500 ml-1">({node.children?.length})</span>
           )}
         </span>
 

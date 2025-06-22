@@ -1,8 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type {
-  ComponentRegistryEvent,
-  ComponentWrapper,
-} from "@/types/component";
+import type { ComponentRegistryEvent, ComponentWrapper } from "@/types/component";
 import {
   AdvancedComponentRegistry,
   getComponentRegistry,
@@ -248,9 +245,7 @@ describe("AdvancedComponentRegistry", () => {
       expect(result.isValid).toBe(true);
       expect(result.warnings).toContain("Description is recommended");
       expect(result.warnings).toContain("Icon is recommended");
-      expect(result.warnings).toContain(
-        "Props schema is recommended for better validation",
-      );
+      expect(result.warnings).toContain("Props schema is recommended for better validation");
     });
 
     it("should warn about duplicate registration", () => {
@@ -259,9 +254,7 @@ describe("AdvancedComponentRegistry", () => {
       const result = registry.validateComponent(mockButtonWrapper);
 
       expect(result.isValid).toBe(true);
-      expect(result.warnings).toContain(
-        "Component Button is already registered and will be replaced",
-      );
+      expect(result.warnings).toContain("Component Button is already registered and will be replaced");
     });
   });
 
@@ -330,10 +323,7 @@ describe("AdvancedComponentRegistry", () => {
       expect(eventListener).toHaveBeenCalledWith(
         expect.objectContaining({
           type: "registry-cleared",
-          components: expect.arrayContaining([
-            mockButtonWrapper,
-            mockInputWrapper,
-          ]),
+          components: expect.arrayContaining([mockButtonWrapper, mockInputWrapper]),
         }),
       );
     });
@@ -352,17 +342,12 @@ describe("AdvancedComponentRegistry", () => {
       const errorListener = vi.fn(() => {
         throw new Error("Listener error");
       });
-      const consoleErrorSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
       registry.addEventListener("component-registered", errorListener);
       registry.register(mockButtonWrapper);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "Error in registry event listener:",
-        expect.any(Error),
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith("Error in registry event listener:", expect.any(Error));
 
       consoleErrorSpy.mockRestore();
     });
@@ -408,9 +393,7 @@ describe("AdvancedComponentRegistry", () => {
       registry.register(mockInputWrapper);
 
       // 현재는 기본 구현이므로 에러 없이 완료되어야 함
-      await expect(
-        registry.preloadComponents(["Button", "Input"]),
-      ).resolves.toBeUndefined();
+      await expect(registry.preloadComponents(["Button", "Input"])).resolves.toBeUndefined();
     });
   });
 });

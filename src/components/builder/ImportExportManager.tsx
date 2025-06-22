@@ -3,14 +3,7 @@
 // AIDEV-NOTE: 프로젝트 Import/Export 관리 컴포넌트
 // JSON 내보내기/가져오기, 스키마 검증, 버전 호환성 관리
 
-import {
-  AlertTriangle,
-  CheckCircle,
-  Copy,
-  Download,
-  FileText,
-  Upload,
-} from "lucide-react";
+import { AlertTriangle, CheckCircle, Copy, Download, FileText, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -147,9 +140,7 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
       const validationResult = projectSchema.safeParse(parsedData);
 
       if (!validationResult.success) {
-        const errors = validationResult.error.issues.map(
-          (issue) => `${issue.path.join(".")}: ${issue.message}`,
-        );
+        const errors = validationResult.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`);
         setImportResult({
           success: false,
           errors: ["스키마 검증 실패:", ...errors],
@@ -162,9 +153,7 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
 
       // 버전 호환성 검사
       if (importedProject.schemaVersion !== 1) {
-        warnings.push(
-          `스키마 버전 불일치 (가져온 버전: ${importedProject.schemaVersion}, 현재 버전: 1)`,
-        );
+        warnings.push(`스키마 버전 불일치 (가져온 버전: ${importedProject.schemaVersion}, 현재 버전: 1)`);
       }
 
       // 중복 ID 검사 및 해결
@@ -172,9 +161,7 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
       const existingProject = projects.find((p) => p.id === importedProject.id);
 
       if (existingProject) {
-        warnings.push(
-          "동일한 ID의 프로젝트가 이미 존재합니다. 새로운 ID로 생성됩니다.",
-        );
+        warnings.push("동일한 ID의 프로젝트가 이미 존재합니다. 새로운 ID로 생성됩니다.");
       }
 
       setImportResult({
@@ -185,11 +172,7 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
     } catch (error) {
       setImportResult({
         success: false,
-        errors: [
-          error instanceof Error
-            ? error.message
-            : "알 수 없는 오류가 발생했습니다.",
-        ],
+        errors: [error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다."],
       });
     } finally {
       setIsImporting(false);
@@ -202,15 +185,12 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
 
     try {
       const { projects } = useProjectStore.getState();
-      const existingProject = projects.find(
-        (p) => p.id === importResult.project!.id,
-      );
+      const existingProject = projects.find((p) => p.id === importResult.project!.id);
 
       if (existingProject) {
         // 기존 프로젝트 업데이트 또는 새 프로젝트로 생성
         const shouldReplace = confirm(
-          "동일한 ID의 프로젝트가 존재합니다. 덮어쓰시겠습니까?\n" +
-            "취소를 누르면 새로운 프로젝트로 생성됩니다.",
+          "동일한 ID의 프로젝트가 존재합니다. 덮어쓰시겠습니까?\n" + "취소를 누르면 새로운 프로젝트로 생성됩니다.",
         );
 
         if (shouldReplace) {
@@ -220,10 +200,7 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
           });
         } else {
           // 새 ID로 생성
-          await createProject(
-            `${importResult.project.name} (가져옴)`,
-            "가져온 프로젝트",
-          );
+          await createProject(`${importResult.project.name} (가져옴)`, "가져온 프로젝트");
         }
       } else {
         // 새 프로젝트로 생성
@@ -267,22 +244,14 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
       </DropdownMenu>
 
       {/* 숨겨진 파일 입력 */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".json"
-        style={{ display: "none" }}
-        onChange={handleFileSelect}
-      />
+      <input ref={fileInputRef} type="file" accept=".json" style={{ display: "none" }} onChange={handleFileSelect} />
 
       {/* 내보내기 다이얼로그 */}
       <Dialog open={isExportDialogOpen} onOpenChange={setIsExportDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>프로젝트 내보내기</DialogTitle>
-            <DialogDescription>
-              프로젝트 데이터가 JSON 형식으로 내보내졌습니다.
-            </DialogDescription>
+            <DialogDescription>프로젝트 데이터가 JSON 형식으로 내보내졌습니다.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
@@ -313,9 +282,7 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>프로젝트 가져오기</DialogTitle>
-            <DialogDescription>
-              JSON 형식의 프로젝트 데이터를 붙여넣어 주세요.
-            </DialogDescription>
+            <DialogDescription>JSON 형식의 프로젝트 데이터를 붙여넣어 주세요.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
@@ -332,9 +299,7 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
             {importResult && (
               <div
                 className={`p-4 rounded-lg border ${
-                  importResult.success
-                    ? "bg-green-50 border-green-200"
-                    : "bg-red-50 border-red-200"
+                  importResult.success ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"
                 }`}
               >
                 <div className="flex items-center gap-2 mb-2">
@@ -343,11 +308,7 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
                   ) : (
                     <AlertTriangle className="h-4 w-4 text-red-600" />
                   )}
-                  <span
-                    className={`font-medium ${
-                      importResult.success ? "text-green-800" : "text-red-800"
-                    }`}
-                  >
+                  <span className={`font-medium ${importResult.success ? "text-green-800" : "text-red-800"}`}>
                     {importResult.success ? "검증 성공" : "검증 실패"}
                   </span>
                 </div>
@@ -355,10 +316,7 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
                 {importResult.errors && (
                   <div className="space-y-1">
                     {importResult.errors.map((error, index) => (
-                      <div
-                        key={`error-${index}-${error.slice(0, 20)}`}
-                        className="text-sm text-red-700"
-                      >
+                      <div key={`error-${index}-${error.slice(0, 20)}`} className="text-sm text-red-700">
                         • {error}
                       </div>
                     ))}
@@ -367,14 +325,9 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
 
                 {importResult.warnings && (
                   <div className="space-y-1 mt-2">
-                    <div className="text-sm font-medium text-yellow-800">
-                      경고:
-                    </div>
+                    <div className="text-sm font-medium text-yellow-800">경고:</div>
                     {importResult.warnings.map((warning, index) => (
-                      <div
-                        key={`warning-${index}-${warning.slice(0, 20)}`}
-                        className="text-sm text-yellow-700"
-                      >
+                      <div key={`warning-${index}-${warning.slice(0, 20)}`} className="text-sm text-yellow-700">
                         • {warning}
                       </div>
                     ))}
@@ -386,14 +339,10 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
                     <div className="text-sm">
                       <strong>프로젝트:</strong> {importResult.project.name}
                       <br />
-                      <strong>화면 수:</strong>{" "}
-                      {importResult.project.screens.length}개<br />
+                      <strong>화면 수:</strong> {importResult.project.screens.length}개<br />
                       <strong>버전:</strong> {importResult.project.version}
                       <br />
-                      <strong>생성일:</strong>{" "}
-                      {new Date(
-                        importResult.project.createdAt,
-                      ).toLocaleDateString()}
+                      <strong>생성일:</strong> {new Date(importResult.project.createdAt).toLocaleDateString()}
                     </div>
                   </div>
                 )}
@@ -412,16 +361,11 @@ export function ImportExportManager({ project }: ImportExportManagerProps) {
               취소
             </Button>
             {!importResult && (
-              <Button
-                onClick={handleImport}
-                disabled={!importJson.trim() || isImporting}
-              >
+              <Button onClick={handleImport} disabled={!importJson.trim() || isImporting}>
                 {isImporting ? "검증 중..." : "검증"}
               </Button>
             )}
-            {importResult?.success && (
-              <Button onClick={handleConfirmImport}>가져오기</Button>
-            )}
+            {importResult?.success && <Button onClick={handleConfirmImport}>가져오기</Button>}
           </DialogFooter>
         </DialogContent>
       </Dialog>

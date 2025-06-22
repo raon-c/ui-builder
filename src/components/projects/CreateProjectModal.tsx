@@ -24,10 +24,7 @@ interface CreateProjectModalProps {
   isLoading?: boolean;
 }
 
-export function CreateProjectModal({
-  onCreateProject,
-  isLoading = false,
-}: CreateProjectModalProps) {
+export function CreateProjectModal({ onCreateProject, isLoading = false }: CreateProjectModalProps) {
   const nameId = useId();
   const descriptionId = useId();
   const [open, setOpen] = useState(false);
@@ -63,9 +60,7 @@ export function CreateProjectModal({
       setName("");
       setDescription("");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "프로젝트 생성에 실패했습니다.",
-      );
+      setError(err instanceof Error ? err.message : "프로젝트 생성에 실패했습니다.");
     }
   };
 
@@ -92,10 +87,7 @@ export function CreateProjectModal({
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>새 프로젝트 만들기</DialogTitle>
-            <DialogDescription>
-              새로운 UI 프로젝트를 시작하세요. 언제든지 설정을 변경할 수
-              있습니다.
-            </DialogDescription>
+            <DialogDescription>새로운 UI 프로젝트를 시작하세요. 언제든지 설정을 변경할 수 있습니다.</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
@@ -123,25 +115,14 @@ export function CreateProjectModal({
                 rows={3}
                 maxLength={200}
               />
-              <p className="text-xs text-muted-foreground">
-                {description.length}/200자
-              </p>
+              <p className="text-xs text-muted-foreground">{description.length}/200자</p>
             </div>
 
-            {error && (
-              <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
-                {error}
-              </div>
-            )}
+            {error && <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">{error}</div>}
           </div>
 
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handleOpenChange(false)}
-              disabled={isLoading}
-            >
+            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} disabled={isLoading}>
               취소
             </Button>
             <Button type="submit" disabled={isLoading || !name.trim()}>

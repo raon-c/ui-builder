@@ -5,23 +5,11 @@
 
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
-import {
-  Edit,
-  ExternalLink,
-  MoreVertical,
-  Palette,
-  Trash2,
-} from "lucide-react";
+import { Edit, ExternalLink, MoreVertical, Palette, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,12 +25,7 @@ interface ProjectCardProps {
   onOpen?: (project: Project) => void;
 }
 
-export function ProjectCard({
-  project,
-  onEdit,
-  onDelete,
-  onOpen,
-}: ProjectCardProps) {
+export function ProjectCard({ project, onEdit, onDelete, onOpen }: ProjectCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const formatDate = (dateString: string) => {

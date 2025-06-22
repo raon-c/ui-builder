@@ -98,9 +98,7 @@ describe("projectStore", () => {
     });
 
     it("should handle loading errors", async () => {
-      mockProjectStorage.getAllProjects.mockRejectedValue(
-        new Error("Storage error"),
-      );
+      mockProjectStorage.getAllProjects.mockRejectedValue(new Error("Storage error"));
 
       const { result } = renderHook(() => useProjectStore());
 
@@ -131,9 +129,7 @@ describe("projectStore", () => {
     });
 
     it("should handle creation errors", async () => {
-      mockProjectStorage.saveProject.mockRejectedValue(
-        new Error("Storage full"),
-      );
+      mockProjectStorage.saveProject.mockRejectedValue(new Error("Storage full"));
 
       const { result } = renderHook(() => useProjectStore());
 
@@ -170,9 +166,7 @@ describe("projectStore", () => {
         });
       });
 
-      expect(mockProjectStorage.getProject).toHaveBeenCalledWith(
-        "test-project-1",
-      );
+      expect(mockProjectStorage.getProject).toHaveBeenCalledWith("test-project-1");
       expect(mockProjectStorage.saveProject).toHaveBeenCalled();
 
       const updatedProjectInStore = result.current.projects[0];
@@ -208,16 +202,12 @@ describe("projectStore", () => {
         await result.current.deleteProject("test-project-1");
       });
 
-      expect(mockProjectStorage.deleteProject).toHaveBeenCalledWith(
-        "test-project-1",
-      );
+      expect(mockProjectStorage.deleteProject).toHaveBeenCalledWith("test-project-1");
       expect(result.current.projects).toHaveLength(0);
     });
 
     it("should handle deletion errors", async () => {
-      mockProjectStorage.deleteProject.mockRejectedValue(
-        new Error("Delete failed"),
-      );
+      mockProjectStorage.deleteProject.mockRejectedValue(new Error("Delete failed"));
 
       const { result } = renderHook(() => useProjectStore());
       act(() => {
@@ -268,9 +258,7 @@ describe("projectStore", () => {
         await result.current.addScreen("test-project-1", "새 화면");
       });
 
-      expect(mockProjectStorage.getProject).toHaveBeenCalledWith(
-        "test-project-1",
-      );
+      expect(mockProjectStorage.getProject).toHaveBeenCalledWith("test-project-1");
       expect(mockProjectStorage.saveProject).toHaveBeenCalled();
 
       const updatedProject = result.current.projects[0];
@@ -321,9 +309,7 @@ describe("projectStore", () => {
         });
       });
 
-      expect(mockProjectStorage.getProject).toHaveBeenCalledWith(
-        "test-project-1",
-      );
+      expect(mockProjectStorage.getProject).toHaveBeenCalledWith("test-project-1");
       expect(mockProjectStorage.saveProject).toHaveBeenCalled();
 
       const project = result.current.projects[0];
@@ -415,9 +401,7 @@ describe("projectStore", () => {
         await result.current.deleteScreen("test-project-1", "screen-1");
       });
 
-      expect(mockProjectStorage.getProject).toHaveBeenCalledWith(
-        "test-project-1",
-      );
+      expect(mockProjectStorage.getProject).toHaveBeenCalledWith("test-project-1");
       expect(mockProjectStorage.saveProject).toHaveBeenCalled();
 
       const updatedProject = result.current.projects[0];
@@ -439,9 +423,7 @@ describe("projectStore", () => {
         await result.current.deleteScreen("test-project-1", "screen-1");
       });
 
-      expect(result.current.error).toContain(
-        "최소 하나의 화면은 유지되어야 합니다",
-      );
+      expect(result.current.error).toContain("최소 하나의 화면은 유지되어야 합니다");
     });
   });
 
@@ -460,9 +442,7 @@ describe("projectStore", () => {
         await result.current.duplicateScreen("test-project-1", "screen-1");
       });
 
-      expect(mockProjectStorage.getProject).toHaveBeenCalledWith(
-        "test-project-1",
-      );
+      expect(mockProjectStorage.getProject).toHaveBeenCalledWith("test-project-1");
       expect(mockProjectStorage.saveProject).toHaveBeenCalled();
 
       const updatedProject = result.current.projects[0];
@@ -554,9 +534,7 @@ describe("projectStore", () => {
         await result.current.reorderScreens("test-project-1", 0, 2);
       });
 
-      expect(mockProjectStorage.getProject).toHaveBeenCalledWith(
-        "test-project-1",
-      );
+      expect(mockProjectStorage.getProject).toHaveBeenCalledWith("test-project-1");
       expect(mockProjectStorage.saveProject).toHaveBeenCalled();
 
       const updatedProject = result.current.projects[0];

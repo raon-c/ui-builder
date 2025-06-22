@@ -19,17 +19,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  Copy,
-  Edit,
-  GripVertical,
-  Monitor,
-  MoreVertical,
-  Plus,
-  Smartphone,
-  Tablet,
-  Trash2,
-} from "lucide-react";
+import { Copy, Edit, GripVertical, Monitor, MoreVertical, Plus, Smartphone, Tablet, Trash2 } from "lucide-react";
 import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -74,18 +64,8 @@ const viewportIcons = {
   mobile: Smartphone,
 };
 
-export function ScreenManager({
-  project,
-  selectedScreenId,
-  onScreenSelect,
-}: ScreenManagerProps) {
-  const {
-    addScreen,
-    updateScreen,
-    deleteScreen,
-    reorderScreens,
-    duplicateScreen,
-  } = useProjectStore();
+export function ScreenManager({ project, selectedScreenId, onScreenSelect }: ScreenManagerProps) {
+  const { addScreen, updateScreen, deleteScreen, reorderScreens, duplicateScreen } = useProjectStore();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newScreenName, setNewScreenName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -151,9 +131,7 @@ export function ScreenManager({
 
         // 삭제된 화면이 현재 선택된 화면이면 첫 번째 화면으로 이동
         if (selectedScreenId === screenId && project.screens.length > 1) {
-          const remainingScreen = project.screens.find(
-            (s) => s.id !== screenId,
-          );
+          const remainingScreen = project.screens.find((s) => s.id !== screenId);
           if (remainingScreen) {
             onScreenSelect(remainingScreen.id);
           }
@@ -186,25 +164,14 @@ export function ScreenManager({
     <div className="p-4 border-b">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-medium">화면 목록</h3>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsAddDialogOpen(true)}
-        >
+        <Button variant="outline" size="sm" onClick={() => setIsAddDialogOpen(true)}>
           <Plus className="h-3 w-3 mr-1" />
           추가
         </Button>
       </div>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={project.screens.map((s) => s.id)}
-          strategy={verticalListSortingStrategy}
-        >
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={project.screens.map((s) => s.id)} strategy={verticalListSortingStrategy}>
           <div className="space-y-1">
             {project.screens.map((screen) => (
               <ScreenItem
@@ -226,9 +193,7 @@ export function ScreenManager({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>새 화면 추가</DialogTitle>
-            <DialogDescription>
-              새로운 화면의 이름을 입력해주세요.
-            </DialogDescription>
+            <DialogDescription>새로운 화면의 이름을 입력해주세요.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -258,10 +223,7 @@ export function ScreenManager({
             >
               취소
             </Button>
-            <Button
-              onClick={handleAddScreen}
-              disabled={!newScreenName.trim() || isLoading}
-            >
+            <Button onClick={handleAddScreen} disabled={!newScreenName.trim() || isLoading}>
               {isLoading ? "추가 중..." : "추가"}
             </Button>
           </DialogFooter>
@@ -271,25 +233,11 @@ export function ScreenManager({
   );
 }
 
-function ScreenItem({
-  screen,
-  isSelected,
-  onSelect,
-  onRename,
-  onDuplicate,
-  onDelete,
-}: ScreenItemProps) {
+function ScreenItem({ screen, isSelected, onSelect, onRename, onDuplicate, onDelete }: ScreenItemProps) {
   const [isRenaming, setIsRenaming] = useState(false);
   const [renamingValue, setRenamingValue] = useState(screen.name);
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: screen.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: screen.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -353,10 +301,7 @@ function ScreenItem({
             autoFocus
           />
         ) : (
-          <button
-            onClick={onSelect}
-            className="w-full text-left text-sm truncate"
-          >
+          <button onClick={onSelect} className="w-full text-left text-sm truncate">
             {screen.name}
           </button>
         )}
@@ -383,10 +328,7 @@ function ScreenItem({
             복사
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => onDelete(screen.id)}
-            className="text-destructive focus:text-destructive"
-          >
+          <DropdownMenuItem onClick={() => onDelete(screen.id)} className="text-destructive focus:text-destructive">
             <Trash2 className="h-3 w-3 mr-2" />
             삭제
           </DropdownMenuItem>

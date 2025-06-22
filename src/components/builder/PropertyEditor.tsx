@@ -10,13 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { useBuilderStore } from "@/store/builderStore";
@@ -43,539 +37,533 @@ interface ValidationError {
 }
 
 // 컴포넌트별 편집 가능한 속성 정의 (그룹화 및 설명 추가)
-const COMPONENT_PROPERTIES: Record<BuilderComponentType, PropertyDefinition[]> =
-  {
-    // Basic Components
-    Text: [
-      {
-        key: "text",
-        label: "텍스트",
-        description: "표시할 텍스트 내용",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "className",
-        label: "CSS 클래스",
-        description: "추가 스타일링을 위한 CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 2,
-      },
-    ],
-    Heading: [
-      {
-        key: "text",
-        label: "제목 텍스트",
-        description: "제목으로 표시할 텍스트",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "level",
-        label: "제목 레벨",
-        description: "HTML 제목 태그 레벨",
-        type: "select",
-        group: "style",
-        order: 2,
-        options: [
-          { label: "H1 (가장 큰 제목)", value: "1" },
-          { label: "H2", value: "2" },
-          { label: "H3", value: "3" },
-          { label: "H4", value: "4" },
-          { label: "H5", value: "5" },
-          { label: "H6 (가장 작은 제목)", value: "6" },
-        ],
-      },
-      {
-        key: "className",
-        label: "CSS 클래스",
-        description: "추가 스타일링",
-        type: "text",
-        group: "style",
-        order: 3,
-      },
-    ],
-    Button: [
-      {
-        key: "children",
-        label: "버튼 텍스트",
-        description: "버튼에 표시될 텍스트",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "variant",
-        label: "스타일 변형",
-        description: "버튼의 시각적 스타일",
-        type: "select",
-        group: "style",
-        order: 2,
-        options: [
-          { label: "기본 (Primary)", value: "default" },
-          { label: "보조 (Secondary)", value: "secondary" },
-          { label: "위험 (Destructive)", value: "destructive" },
-          { label: "외곽선 (Outline)", value: "outline" },
-          { label: "고스트 (Ghost)", value: "ghost" },
-          { label: "링크 (Link)", value: "link" },
-        ],
-      },
-      {
-        key: "size",
-        label: "크기",
-        description: "버튼의 크기",
-        type: "select",
-        group: "style",
-        order: 3,
-        options: [
-          { label: "작게 (Small)", value: "sm" },
-          { label: "기본 (Default)", value: "default" },
-          { label: "크게 (Large)", value: "lg" },
-          { label: "아이콘 (Icon)", value: "icon" },
-        ],
-      },
-      {
-        key: "disabled",
-        label: "비활성화",
-        description: "버튼을 비활성화 상태로 설정",
-        type: "boolean",
-        group: "behavior",
-        order: 4,
-      },
-    ],
-    Link: [
-      {
-        key: "text",
-        label: "링크 텍스트",
-        description: "링크에 표시될 텍스트",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "href",
-        label: "URL",
-        description: "링크 대상 URL",
-        type: "text",
-        group: "behavior",
-        order: 2,
-      },
-      {
-        key: "className",
-        label: "CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 3,
-      },
-    ],
+const COMPONENT_PROPERTIES: Record<BuilderComponentType, PropertyDefinition[]> = {
+  // Basic Components
+  Text: [
+    {
+      key: "text",
+      label: "텍스트",
+      description: "표시할 텍스트 내용",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "className",
+      label: "CSS 클래스",
+      description: "추가 스타일링을 위한 CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 2,
+    },
+  ],
+  Heading: [
+    {
+      key: "text",
+      label: "제목 텍스트",
+      description: "제목으로 표시할 텍스트",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "level",
+      label: "제목 레벨",
+      description: "HTML 제목 태그 레벨",
+      type: "select",
+      group: "style",
+      order: 2,
+      options: [
+        { label: "H1 (가장 큰 제목)", value: "1" },
+        { label: "H2", value: "2" },
+        { label: "H3", value: "3" },
+        { label: "H4", value: "4" },
+        { label: "H5", value: "5" },
+        { label: "H6 (가장 작은 제목)", value: "6" },
+      ],
+    },
+    {
+      key: "className",
+      label: "CSS 클래스",
+      description: "추가 스타일링",
+      type: "text",
+      group: "style",
+      order: 3,
+    },
+  ],
+  Button: [
+    {
+      key: "children",
+      label: "버튼 텍스트",
+      description: "버튼에 표시될 텍스트",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "variant",
+      label: "스타일 변형",
+      description: "버튼의 시각적 스타일",
+      type: "select",
+      group: "style",
+      order: 2,
+      options: [
+        { label: "기본 (Primary)", value: "default" },
+        { label: "보조 (Secondary)", value: "secondary" },
+        { label: "위험 (Destructive)", value: "destructive" },
+        { label: "외곽선 (Outline)", value: "outline" },
+        { label: "고스트 (Ghost)", value: "ghost" },
+        { label: "링크 (Link)", value: "link" },
+      ],
+    },
+    {
+      key: "size",
+      label: "크기",
+      description: "버튼의 크기",
+      type: "select",
+      group: "style",
+      order: 3,
+      options: [
+        { label: "작게 (Small)", value: "sm" },
+        { label: "기본 (Default)", value: "default" },
+        { label: "크게 (Large)", value: "lg" },
+        { label: "아이콘 (Icon)", value: "icon" },
+      ],
+    },
+    {
+      key: "disabled",
+      label: "비활성화",
+      description: "버튼을 비활성화 상태로 설정",
+      type: "boolean",
+      group: "behavior",
+      order: 4,
+    },
+  ],
+  Link: [
+    {
+      key: "text",
+      label: "링크 텍스트",
+      description: "링크에 표시될 텍스트",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "href",
+      label: "URL",
+      description: "링크 대상 URL",
+      type: "text",
+      group: "behavior",
+      order: 2,
+    },
+    {
+      key: "className",
+      label: "CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 3,
+    },
+  ],
 
-    // Layout Components
-    Container: [
-      {
-        key: "className",
-        label: "CSS 클래스",
-        description: "컨테이너 스타일링",
-        type: "text",
-        group: "style",
-        order: 1,
-      },
-    ],
-    Card: [
-      {
-        key: "className",
-        label: "CSS 클래스",
-        description: "카드 스타일링",
-        type: "text",
-        group: "style",
-        order: 1,
-      },
-    ],
-    Grid: [
-      {
-        key: "cols",
-        label: "열 개수",
-        description: "그리드의 열 개수",
-        type: "number",
-        group: "layout",
-        order: 1,
-      },
-      {
-        key: "gap",
-        label: "간격",
-        description: "그리드 아이템 간 간격",
-        type: "number",
-        group: "layout",
-        order: 2,
-      },
-      {
-        key: "className",
-        label: "CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 3,
-      },
-    ],
-    Flex: [
-      {
-        key: "direction",
-        label: "방향",
-        description: "플렉스 아이템 배치 방향",
-        type: "select",
-        group: "layout",
-        order: 1,
-        options: [
-          { label: "가로 (Row)", value: "row" },
-          { label: "세로 (Column)", value: "column" },
-        ],
-      },
-      {
-        key: "gap",
-        label: "간격",
-        description: "플렉스 아이템 간 간격",
-        type: "number",
-        group: "layout",
-        order: 2,
-      },
-      {
-        key: "className",
-        label: "CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 3,
-      },
-    ],
+  // Layout Components
+  Container: [
+    {
+      key: "className",
+      label: "CSS 클래스",
+      description: "컨테이너 스타일링",
+      type: "text",
+      group: "style",
+      order: 1,
+    },
+  ],
+  Card: [
+    {
+      key: "className",
+      label: "CSS 클래스",
+      description: "카드 스타일링",
+      type: "text",
+      group: "style",
+      order: 1,
+    },
+  ],
+  Grid: [
+    {
+      key: "cols",
+      label: "열 개수",
+      description: "그리드의 열 개수",
+      type: "number",
+      group: "layout",
+      order: 1,
+    },
+    {
+      key: "gap",
+      label: "간격",
+      description: "그리드 아이템 간 간격",
+      type: "number",
+      group: "layout",
+      order: 2,
+    },
+    {
+      key: "className",
+      label: "CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 3,
+    },
+  ],
+  Flex: [
+    {
+      key: "direction",
+      label: "방향",
+      description: "플렉스 아이템 배치 방향",
+      type: "select",
+      group: "layout",
+      order: 1,
+      options: [
+        { label: "가로 (Row)", value: "row" },
+        { label: "세로 (Column)", value: "column" },
+      ],
+    },
+    {
+      key: "gap",
+      label: "간격",
+      description: "플렉스 아이템 간 간격",
+      type: "number",
+      group: "layout",
+      order: 2,
+    },
+    {
+      key: "className",
+      label: "CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 3,
+    },
+  ],
 
-    // Form Components
-    Input: [
-      {
-        key: "placeholder",
-        label: "플레이스홀더",
-        description: "입력 필드의 힌트 텍스트",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "type",
-        label: "입력 타입",
-        description: "입력 필드의 타입",
-        type: "select",
-        group: "behavior",
-        order: 2,
-        options: [
-          { label: "텍스트", value: "text" },
-          { label: "이메일", value: "email" },
-          { label: "비밀번호", value: "password" },
-          { label: "숫자", value: "number" },
-        ],
-      },
-      {
-        key: "disabled",
-        label: "비활성화",
-        description: "입력 필드를 비활성화",
-        type: "boolean",
-        group: "behavior",
-        order: 3,
-      },
-      {
-        key: "className",
-        label: "CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 4,
-      },
-    ],
+  // Form Components
+  Input: [
+    {
+      key: "placeholder",
+      label: "플레이스홀더",
+      description: "입력 필드의 힌트 텍스트",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "type",
+      label: "입력 타입",
+      description: "입력 필드의 타입",
+      type: "select",
+      group: "behavior",
+      order: 2,
+      options: [
+        { label: "텍스트", value: "text" },
+        { label: "이메일", value: "email" },
+        { label: "비밀번호", value: "password" },
+        { label: "숫자", value: "number" },
+      ],
+    },
+    {
+      key: "disabled",
+      label: "비활성화",
+      description: "입력 필드를 비활성화",
+      type: "boolean",
+      group: "behavior",
+      order: 3,
+    },
+    {
+      key: "className",
+      label: "CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 4,
+    },
+  ],
 
-    // 나머지 컴포넌트들은 기본 정의 유지
-    Modal: [
-      {
-        key: "title",
-        label: "모달 제목",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "className",
-        label: "CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 2,
-      },
-    ],
-    Drawer: [
-      {
-        key: "title",
-        label: "드로어 제목",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "className",
-        label: "CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 2,
-      },
-    ],
-    Tabs: [
-      {
-        key: "defaultValue",
-        label: "기본 탭",
-        type: "text",
-        group: "behavior",
-        order: 1,
-      },
-      {
-        key: "className",
-        label: "CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 2,
-      },
-    ],
-    Divider: [
-      {
-        key: "className",
-        label: "CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 1,
-      },
-    ],
-    Icon: [
-      {
-        key: "name",
-        label: "아이콘 이름",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      { key: "size", label: "크기", type: "number", group: "style", order: 2 },
-    ],
-    Textarea: [
-      {
-        key: "placeholder",
-        label: "플레이스홀더",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "rows",
-        label: "행 수",
-        type: "number",
-        group: "layout",
-        order: 2,
-      },
-    ],
-    Select: [
-      {
-        key: "placeholder",
-        label: "플레이스홀더",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-    ],
-    Radio: [
-      {
-        key: "name",
-        label: "그룹명",
-        type: "text",
-        group: "behavior",
-        order: 1,
-      },
-      { key: "value", label: "값", type: "text", group: "content", order: 2 },
-      { key: "label", label: "라벨", type: "text", group: "content", order: 3 },
-    ],
-    Checkbox: [
-      { key: "label", label: "라벨", type: "text", group: "content", order: 1 },
-      {
-        key: "checked",
-        label: "체크됨",
-        type: "boolean",
-        group: "behavior",
-        order: 2,
-      },
-    ],
-    Switch: [
-      { key: "label", label: "라벨", type: "text", group: "content", order: 1 },
-      {
-        key: "checked",
-        label: "활성화",
-        type: "boolean",
-        group: "behavior",
-        order: 2,
-      },
-    ],
-    NumberInput: [
-      {
-        key: "placeholder",
-        label: "플레이스홀더",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "min",
-        label: "최솟값",
-        type: "number",
-        group: "behavior",
-        order: 2,
-      },
-    ],
-    DatePicker: [
-      {
-        key: "placeholder",
-        label: "플레이스홀더",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-    ],
-    Label: [
-      {
-        key: "children",
-        label: "라벨 텍스트",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "htmlFor",
-        label: "대상 ID",
-        type: "text",
-        group: "behavior",
-        order: 2,
-      },
-    ],
-    Table: [
-      {
-        key: "className",
-        label: "CSS 클래스",
-        type: "text",
-        group: "style",
-        order: 1,
-      },
-    ],
-    Tag: [
-      {
-        key: "text",
-        label: "태그 텍스트",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "variant",
-        label: "스타일",
-        type: "text",
-        group: "style",
-        order: 2,
-      },
-    ],
-    Badge: [
-      {
-        key: "children",
-        label: "배지 텍스트",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "variant",
-        label: "스타일 변형",
-        type: "select",
-        group: "style",
-        order: 2,
-        options: [
-          { label: "기본 (Primary)", value: "default" },
-          { label: "보조 (Secondary)", value: "secondary" },
-          { label: "위험 (Destructive)", value: "destructive" },
-          { label: "외곽선 (Outline)", value: "outline" },
-        ],
-      },
-    ],
-    Avatar: [
-      {
-        key: "src",
-        label: "이미지 URL",
-        type: "text",
-        group: "content",
-        order: 1,
-      },
-      {
-        key: "alt",
-        label: "대체 텍스트",
-        type: "text",
-        group: "content",
-        order: 2,
-      },
-      {
-        key: "fallback",
-        label: "대체 문자",
-        type: "text",
-        group: "content",
-        order: 3,
-      },
-    ],
-    Alert: [
-      { key: "title", label: "제목", type: "text", group: "content", order: 1 },
-      {
-        key: "description",
-        label: "설명",
-        type: "text",
-        group: "content",
-        order: 2,
-      },
-      {
-        key: "variant",
-        label: "스타일",
-        type: "text",
-        group: "style",
-        order: 3,
-      },
-    ],
-    Toast: [
-      { key: "title", label: "제목", type: "text", group: "content", order: 1 },
-      {
-        key: "description",
-        label: "설명",
-        type: "text",
-        group: "content",
-        order: 2,
-      },
-    ],
-    Spinner: [
-      { key: "size", label: "크기", type: "text", group: "style", order: 1 },
-    ],
-    Progress: [
-      { key: "value", label: "값", type: "number", group: "content", order: 1 },
-      {
-        key: "max",
-        label: "최댓값",
-        type: "number",
-        group: "behavior",
-        order: 2,
-      },
-    ],
-  };
+  // 나머지 컴포넌트들은 기본 정의 유지
+  Modal: [
+    {
+      key: "title",
+      label: "모달 제목",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "className",
+      label: "CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 2,
+    },
+  ],
+  Drawer: [
+    {
+      key: "title",
+      label: "드로어 제목",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "className",
+      label: "CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 2,
+    },
+  ],
+  Tabs: [
+    {
+      key: "defaultValue",
+      label: "기본 탭",
+      type: "text",
+      group: "behavior",
+      order: 1,
+    },
+    {
+      key: "className",
+      label: "CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 2,
+    },
+  ],
+  Divider: [
+    {
+      key: "className",
+      label: "CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 1,
+    },
+  ],
+  Icon: [
+    {
+      key: "name",
+      label: "아이콘 이름",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    { key: "size", label: "크기", type: "number", group: "style", order: 2 },
+  ],
+  Textarea: [
+    {
+      key: "placeholder",
+      label: "플레이스홀더",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "rows",
+      label: "행 수",
+      type: "number",
+      group: "layout",
+      order: 2,
+    },
+  ],
+  Select: [
+    {
+      key: "placeholder",
+      label: "플레이스홀더",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+  ],
+  Radio: [
+    {
+      key: "name",
+      label: "그룹명",
+      type: "text",
+      group: "behavior",
+      order: 1,
+    },
+    { key: "value", label: "값", type: "text", group: "content", order: 2 },
+    { key: "label", label: "라벨", type: "text", group: "content", order: 3 },
+  ],
+  Checkbox: [
+    { key: "label", label: "라벨", type: "text", group: "content", order: 1 },
+    {
+      key: "checked",
+      label: "체크됨",
+      type: "boolean",
+      group: "behavior",
+      order: 2,
+    },
+  ],
+  Switch: [
+    { key: "label", label: "라벨", type: "text", group: "content", order: 1 },
+    {
+      key: "checked",
+      label: "활성화",
+      type: "boolean",
+      group: "behavior",
+      order: 2,
+    },
+  ],
+  NumberInput: [
+    {
+      key: "placeholder",
+      label: "플레이스홀더",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "min",
+      label: "최솟값",
+      type: "number",
+      group: "behavior",
+      order: 2,
+    },
+  ],
+  DatePicker: [
+    {
+      key: "placeholder",
+      label: "플레이스홀더",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+  ],
+  Label: [
+    {
+      key: "children",
+      label: "라벨 텍스트",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "htmlFor",
+      label: "대상 ID",
+      type: "text",
+      group: "behavior",
+      order: 2,
+    },
+  ],
+  Table: [
+    {
+      key: "className",
+      label: "CSS 클래스",
+      type: "text",
+      group: "style",
+      order: 1,
+    },
+  ],
+  Tag: [
+    {
+      key: "text",
+      label: "태그 텍스트",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "variant",
+      label: "스타일",
+      type: "text",
+      group: "style",
+      order: 2,
+    },
+  ],
+  Badge: [
+    {
+      key: "children",
+      label: "배지 텍스트",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "variant",
+      label: "스타일 변형",
+      type: "select",
+      group: "style",
+      order: 2,
+      options: [
+        { label: "기본 (Primary)", value: "default" },
+        { label: "보조 (Secondary)", value: "secondary" },
+        { label: "위험 (Destructive)", value: "destructive" },
+        { label: "외곽선 (Outline)", value: "outline" },
+      ],
+    },
+  ],
+  Avatar: [
+    {
+      key: "src",
+      label: "이미지 URL",
+      type: "text",
+      group: "content",
+      order: 1,
+    },
+    {
+      key: "alt",
+      label: "대체 텍스트",
+      type: "text",
+      group: "content",
+      order: 2,
+    },
+    {
+      key: "fallback",
+      label: "대체 문자",
+      type: "text",
+      group: "content",
+      order: 3,
+    },
+  ],
+  Alert: [
+    { key: "title", label: "제목", type: "text", group: "content", order: 1 },
+    {
+      key: "description",
+      label: "설명",
+      type: "text",
+      group: "content",
+      order: 2,
+    },
+    {
+      key: "variant",
+      label: "스타일",
+      type: "text",
+      group: "style",
+      order: 3,
+    },
+  ],
+  Toast: [
+    { key: "title", label: "제목", type: "text", group: "content", order: 1 },
+    {
+      key: "description",
+      label: "설명",
+      type: "text",
+      group: "content",
+      order: 2,
+    },
+  ],
+  Spinner: [{ key: "size", label: "크기", type: "text", group: "style", order: 1 }],
+  Progress: [
+    { key: "value", label: "값", type: "number", group: "content", order: 1 },
+    {
+      key: "max",
+      label: "최댓값",
+      type: "number",
+      group: "behavior",
+      order: 2,
+    },
+  ],
+};
 
 export function PropertyEditor({ node }: PropertyEditorProps) {
   const { updateNodeProps } = useBuilderStore();
   const [formData, setFormData] = useState<Record<string, unknown>>(node.props);
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
-    [],
-  );
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  const properties =
-    COMPONENT_PROPERTIES[node.type as BuilderComponentType] || [];
+  const properties = COMPONENT_PROPERTIES[node.type as BuilderComponentType] || [];
 
   // 속성을 그룹별로 분류
   const groupedProperties = properties.reduce(
@@ -608,17 +596,8 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
   }, [node.props]);
 
   // 기본 검증 함수
-  const validateField = (
-    key: string,
-    value: unknown,
-    type: string,
-  ): string | null => {
-    if (
-      type === "number" &&
-      value !== "" &&
-      value !== null &&
-      value !== undefined
-    ) {
+  const validateField = (key: string, value: unknown, type: string): string | null => {
+    if (type === "number" && value !== "" && value !== null && value !== undefined) {
       const num = Number(value);
       if (isNaN(num)) {
         return "유효한 숫자를 입력해주세요.";
@@ -695,22 +674,14 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
             <Label htmlFor={fieldId} className="text-sm font-medium">
               {property.label}
               {property.description && (
-                <span className="text-xs text-muted-foreground block">
-                  {property.description}
-                </span>
+                <span className="text-xs text-muted-foreground block">{property.description}</span>
               )}
             </Label>
             <Input
               id={fieldId}
               type="text"
               value={(value as string) || ""}
-              onChange={(e) =>
-                handlePropertyChange(
-                  property.key,
-                  e.target.value,
-                  property.type,
-                )
-              }
+              onChange={(e) => handlePropertyChange(property.key, e.target.value, property.type)}
               className={error ? "border-destructive" : ""}
             />
             {error && (
@@ -728,22 +699,14 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
             <Label htmlFor={fieldId} className="text-sm font-medium">
               {property.label}
               {property.description && (
-                <span className="text-xs text-muted-foreground block">
-                  {property.description}
-                </span>
+                <span className="text-xs text-muted-foreground block">{property.description}</span>
               )}
             </Label>
             <Input
               id={fieldId}
               type="number"
               value={(value as number) || ""}
-              onChange={(e) =>
-                handlePropertyChange(
-                  property.key,
-                  parseFloat(e.target.value) || 0,
-                  property.type,
-                )
-              }
+              onChange={(e) => handlePropertyChange(property.key, parseFloat(e.target.value) || 0, property.type)}
               className={error ? "border-destructive" : ""}
             />
             {error && (
@@ -761,21 +724,14 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
             <Label htmlFor={fieldId} className="text-sm font-medium">
               {property.label}
               {property.description && (
-                <span className="text-xs text-muted-foreground block">
-                  {property.description}
-                </span>
+                <span className="text-xs text-muted-foreground block">{property.description}</span>
               )}
             </Label>
             <Select
               value={(value as string) || ""}
-              onValueChange={(newValue) =>
-                handlePropertyChange(property.key, newValue, property.type)
-              }
+              onValueChange={(newValue) => handlePropertyChange(property.key, newValue, property.type)}
             >
-              <SelectTrigger
-                id={fieldId}
-                className={error ? "border-destructive" : ""}
-              >
+              <SelectTrigger id={fieldId} className={error ? "border-destructive" : ""}>
                 <SelectValue placeholder="선택하세요" />
               </SelectTrigger>
               <SelectContent>
@@ -802,19 +758,13 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
               <Switch
                 id={fieldId}
                 checked={(value as boolean) || false}
-                onCheckedChange={(checked) =>
-                  handlePropertyChange(property.key, checked, property.type)
-                }
+                onCheckedChange={(checked) => handlePropertyChange(property.key, checked, property.type)}
               />
               <Label htmlFor={fieldId} className="text-sm font-medium">
                 {property.label}
               </Label>
             </div>
-            {property.description && (
-              <p className="text-xs text-muted-foreground ml-6">
-                {property.description}
-              </p>
-            )}
+            {property.description && <p className="text-xs text-muted-foreground ml-6">{property.description}</p>}
             {error && (
               <div className="flex items-center gap-1 text-xs text-destructive ml-6">
                 <AlertCircle className="h-3 w-3" />
@@ -855,22 +805,12 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
 
       {/* 액션 버튼들 */}
       <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={resetToDefaults}
-          className="flex-1"
-        >
+        <Button variant="outline" size="sm" onClick={resetToDefaults} className="flex-1">
           <RotateCcw className="h-3 w-3 mr-1" />
           기본값
         </Button>
         {hasUnsavedChanges && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={revertChanges}
-            className="flex-1"
-          >
+          <Button variant="outline" size="sm" onClick={revertChanges} className="flex-1">
             되돌리기
           </Button>
         )}
@@ -884,37 +824,26 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
             if (!groupProperties || groupProperties.length === 0) return null;
 
             // 속성을 order에 따라 정렬
-            const sortedProperties = groupProperties.sort(
-              (a, b) => (a.order || 999) - (b.order || 999),
-            );
+            const sortedProperties = groupProperties.sort((a, b) => (a.order || 999) - (b.order || 999));
 
             return (
-              <Card
-                key={groupKey}
-                className="border-none shadow-none bg-muted/20"
-              >
+              <Card key={groupKey} className="border-none shadow-none bg-muted/20">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm">
-                    {groupLabels[groupKey as keyof typeof groupLabels] ||
-                      groupKey}
+                    {groupLabels[groupKey as keyof typeof groupLabels] || groupKey}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  {sortedProperties.map(renderField)}
-                </CardContent>
-                {groupIndex < groupOrder.length - 1 &&
-                  groupedProperties[groupOrder[groupIndex + 1]]?.length > 0 && (
-                    <Separator className="mt-4" />
-                  )}
+                <CardContent className="space-y-4">{sortedProperties.map(renderField)}</CardContent>
+                {groupIndex < groupOrder.length - 1 && groupedProperties[groupOrder[groupIndex + 1]]?.length > 0 && (
+                  <Separator className="mt-4" />
+                )}
               </Card>
             );
           })}
         </>
       ) : (
         <div className="text-center py-8">
-          <div className="text-sm text-muted-foreground">
-            이 컴포넌트에 대한 편집 가능한 속성이 없습니다.
-          </div>
+          <div className="text-sm text-muted-foreground">이 컴포넌트에 대한 편집 가능한 속성이 없습니다.</div>
         </div>
       )}
 
@@ -929,10 +858,7 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
           </CardHeader>
           <CardContent className="space-y-1">
             {validationErrors.map((error, index) => (
-              <div
-                key={`error-${error.field}-${index}`}
-                className="text-xs text-destructive"
-              >
+              <div key={`error-${error.field}-${index}`} className="text-xs text-destructive">
                 <strong>{error.field}:</strong> {error.message}
               </div>
             ))}
@@ -943,9 +869,7 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
       {/* 디버그 정보 (개발 환경에서만) */}
       {process.env.NODE_ENV === "development" && (
         <details className="text-xs">
-          <summary className="cursor-pointer text-muted-foreground">
-            디버그 정보
-          </summary>
+          <summary className="cursor-pointer text-muted-foreground">디버그 정보</summary>
           <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-auto">
             {JSON.stringify(
               {

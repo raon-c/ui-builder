@@ -7,13 +7,7 @@ import { Grid3X3, List, Package, Search } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useComponentCatalog } from "@/hooks/useComponentCatalog";
 import type { ComponentWrapper } from "@/types/component";
@@ -29,14 +23,9 @@ interface ComponentCatalogProps {
 /**
  * 메인 컴포넌트 카탈로그
  */
-export function ComponentCatalog({
-  onComponentSelect,
-  onComponentPreview,
-  className = "",
-}: ComponentCatalogProps) {
+export function ComponentCatalog({ onComponentSelect, onComponentPreview, className = "" }: ComponentCatalogProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [selectedComponent, setSelectedComponent] =
-    useState<ComponentWrapper | null>(null);
+  const [selectedComponent, setSelectedComponent] = useState<ComponentWrapper | null>(null);
 
   const {
     filteredComponents,
@@ -78,15 +67,12 @@ export function ComponentCatalog({
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">컴포넌트 카탈로그</h1>
-            <p className="text-muted-foreground">
-              사용 가능한 UI 컴포넌트를 탐색하고 선택하세요
-            </p>
+            <p className="text-muted-foreground">사용 가능한 UI 컴포넌트를 탐색하고 선택하세요</p>
           </div>
 
           <div className="flex items-center gap-2">
             <Badge variant="outline">
-              {getFilteredComponentCount()} / {getTotalComponentCount()}{" "}
-              컴포넌트
+              {getFilteredComponentCount()} / {getTotalComponentCount()} 컴포넌트
             </Badge>
 
             <div className="flex border rounded-md">
@@ -138,9 +124,7 @@ export function ComponentCatalog({
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Package className="h-12 w-12 text-muted-foreground mb-4" />
-            <CardTitle className="text-lg mb-2">
-              컴포넌트를 찾을 수 없습니다
-            </CardTitle>
+            <CardTitle className="text-lg mb-2">컴포넌트를 찾을 수 없습니다</CardTitle>
             <CardDescription className="text-center max-w-md">
               {searchQuery || selectedCategory !== "all"
                 ? "검색 조건을 변경하거나 필터를 초기화해보세요."
@@ -163,9 +147,7 @@ export function ComponentCatalog({
       ) : (
         <div
           className={
-            viewMode === "grid"
-              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-              : "space-y-4"
+            viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" : "space-y-4"
           }
         >
           {filteredComponents.map((component) => (
@@ -204,19 +186,13 @@ export function ComponentCatalog({
                   </div>
                   <div className="flex justify-between">
                     <dt>자식 요소:</dt>
-                    <dd>
-                      {selectedComponent.metadata.canHaveChildren
-                        ? "가능"
-                        : "불가능"}
-                    </dd>
+                    <dd>{selectedComponent.metadata.canHaveChildren ? "가능" : "불가능"}</dd>
                   </div>
                 </dl>
               </div>
               <div>
                 <h4 className="font-medium mb-2">설명</h4>
-                <p className="text-sm text-muted-foreground">
-                  {selectedComponent.metadata.description}
-                </p>
+                <p className="text-sm text-muted-foreground">{selectedComponent.metadata.description}</p>
               </div>
             </div>
           </CardContent>

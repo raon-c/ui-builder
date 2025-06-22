@@ -22,18 +22,13 @@ export class AdvancedComponentRegistry implements ComponentRegistry {
   public components: Map<BuilderComponentType, ComponentWrapper> = new Map();
 
   // 이벤트 시스템
-  private eventListeners: Map<
-    ComponentRegistryEventType,
-    ComponentRegistryEventListener[]
-  > = new Map();
+  private eventListeners: Map<ComponentRegistryEventType, ComponentRegistryEventListener[]> = new Map();
 
   // 성능 최적화용 인덱스
-  private categoryIndex: Map<ComponentCategory, Set<BuilderComponentType>> =
-    new Map();
+  private categoryIndex: Map<ComponentCategory, Set<BuilderComponentType>> = new Map();
 
   // 의존성 관리
-  private dependencies: Map<BuilderComponentType, ComponentDependency> =
-    new Map();
+  private dependencies: Map<BuilderComponentType, ComponentDependency> = new Map();
 
   // 등록 순서 추적
   private registrationOrder: BuilderComponentType[] = [];
@@ -56,10 +51,7 @@ export class AdvancedComponentRegistry implements ComponentRegistry {
     // 검증
     const validation = this.validateComponent(wrapper);
     if (!validation.isValid) {
-      console.warn(
-        `Component validation failed for ${type}:`,
-        validation.errors,
-      );
+      console.warn(`Component validation failed for ${type}:`, validation.errors);
     }
 
     // 기존 컴포넌트 교체 여부 확인
@@ -236,9 +228,7 @@ export class AdvancedComponentRegistry implements ComponentRegistry {
 
     // 중복 등록 확인
     if (this.components.has(wrapper.type)) {
-      warnings.push(
-        `Component ${wrapper.type} is already registered and will be replaced`,
-      );
+      warnings.push(`Component ${wrapper.type} is already registered and will be replaced`);
     }
 
     return {
@@ -293,10 +283,7 @@ export class AdvancedComponentRegistry implements ComponentRegistry {
   /**
    * 이벤트 리스너 추가
    */
-  addEventListener(
-    type: ComponentRegistryEventType,
-    listener: ComponentRegistryEventListener,
-  ): void {
+  addEventListener(type: ComponentRegistryEventType, listener: ComponentRegistryEventListener): void {
     if (!this.eventListeners.has(type)) {
       this.eventListeners.set(type, []);
     }
@@ -306,10 +293,7 @@ export class AdvancedComponentRegistry implements ComponentRegistry {
   /**
    * 이벤트 리스너 제거
    */
-  removeEventListener(
-    type: ComponentRegistryEventType,
-    listener: ComponentRegistryEventListener,
-  ): void {
+  removeEventListener(type: ComponentRegistryEventType, listener: ComponentRegistryEventListener): void {
     const listeners = this.eventListeners.get(type);
     if (listeners) {
       const index = listeners.indexOf(listener);
@@ -329,7 +313,7 @@ export class AdvancedComponentRegistry implements ComponentRegistry {
         try {
           listener(event);
         } catch (error) {
-          console.error(`Error in registry event listener:`, error);
+          console.error("Error in registry event listener:", error);
         }
       }
     }
@@ -341,13 +325,7 @@ export class AdvancedComponentRegistry implements ComponentRegistry {
    * 카테고리별 인덱스 초기화
    */
   private initializeCategoryIndex(): void {
-    const categories: ComponentCategory[] = [
-      "Layout",
-      "Basic",
-      "Form",
-      "DataDisplay",
-      "Feedback",
-    ];
+    const categories: ComponentCategory[] = ["Layout", "Basic", "Form", "DataDisplay", "Feedback"];
     for (const category of categories) {
       this.categoryIndex.set(category, new Set());
     }
@@ -356,10 +334,7 @@ export class AdvancedComponentRegistry implements ComponentRegistry {
   /**
    * 카테고리 인덱스 업데이트
    */
-  private updateCategoryIndex(
-    type: BuilderComponentType,
-    category: ComponentCategory,
-  ): void {
+  private updateCategoryIndex(type: BuilderComponentType, category: ComponentCategory): void {
     // 기존 카테고리에서 제거
     for (const [cat, types] of this.categoryIndex.entries()) {
       types.delete(type);
@@ -375,10 +350,7 @@ export class AdvancedComponentRegistry implements ComponentRegistry {
   /**
    * 카테고리 인덱스에서 제거
    */
-  private removeCategoryIndex(
-    type: BuilderComponentType,
-    category: ComponentCategory,
-  ): void {
+  private removeCategoryIndex(type: BuilderComponentType, category: ComponentCategory): void {
     const types = this.categoryIndex.get(category);
     if (types) {
       types.delete(type);
@@ -502,8 +474,6 @@ export function createAdvancedRegistry(): AdvancedComponentRegistry {
 export class ComponentRegistryImpl extends AdvancedComponentRegistry {
   constructor() {
     super();
-    console.warn(
-      "ComponentRegistryImpl is deprecated. Use AdvancedComponentRegistry instead.",
-    );
+    console.warn("ComponentRegistryImpl is deprecated. Use AdvancedComponentRegistry instead.");
   }
 }

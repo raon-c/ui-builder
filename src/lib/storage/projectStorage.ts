@@ -25,9 +25,7 @@ export class ProjectStorageImpl implements ProjectStorage {
    */
   async getAllProjects(): Promise<Project[]> {
     try {
-      const projectsData = await this.adapter.getItem<Record<string, Project>>(
-        STORAGE_KEYS.PROJECTS,
-      );
+      const projectsData = await this.adapter.getItem<Record<string, Project>>(STORAGE_KEYS.PROJECTS);
 
       if (!projectsData) {
         return [];
@@ -35,8 +33,7 @@ export class ProjectStorageImpl implements ProjectStorage {
 
       // 프로젝트 배열로 변환하고 updatedAt 기준으로 정렬
       const projects = Object.values(projectsData).sort(
-        (a, b) =>
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+        (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
       );
 
       // 각 프로젝트 데이터 검증
@@ -52,11 +49,7 @@ export class ProjectStorageImpl implements ProjectStorage {
 
       return validProjects;
     } catch (error) {
-      throw new StorageError(
-        "Failed to get all projects",
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError("Failed to get all projects", "UNKNOWN", error as Error);
     }
   }
 
@@ -65,9 +58,7 @@ export class ProjectStorageImpl implements ProjectStorage {
    */
   async getProject(id: string): Promise<Project | null> {
     try {
-      const projectsData = await this.adapter.getItem<Record<string, Project>>(
-        STORAGE_KEYS.PROJECTS,
-      );
+      const projectsData = await this.adapter.getItem<Record<string, Project>>(STORAGE_KEYS.PROJECTS);
 
       if (!projectsData || !projectsData[id]) {
         return null;
@@ -79,21 +70,13 @@ export class ProjectStorageImpl implements ProjectStorage {
       try {
         return projectSchema.parse(project);
       } catch (error) {
-        throw new StorageError(
-          `Invalid project data for ${id}`,
-          "INVALID_DATA",
-          error as Error,
-        );
+        throw new StorageError(`Invalid project data for ${id}`, "INVALID_DATA", error as Error);
       }
     } catch (error) {
       if (error instanceof StorageError) {
         throw error;
       }
-      throw new StorageError(
-        `Failed to get project ${id}`,
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError(`Failed to get project ${id}`, "UNKNOWN", error as Error);
     }
   }
 
@@ -106,10 +89,7 @@ export class ProjectStorageImpl implements ProjectStorage {
       const validProject = projectSchema.parse(project);
 
       // 기존 프로젝트 데이터 조회
-      const projectsData =
-        (await this.adapter.getItem<Record<string, Project>>(
-          STORAGE_KEYS.PROJECTS,
-        )) || {};
+      const projectsData = (await this.adapter.getItem<Record<string, Project>>(STORAGE_KEYS.PROJECTS)) || {};
 
       // 새 프로젝트인 경우 ID 생성
       if (!validProject.id) {
@@ -135,11 +115,7 @@ export class ProjectStorageImpl implements ProjectStorage {
       if (error instanceof StorageError) {
         throw error;
       }
-      throw new StorageError(
-        `Failed to save project ${project.id || "new"}`,
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError(`Failed to save project ${project.id || "new"}`, "UNKNOWN", error as Error);
     }
   }
 
@@ -148,9 +124,7 @@ export class ProjectStorageImpl implements ProjectStorage {
    */
   async deleteProject(id: string): Promise<void> {
     try {
-      const projectsData = await this.adapter.getItem<Record<string, Project>>(
-        STORAGE_KEYS.PROJECTS,
-      );
+      const projectsData = await this.adapter.getItem<Record<string, Project>>(STORAGE_KEYS.PROJECTS);
 
       if (!projectsData || !projectsData[id]) {
         throw new StorageError(`Project ${id} not found`, "NOT_FOUND");
@@ -169,11 +143,7 @@ export class ProjectStorageImpl implements ProjectStorage {
       if (error instanceof StorageError) {
         throw error;
       }
-      throw new StorageError(
-        `Failed to delete project ${id}`,
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError(`Failed to delete project ${id}`, "UNKNOWN", error as Error);
     }
   }
 
@@ -250,11 +220,7 @@ export class ProjectStorageImpl implements ProjectStorage {
         projects: projectUsages.sort((a, b) => b.size - a.size),
       };
     } catch (error) {
-      throw new StorageError(
-        "Failed to get storage usage",
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError("Failed to get storage usage", "UNKNOWN", error as Error);
     }
   }
 }

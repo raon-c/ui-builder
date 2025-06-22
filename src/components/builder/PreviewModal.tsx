@@ -117,9 +117,7 @@ export function PreviewModal({ screen, isOpen, onClose }: PreviewModalProps) {
 
         {/* 미리보기 푸터 */}
         <div className="flex items-center justify-between p-4 border-t bg-gray-50">
-          <div className="text-sm text-gray-500">
-            실제 사용자가 보는 화면입니다. 편집하려면 미리보기를 닫아주세요.
-          </div>
+          <div className="text-sm text-gray-500">실제 사용자가 보는 화면입니다. 편집하려면 미리보기를 닫아주세요.</div>
           <Button onClick={onClose}>편집 모드로 돌아가기</Button>
         </div>
       </div>

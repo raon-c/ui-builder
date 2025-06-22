@@ -4,11 +4,7 @@
 // @dnd-kit을 사용하여 드래그된 컴포넌트를 받을 수 있고, 자식 노드들의 재배치도 지원
 
 import { useDroppable } from "@dnd-kit/core";
-import {
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -24,33 +20,19 @@ interface DroppableCanvasNodeProps {
   depth?: number;
 }
 
-export function DroppableCanvasNode({
-  node,
-  isRoot = false,
-  depth = 0,
-}: DroppableCanvasNodeProps) {
-  const {
-    selectedNodeId,
-    setSelectedNode,
-    removeNode,
-    dragOverNodeId,
-    draggedComponentType,
-    dropPosition,
-  } = useBuilderStore();
+export function DroppableCanvasNode({ node, isRoot = false, depth = 0 }: DroppableCanvasNodeProps) {
+  const { selectedNodeId, setSelectedNode, removeNode, dragOverNodeId, draggedComponentType, dropPosition } =
+    useBuilderStore();
   const [isHovered, setIsHovered] = useState(false);
 
   const isSelected = selectedNodeId === node.id;
   const isDraggedOver = dragOverNodeId === node.id;
   const canAcceptDrop = isContainerComponent(node.type);
-  const isInvalidDropTarget =
-    isDraggedOver && draggedComponentType && !canAcceptDrop;
+  const isInvalidDropTarget = isDraggedOver && draggedComponentType && !canAcceptDrop;
 
   // 드롭 인디케이터 표시 여부
-  const shouldShowDropIndicator =
-    dropPosition && dropPosition.parentId === node.id;
-  const dropIndicatorPosition = shouldShowDropIndicator
-    ? dropPosition.position
-    : "inside";
+  const shouldShowDropIndicator = dropPosition && dropPosition.parentId === node.id;
+  const dropIndicatorPosition = shouldShowDropIndicator ? dropPosition.position : "inside";
 
   // 드롭 가능한 영역 설정
   const { setNodeRef: setDropRef, isOver } = useDroppable({
@@ -111,21 +93,12 @@ export function DroppableCanvasNode({
             className={`${baseClasses} bg-gray-50 rounded-lg min-h-[100px] border-2 border-dashed border-gray-300 p-4 ${node.props.className || ""}`}
           >
             {node.children.length === 0 ? (
-              <div className="text-center text-gray-500 text-sm">
-                이곳에 컴포넌트를 놓으세요
-              </div>
+              <div className="text-center text-gray-500 text-sm">이곳에 컴포넌트를 놓으세요</div>
             ) : (
-              <SortableContext
-                items={node.children.map((child) => child.id)}
-                strategy={verticalListSortingStrategy}
-              >
+              <SortableContext items={node.children.map((child) => child.id)} strategy={verticalListSortingStrategy}>
                 <div className="space-y-1">
                   {node.children.map((child) => (
-                    <DroppableCanvasNode
-                      key={child.id}
-                      node={child}
-                      depth={depth + 1}
-                    />
+                    <DroppableCanvasNode key={child.id} node={child} depth={depth + 1} />
                   ))}
                 </div>
               </SortableContext>
@@ -139,21 +112,12 @@ export function DroppableCanvasNode({
             className={`${baseClasses} bg-white rounded-lg shadow-sm border p-4 min-h-[80px] ${node.props.className || ""}`}
           >
             {node.children.length === 0 ? (
-              <div className="text-center text-gray-400 text-sm">
-                카드 내용을 추가하세요
-              </div>
+              <div className="text-center text-gray-400 text-sm">카드 내용을 추가하세요</div>
             ) : (
-              <SortableContext
-                items={node.children.map((child) => child.id)}
-                strategy={verticalListSortingStrategy}
-              >
+              <SortableContext items={node.children.map((child) => child.id)} strategy={verticalListSortingStrategy}>
                 <div className="space-y-1">
                   {node.children.map((child) => (
-                    <DroppableCanvasNode
-                      key={child.id}
-                      node={child}
-                      depth={depth + 1}
-                    />
+                    <DroppableCanvasNode key={child.id} node={child} depth={depth + 1} />
                   ))}
                 </div>
               </SortableContext>
@@ -182,20 +146,11 @@ export function DroppableCanvasNode({
             className={`${baseClasses} grid ${gridCols} gap-4 bg-blue-50/20 rounded-lg border-2 border-dashed border-blue-300 p-4 min-h-[80px] ${node.props.className || ""}`}
           >
             {node.children.length === 0 ? (
-              <div className="col-span-full text-center text-gray-400 text-sm">
-                그리드 아이템을 추가하세요
-              </div>
+              <div className="col-span-full text-center text-gray-400 text-sm">그리드 아이템을 추가하세요</div>
             ) : (
-              <SortableContext
-                items={node.children.map((child) => child.id)}
-                strategy={verticalListSortingStrategy}
-              >
+              <SortableContext items={node.children.map((child) => child.id)} strategy={verticalListSortingStrategy}>
                 {node.children.map((child) => (
-                  <DroppableCanvasNode
-                    key={child.id}
-                    node={child}
-                    depth={depth + 1}
-                  />
+                  <DroppableCanvasNode key={child.id} node={child} depth={depth + 1} />
                 ))}
               </SortableContext>
             )}
@@ -210,20 +165,11 @@ export function DroppableCanvasNode({
             className={`${baseClasses} flex ${direction === "column" ? "flex-col" : "flex-row"} gap-4 bg-purple-50/20 rounded-lg border-2 border-dashed border-purple-300 p-4 min-h-[80px] ${node.props.className || ""}`}
           >
             {node.children.length === 0 ? (
-              <div className="text-center text-gray-400 text-sm w-full">
-                플렉스 아이템을 추가하세요
-              </div>
+              <div className="text-center text-gray-400 text-sm w-full">플렉스 아이템을 추가하세요</div>
             ) : (
-              <SortableContext
-                items={node.children.map((child) => child.id)}
-                strategy={verticalListSortingStrategy}
-              >
+              <SortableContext items={node.children.map((child) => child.id)} strategy={verticalListSortingStrategy}>
                 {node.children.map((child) => (
-                  <DroppableCanvasNode
-                    key={child.id}
-                    node={child}
-                    depth={depth + 1}
-                  />
+                  <DroppableCanvasNode key={child.id} node={child} depth={depth + 1} />
                 ))}
               </SortableContext>
             )}
@@ -284,9 +230,7 @@ export function DroppableCanvasNode({
 
       default:
         return (
-          <div
-            className={`${baseClasses} p-4 bg-gray-100 rounded ${node.props.className || ""}`}
-          >
+          <div className={`${baseClasses} p-4 bg-gray-100 rounded ${node.props.className || ""}`}>
             <span className="text-sm text-gray-500">{node.type}</span>
           </div>
         );
@@ -333,9 +277,7 @@ export function DroppableCanvasNode({
       {/* 노드 컨트롤 */}
       {isSelected && !isRoot && (
         <div className="absolute -top-9 right-0 flex items-center gap-1 bg-white border rounded-md shadow-sm p-1">
-          <span className="text-xs font-medium text-gray-600 px-2">
-            {node.type}
-          </span>
+          <span className="text-xs font-medium text-gray-600 px-2">{node.type}</span>
           <Button
             size="sm"
             variant="ghost"

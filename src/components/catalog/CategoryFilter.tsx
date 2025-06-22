@@ -35,10 +35,7 @@ export function CategoryFilter({
 
   // 실제 컴포넌트가 있는 탭만 표시
   const visibleTabs = allTabs.filter(
-    (tab) =>
-      tab.key === "all" ||
-      (categories.includes(tab.key as ComponentCategory) &&
-        categoryCounts[tab.key] > 0),
+    (tab) => tab.key === "all" || (categories.includes(tab.key as ComponentCategory) && categoryCounts[tab.key] > 0),
   );
 
   return (
@@ -56,10 +53,7 @@ export function CategoryFilter({
             onClick={() => onCategoryChange(tab.key)}
           >
             <span>{tab.label}</span>
-            <Badge
-              variant={isSelected ? "secondary" : "outline"}
-              className="text-xs"
-            >
+            <Badge variant={isSelected ? "secondary" : "outline"} className="text-xs">
               {count}
             </Badge>
           </Button>

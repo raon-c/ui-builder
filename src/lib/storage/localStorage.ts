@@ -3,12 +3,7 @@
 // AIDEV-NOTE: localStorage 기반 StorageAdapter 구현 - MVP 기본 스토리지
 // 브라우저 localStorage API를 StorageAdapter 인터페이스에 맞춰 래핑
 
-import {
-  DEFAULT_STORAGE_CONFIG,
-  type StorageAdapter,
-  type StorageConfig,
-  StorageError,
-} from "@/types/storage";
+import { DEFAULT_STORAGE_CONFIG, type StorageAdapter, type StorageConfig, StorageError } from "@/types/storage";
 
 /**
  * localStorage 기반 스토리지 어댑터
@@ -27,10 +22,7 @@ export class LocalStorageAdapter implements StorageAdapter {
    */
   private checkAvailability(): void {
     if (typeof window === "undefined" || !window.localStorage) {
-      throw new StorageError(
-        "localStorage is not available",
-        "STORAGE_UNAVAILABLE",
-      );
+      throw new StorageError("localStorage is not available", "STORAGE_UNAVAILABLE");
     }
   }
 
@@ -62,17 +54,9 @@ export class LocalStorageAdapter implements StorageAdapter {
       return parsed as T;
     } catch (error) {
       if (error instanceof SyntaxError) {
-        throw new StorageError(
-          `Failed to parse JSON for key "${key}"`,
-          "PARSE_ERROR",
-          error,
-        );
+        throw new StorageError(`Failed to parse JSON for key "${key}"`, "PARSE_ERROR", error);
       }
-      throw new StorageError(
-        `Failed to get item "${key}"`,
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError(`Failed to get item "${key}"`, "UNKNOWN", error as Error);
     }
   }
 
@@ -87,10 +71,7 @@ export class LocalStorageAdapter implements StorageAdapter {
       // 용량 체크 (5MB 기준)
       const estimatedSize = new Blob([serialized]).size;
       if (estimatedSize > 5 * 1024 * 1024) {
-        throw new StorageError(
-          `Data size (${Math.round(estimatedSize / 1024)}KB) exceeds 5MB limit`,
-          "QUOTA_EXCEEDED",
-        );
+        throw new StorageError(`Data size (${Math.round(estimatedSize / 1024)}KB) exceeds 5MB limit`, "QUOTA_EXCEEDED");
       }
 
       localStorage.setItem(fullKey, serialized);
@@ -104,22 +85,11 @@ export class LocalStorageAdapter implements StorageAdapter {
       }
 
       // localStorage quota exceeded 에러 처리
-      if (
-        error instanceof DOMException &&
-        error.name === "QuotaExceededError"
-      ) {
-        throw new StorageError(
-          "Storage quota exceeded",
-          "QUOTA_EXCEEDED",
-          error,
-        );
+      if (error instanceof DOMException && error.name === "QuotaExceededError") {
+        throw new StorageError("Storage quota exceeded", "QUOTA_EXCEEDED", error);
       }
 
-      throw new StorageError(
-        `Failed to set item "${key}"`,
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError(`Failed to set item "${key}"`, "UNKNOWN", error as Error);
     }
   }
 
@@ -135,11 +105,7 @@ export class LocalStorageAdapter implements StorageAdapter {
         console.log(`[LocalStorage] Remove ${key}`);
       }
     } catch (error) {
-      throw new StorageError(
-        `Failed to remove item "${key}"`,
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError(`Failed to remove item "${key}"`, "UNKNOWN", error as Error);
     }
   }
 
@@ -161,11 +127,7 @@ export class LocalStorageAdapter implements StorageAdapter {
 
       return keys;
     } catch (error) {
-      throw new StorageError(
-        "Failed to get all keys",
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError("Failed to get all keys", "UNKNOWN", error as Error);
     }
   }
 
@@ -184,11 +146,7 @@ export class LocalStorageAdapter implements StorageAdapter {
         console.log(`[LocalStorage] Cleared ${keys.length} items`);
       }
     } catch (error) {
-      throw new StorageError(
-        "Failed to clear storage",
-        "UNKNOWN",
-        error as Error,
-      );
+      throw new StorageError("Failed to clear storage", "UNKNOWN", error as Error);
     }
   }
 
@@ -215,10 +173,7 @@ export class LocalStorageAdapter implements StorageAdapter {
       return Math.max(0, estimatedLimit - totalSize);
     } catch (error) {
       if (this.config.debug) {
-        console.warn(
-          "[LocalStorage] Failed to estimate available space:",
-          error,
-        );
+        console.warn("[LocalStorage] Failed to estimate available space:", error);
       }
       return 0;
     }

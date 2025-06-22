@@ -11,10 +11,7 @@ interface PreviewRendererProps {
   isRoot?: boolean;
 }
 
-export function PreviewRenderer({
-  node,
-  isRoot = false,
-}: PreviewRendererProps) {
+export function PreviewRenderer({ node, isRoot = false }: PreviewRendererProps) {
   // 노드 렌더링 함수 - 편집 UI 제거된 순수 컴포넌트
   const renderNodeContent = () => {
     switch (node.type) {
@@ -34,9 +31,7 @@ export function PreviewRenderer({
 
       case "Card":
         return (
-          <div
-            className={`border rounded-lg shadow-sm ${node.props.className || ""}`}
-          >
+          <div className={`border rounded-lg shadow-sm ${node.props.className || ""}`}>
             {/* 자식 노드들 렌더링 */}
             {node.children.length > 0 && (
               <div className="space-y-2">
@@ -76,9 +71,7 @@ export function PreviewRenderer({
         const direction = (node.props.direction as string) || "row";
         return (
           <div
-            className={`flex ${
-              direction === "column" ? "flex-col" : "flex-row"
-            } gap-2 ${node.props.className || ""}`}
+            className={`flex ${direction === "column" ? "flex-col" : "flex-row"} gap-2 ${node.props.className || ""}`}
           >
             {node.children.map((child) => (
               <PreviewRenderer key={child.id} node={child} />
@@ -89,12 +82,8 @@ export function PreviewRenderer({
 
       case "Modal":
         return (
-          <div
-            className={`bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto ${node.props.className || ""}`}
-          >
-            <h3 className="text-lg font-semibold mb-4">
-              {(node.props.title as string) || "모달"}
-            </h3>
+          <div className={`bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto ${node.props.className || ""}`}>
+            <h3 className="text-lg font-semibold mb-4">{(node.props.title as string) || "모달"}</h3>
             {node.children.length > 0 && (
               <div className="space-y-2">
                 {node.children.map((child) => (
@@ -107,12 +96,8 @@ export function PreviewRenderer({
 
       case "Drawer":
         return (
-          <div
-            className={`bg-white border-r shadow-lg p-4 min-h-screen w-64 ${node.props.className || ""}`}
-          >
-            <h3 className="text-lg font-semibold mb-4">
-              {(node.props.title as string) || "드로어"}
-            </h3>
+          <div className={`bg-white border-r shadow-lg p-4 min-h-screen w-64 ${node.props.className || ""}`}>
+            <h3 className="text-lg font-semibold mb-4">{(node.props.title as string) || "드로어"}</h3>
             {node.children.length > 0 && (
               <div className="space-y-2">
                 {node.children.map((child) => (
@@ -128,12 +113,8 @@ export function PreviewRenderer({
           <div className={`${node.props.className || ""}`}>
             <div className="border-b">
               <div className="flex space-x-4">
-                <button className="py-2 px-4 border-b-2 border-blue-500 text-blue-600 font-medium">
-                  탭 1
-                </button>
-                <button className="py-2 px-4 text-gray-500 hover:text-gray-700">
-                  탭 2
-                </button>
+                <button className="py-2 px-4 border-b-2 border-blue-500 text-blue-600 font-medium">탭 1</button>
+                <button className="py-2 px-4 text-gray-500 hover:text-gray-700">탭 2</button>
               </div>
             </div>
             <div className="p-4">
@@ -174,11 +155,7 @@ export function PreviewRenderer({
       }
 
       case "Text":
-        return (
-          <p className={(node.props.className as string) || ""}>
-            {(node.props.text as string) || "텍스트"}
-          </p>
-        );
+        return <p className={(node.props.className as string) || ""}>{(node.props.text as string) || "텍스트"}</p>;
 
       case "Button":
         return (
@@ -213,9 +190,7 @@ export function PreviewRenderer({
       case "Textarea":
         return (
           <textarea
-            placeholder={
-              (node.props.placeholder as string) || "내용을 입력하세요"
-            }
+            placeholder={(node.props.placeholder as string) || "내용을 입력하세요"}
             rows={(node.props.rows as number) || 3}
             className={`border rounded px-3 py-2 w-full resize-y ${node.props.className || ""}`}
           />
@@ -223,23 +198,15 @@ export function PreviewRenderer({
 
       case "Select":
         return (
-          <select
-            className={`border rounded px-3 py-2 w-full ${node.props.className || ""}`}
-          >
-            <option>
-              {(node.props.placeholder as string) || "선택하세요"}
-            </option>
+          <select className={`border rounded px-3 py-2 w-full ${node.props.className || ""}`}>
+            <option>{(node.props.placeholder as string) || "선택하세요"}</option>
           </select>
         );
 
       case "Checkbox":
         return (
           <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={(node.props.checked as boolean) || false}
-              readOnly
-            />
+            <input type="checkbox" checked={(node.props.checked as boolean) || false} readOnly />
             <span>{(node.props.label as string) || "체크박스"}</span>
           </label>
         );
@@ -254,9 +221,7 @@ export function PreviewRenderer({
             >
               <div
                 className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
-                  (node.props.checked as boolean)
-                    ? "translate-x-5"
-                    : "translate-x-0.5"
+                  (node.props.checked as boolean) ? "translate-x-5" : "translate-x-0.5"
                 } mt-0.5`}
               />
             </div>
@@ -277,11 +242,7 @@ export function PreviewRenderer({
         const src = node.props.src as string;
         const fallback = (node.props.fallback as string) || "A";
         return src ? (
-          <img
-            src={src}
-            alt={(node.props.alt as string) || "아바타"}
-            className="w-10 h-10 rounded-full object-cover"
-          />
+          <img src={src} alt={(node.props.alt as string) || "아바타"} className="w-10 h-10 rounded-full object-cover" />
         ) : (
           <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-medium">
             {fallback}
@@ -298,14 +259,10 @@ export function PreviewRenderer({
                 : "border-blue-200 bg-blue-50 text-blue-800"
             } ${node.props.className || ""}`}
           >
-            <h4 className="font-medium">
-              {(node.props.title as string) || "알림"}
-            </h4>
+            <h4 className="font-medium">{(node.props.title as string) || "알림"}</h4>
             {(() => {
               const description = node.props.description;
-              return description ? (
-                <p className="text-sm mt-1">{String(description)}</p>
-              ) : null;
+              return description ? <p className="text-sm mt-1">{String(description)}</p> : null;
             })()}
           </div>
         );
@@ -316,24 +273,17 @@ export function PreviewRenderer({
         const percentage = (value / max) * 100;
         return (
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-blue-600 h-2 rounded-full transition-all"
-              style={{ width: `${percentage}%` }}
-            />
+            <div className="bg-blue-600 h-2 rounded-full transition-all" style={{ width: `${percentage}%` }} />
           </div>
         );
       }
 
       case "Divider":
-        return (
-          <hr className={`border-gray-300 ${node.props.className || ""}`} />
-        );
+        return <hr className={`border-gray-300 ${node.props.className || ""}`} />;
 
       default:
         return (
-          <div
-            className={`p-2 border border-gray-300 rounded bg-gray-50 ${node.props.className || ""}`}
-          >
+          <div className={`p-2 border border-gray-300 rounded bg-gray-50 ${node.props.className || ""}`}>
             <div className="text-xs text-gray-500">{node.type}</div>
           </div>
         );

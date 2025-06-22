@@ -1,19 +1,13 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
   "vcs": {
-    "enabled": false,
+    "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": false
+    "useIgnoreFile": true
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": [
-      "src/**/*.ts",
-      "src/**/*.tsx",
-      "src/**/*.js",
-      "src/**/*.jsx",
-      "src/**/*.json"
-    ]
+    "includes": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "src/**/*.json"]
   },
   "formatter": {
     "enabled": true,
@@ -22,7 +16,7 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
-    "lineWidth": 80,
+    "lineWidth": 120,
     "attributePosition": "auto",
     "bracketSpacing": true
   },
@@ -31,24 +25,63 @@
     "rules": {
       "recommended": true,
       "performance": {
-        "noAccumulatingSpread": "off"
+        "noAccumulatingSpread": "off",
+        "noDelete": "warn"
       },
       "correctness": {
-        "noUnusedImports": "warn"
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "warn",
+        "useExhaustiveDependencies": "warn",
+        "noUndeclaredVariables": "error",
+        "noUnreachable": "error"
       },
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "noParameterAssign": "warn",
+        "useConst": "warn",
+        "useTemplate": "warn",
+        "useImportType": "warn",
+        "useExportType": "warn",
+        "useNodejsImportProtocol": "off",
+        "noUnusedTemplateLiteral": "warn"
       },
       "a11y": {
         "useKeyWithClickEvents": "off",
-        "useButtonType": "off",
-        "noLabelWithoutControl": "off"
+        "useButtonType": "warn",
+        "noLabelWithoutControl": "off",
+        "useValidAnchor": "warn",
+        "useAltText": "warn"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn",
+        "noAssignInExpressions": "warn",
+        "noConsole": "warn",
+        "noDebugger": "error",
+        "noDuplicateParameters": "error",
+        "noDuplicateObjectKeys": "error"
+      },
+      "complexity": {
+        "noBannedTypes": "warn",
+        "noUselessFragments": "warn",
+        "noForEach": "off",
+        "useArrowFunction": "warn"
       }
     }
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "double"
+      "quoteStyle": "double",
+      "trailingCommas": "all",
+      "semicolons": "always",
+      "arrowParentheses": "always"
+    },
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": false
+    }
+  },
+  "json": {
+    "formatter": {
+      "trailingCommas": "none"
     }
   }
 }

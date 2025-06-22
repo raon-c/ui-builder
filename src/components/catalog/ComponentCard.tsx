@@ -7,13 +7,7 @@ import * as LucideIcons from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ComponentWrapper } from "@/types/component";
 
 interface ComponentCardProps {
@@ -26,18 +20,12 @@ interface ComponentCardProps {
 /**
  * 개별 컴포넌트를 표시하는 카드 컴포넌트
  */
-export function ComponentCard({
-  component,
-  onSelect,
-  onPreview,
-  showPreview = true,
-}: ComponentCardProps) {
+export function ComponentCard({ component, onSelect, onPreview, showPreview = true }: ComponentCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { metadata, type } = component;
 
   // Lucide 아이콘 동적 로드
-  const IconComponent =
-    (LucideIcons as any)[metadata.icon] || LucideIcons.Package;
+  const IconComponent = (LucideIcons as any)[metadata.icon] || LucideIcons.Package;
 
   // 컴포넌트 미리보기 렌더링
   const renderPreview = () => {
@@ -53,9 +41,7 @@ export function ComponentCard({
           return <Component {...defaultProps} size="sm" />;
 
         case "Input":
-          return (
-            <Component {...defaultProps} className="w-full max-w-[120px]" />
-          );
+          return <Component {...defaultProps} className="w-full max-w-[120px]" />;
 
         case "Badge":
           return <Component {...defaultProps} />;
@@ -137,23 +123,16 @@ export function ComponentCard({
               <IconComponent className="h-5 w-5 text-muted-foreground" />
             </div>
             <div className="min-w-0 flex-1">
-              <CardTitle className="text-sm font-medium truncate">
-                {metadata.displayName}
-              </CardTitle>
+              <CardTitle className="text-sm font-medium truncate">{metadata.displayName}</CardTitle>
               <div className="mt-1">
-                <Badge
-                  variant="secondary"
-                  className={`text-xs ${getCategoryColor(metadata.category)}`}
-                >
+                <Badge variant="secondary" className={`text-xs ${getCategoryColor(metadata.category)}`}>
                   {metadata.category}
                 </Badge>
               </div>
             </div>
           </div>
 
-          {metadata.draggable && (
-            <div className="text-xs text-muted-foreground">드래그 가능</div>
-          )}
+          {metadata.draggable && <div className="text-xs text-muted-foreground">드래그 가능</div>}
         </div>
       </CardHeader>
 
@@ -166,9 +145,7 @@ export function ComponentCard({
         )}
 
         {/* 설명 */}
-        <CardDescription className="text-xs leading-relaxed mb-3">
-          {metadata.description}
-        </CardDescription>
+        <CardDescription className="text-xs leading-relaxed mb-3">{metadata.description}</CardDescription>
 
         {/* 액션 버튼들 */}
         <div className="flex gap-2">

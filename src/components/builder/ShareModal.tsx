@@ -12,13 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useProjectStore } from "@/store/projectStore";
 import type { Project } from "@/types/project";
 
@@ -50,13 +44,10 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
 
     try {
       // 7자리 랜덤 문자열 생성 (shareSlug)
-      const characters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let slug = "";
       for (let i = 0; i < 7; i++) {
-        slug += characters.charAt(
-          Math.floor(Math.random() * characters.length),
-        );
+        slug += characters.charAt(Math.floor(Math.random() * characters.length));
       }
 
       // 만료 시간 계산
@@ -119,9 +110,7 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
       return "만료됨";
     }
 
-    const daysLeft = Math.ceil(
-      (expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
-    );
+    const daysLeft = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     return `${daysLeft}일 남음`;
   };
 
@@ -130,9 +119,7 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
           <DialogTitle>프로젝트 공유</DialogTitle>
-          <DialogDescription>
-            읽기 전용 링크를 생성하여 팀원들과 프로젝트를 공유할 수 있습니다.
-          </DialogDescription>
+          <DialogDescription>읽기 전용 링크를 생성하여 팀원들과 프로젝트를 공유할 수 있습니다.</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
@@ -170,28 +157,18 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
                 className="flex-1"
               />
               {shareLink && (
-                <Button
-                  variant="outline"
-                  onClick={handleCopyLink}
-                  disabled={!shareLink}
-                >
+                <Button variant="outline" onClick={handleCopyLink} disabled={!shareLink}>
                   {isCopied ? "복사됨!" : "복사"}
                 </Button>
               )}
             </div>
             {shareLink && project.settings.shareExpiresAt && (
-              <p className="text-xs text-muted-foreground">
-                만료: {getExpiryText()}
-              </p>
+              <p className="text-xs text-muted-foreground">만료: {getExpiryText()}</p>
             )}
           </div>
 
           {!shareLink && (
-            <Button
-              onClick={handleGenerateLink}
-              disabled={isGenerating}
-              className="w-full"
-            >
+            <Button onClick={handleGenerateLink} disabled={isGenerating} className="w-full">
               {isGenerating ? "생성 중..." : "읽기 전용 링크 생성"}
             </Button>
           )}
@@ -199,25 +176,17 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
           {shareLink && (
             <div className="rounded-lg bg-muted p-3 space-y-2">
               <p className="text-sm text-muted-foreground">
-                💡 이 링크로 접속한 사용자는 프로젝트를 볼 수만 있고 편집할 수
-                없습니다.
+                💡 이 링크로 접속한 사용자는 프로젝트를 볼 수만 있고 편집할 수 없습니다.
               </p>
               {project.settings.shareVersion && (
-                <p className="text-xs text-muted-foreground">
-                  공유 버전: {project.settings.shareVersion}
-                </p>
+                <p className="text-xs text-muted-foreground">공유 버전: {project.settings.shareVersion}</p>
               )}
             </div>
           )}
 
           {shareLink && (
             <div className="pt-2 border-t">
-              <Button
-                variant="destructive"
-                size="sm"
-                className="w-full"
-                onClick={handleGenerateLink}
-              >
+              <Button variant="destructive" size="sm" className="w-full" onClick={handleGenerateLink}>
                 새로운 링크 생성 (기존 링크는 무효화됩니다)
               </Button>
             </div>

@@ -28,10 +28,7 @@ import { DraggableComponent } from "@/components/builder/DraggableComponent";
 import { DroppableCanvasNode } from "@/components/builder/DroppableCanvasNode";
 import { ImportExportManager } from "@/components/builder/ImportExportManager";
 import { PreviewModal } from "@/components/builder/PreviewModal";
-import {
-  PropertyEditor,
-  PropertyEditorEmpty,
-} from "@/components/builder/PropertyEditor";
+import { PropertyEditor, PropertyEditorEmpty } from "@/components/builder/PropertyEditor";
 import { ScreenManager } from "@/components/builder/ScreenManager";
 import { ShareModal } from "@/components/builder/ShareModal";
 import { Button } from "@/components/ui/button";
@@ -135,9 +132,7 @@ function BuilderPageContent() {
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [selectedScreenId, setSelectedScreenId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"structure" | "properties">(
-    "structure",
-  );
+  const [activeTab, setActiveTab] = useState<"structure" | "properties">("structure");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
 
@@ -186,9 +181,7 @@ function BuilderPageContent() {
   // 현재 화면이 변경되면 빌더 스토어에 반영
   useEffect(() => {
     if (currentProject && selectedScreenId) {
-      const screen = currentProject.screens.find(
-        (s) => s.id === selectedScreenId,
-      );
+      const screen = currentProject.screens.find((s) => s.id === selectedScreenId);
       if (screen) {
         setCurrentScreen(screen);
       }
@@ -248,10 +241,7 @@ function BuilderPageContent() {
     }
 
     // 캔버스 내에서 노드 재배치
-    else if (
-      activeData?.type === "canvas-node" &&
-      overData?.type === "canvas-node"
-    ) {
+    else if (activeData?.type === "canvas-node" && overData?.type === "canvas-node") {
       const activeNodeId = activeData.nodeId;
       const overNodeId = overData.nodeId;
 
@@ -267,9 +257,7 @@ function BuilderPageContent() {
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
           <div className="text-lg font-medium">프로젝트 ID가 필요합니다</div>
-          <div className="text-sm text-muted-foreground mt-2">
-            URL에 ?id=프로젝트ID 파라미터를 추가해주세요.
-          </div>
+          <div className="text-sm text-muted-foreground mt-2">URL에 ?id=프로젝트ID 파라미터를 추가해주세요.</div>
           <Button
             className="mt-4"
             onClick={() => {
@@ -288,9 +276,7 @@ function BuilderPageContent() {
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
           <div className="text-lg font-medium">프로젝트 로딩 중...</div>
-          <div className="text-sm text-muted-foreground mt-2">
-            잠시만 기다려주세요.
-          </div>
+          <div className="text-sm text-muted-foreground mt-2">잠시만 기다려주세요.</div>
         </div>
       </div>
     );
@@ -301,9 +287,7 @@ function BuilderPageContent() {
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
           <div className="text-lg font-medium">프로젝트를 찾을 수 없습니다</div>
-          <div className="text-sm text-muted-foreground mt-2">
-            프로젝트 ID: {projectId}
-          </div>
+          <div className="text-sm text-muted-foreground mt-2">프로젝트 ID: {projectId}</div>
           <Button
             className="mt-4"
             onClick={() => {
@@ -317,9 +301,7 @@ function BuilderPageContent() {
     );
   }
 
-  const currentScreenData = currentProject.screens.find(
-    (s) => s.id === selectedScreenId,
-  );
+  const currentScreenData = currentProject.screens.find((s) => s.id === selectedScreenId);
 
   return (
     <DndContext
@@ -345,26 +327,16 @@ function BuilderPageContent() {
             <Separator orientation="vertical" className="h-6" />
             <div>
               <h1 className="font-semibold text-lg">{currentProject.name}</h1>
-              <p className="text-xs text-muted-foreground">
-                {currentScreenData?.name || "화면 없음"}
-              </p>
+              <p className="text-xs text-muted-foreground">{currentScreenData?.name || "화면 없음"}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <ImportExportManager project={currentProject} />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsShareOpen(true)}
-            >
+            <Button variant="outline" size="sm" onClick={() => setIsShareOpen(true)}>
               공유
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsPreviewOpen(true)}
-            >
+            <Button variant="outline" size="sm" onClick={() => setIsPreviewOpen(true)}>
               미리보기
             </Button>
             <Button size="sm">저장</Button>
@@ -390,13 +362,9 @@ function BuilderPageContent() {
                   <div className="space-y-4">
                     {["Layout", "Basic", "Form"].map((category) => (
                       <div key={category}>
-                        <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                          {category}
-                        </h4>
+                        <h4 className="text-sm font-medium text-muted-foreground mb-2">{category}</h4>
                         <div className="grid grid-cols-2 gap-2">
-                          {COMPONENT_PALETTE.filter(
-                            (comp) => comp.category === category,
-                          ).map((comp) => (
+                          {COMPONENT_PALETTE.filter((comp) => comp.category === category).map((comp) => (
                             <DraggableComponent
                               key={comp.componentType}
                               componentType={comp.componentType}
@@ -446,23 +414,13 @@ function BuilderPageContent() {
                     <Card className="min-h-[600px] bg-white shadow-lg">
                       <div className="p-8">
                         {currentScreen ? (
-                          <SortableContext
-                            items={[currentScreen.content.id]}
-                            strategy={verticalListSortingStrategy}
-                          >
-                            <DroppableCanvasNode
-                              node={currentScreen.content}
-                              isRoot={true}
-                            />
+                          <SortableContext items={[currentScreen.content.id]} strategy={verticalListSortingStrategy}>
+                            <DroppableCanvasNode node={currentScreen.content} isRoot={true} />
                           </SortableContext>
                         ) : (
                           <div className="text-center text-muted-foreground">
-                            <div className="text-lg font-medium mb-2">
-                              화면을 선택하세요
-                            </div>
-                            <div className="text-sm">
-                              좌측 패널에서 편집할 화면을 선택해주세요.
-                            </div>
+                            <div className="text-lg font-medium mb-2">화면을 선택하세요</div>
+                            <div className="text-sm">좌측 패널에서 편집할 화면을 선택해주세요.</div>
                           </div>
                         )}
                       </div>
@@ -483,9 +441,7 @@ function BuilderPageContent() {
                     variant="ghost"
                     onClick={() => setActiveTab("structure")}
                     className={`flex-1 px-4 py-3 text-sm font-medium rounded-none ${
-                      activeTab === "structure"
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-muted"
+                      activeTab === "structure" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
                     }`}
                   >
                     구조
@@ -494,9 +450,7 @@ function BuilderPageContent() {
                     variant="ghost"
                     onClick={() => setActiveTab("properties")}
                     className={`flex-1 px-4 py-3 text-sm font-medium rounded-none ${
-                      activeTab === "properties"
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-muted"
+                      activeTab === "properties" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
                     }`}
                   >
                     속성
@@ -511,9 +465,7 @@ function BuilderPageContent() {
                       {currentScreen ? (
                         <StructureTree node={currentScreen.content} />
                       ) : (
-                        <div className="text-sm text-muted-foreground">
-                          화면을 선택하세요
-                        </div>
+                        <div className="text-sm text-muted-foreground">화면을 선택하세요</div>
                       )}
                     </div>
                   ) : (
@@ -521,11 +473,7 @@ function BuilderPageContent() {
                       {selectedNodeId && currentScreen ? (
                         (() => {
                           const selectedNode = findNode(selectedNodeId);
-                          return selectedNode ? (
-                            <PropertyEditor node={selectedNode} />
-                          ) : (
-                            <PropertyEditorEmpty />
-                          );
+                          return selectedNode ? <PropertyEditor node={selectedNode} /> : <PropertyEditorEmpty />;
                         })()
                       ) : (
                         <PropertyEditorEmpty />
@@ -554,21 +502,14 @@ function BuilderPageContent() {
             ? (() => {
                 // 팔레트 아이템인지 확인
                 if (activeId.startsWith("palette-")) {
-                  const componentType = activeId.replace(
-                    "palette-",
-                    "",
-                  ) as BuilderComponentType;
-                  const paletteItem = COMPONENT_PALETTE.find(
-                    (c) => c.componentType === componentType,
-                  );
+                  const componentType = activeId.replace("palette-", "") as BuilderComponentType;
+                  const paletteItem = COMPONENT_PALETTE.find((c) => c.componentType === componentType);
 
                   if (paletteItem) {
                     return (
                       <div className="flex items-center p-3 bg-white rounded-lg shadow-lg border-2 border-blue-500 cursor-grabbing">
                         <div className="text-lg mr-3">{paletteItem.icon}</div>
-                        <span className="text-sm font-medium text-gray-700">
-                          {paletteItem.name}
-                        </span>
+                        <span className="text-sm font-medium text-gray-700">{paletteItem.name}</span>
                       </div>
                     );
                   }
@@ -579,9 +520,7 @@ function BuilderPageContent() {
                 if (node) {
                   return (
                     <div className="bg-white border-2 border-blue-500 rounded-lg p-2 shadow-lg opacity-90">
-                      <div className="text-xs text-gray-500 mb-1">
-                        📦 {node.type}
-                      </div>
+                      <div className="text-xs text-gray-500 mb-1">📦 {node.type}</div>
                       <div className="text-sm font-medium">이동 중...</div>
                     </div>
                   );
@@ -598,18 +537,10 @@ function BuilderPageContent() {
         </DragOverlay>
 
         {/* 미리보기 모달 */}
-        <PreviewModal
-          screen={currentScreen}
-          isOpen={isPreviewOpen}
-          onClose={() => setIsPreviewOpen(false)}
-        />
+        <PreviewModal screen={currentScreen} isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />
 
         {/* 공유 모달 */}
-        <ShareModal
-          project={currentProject}
-          isOpen={isShareOpen}
-          onClose={() => setIsShareOpen(false)}
-        />
+        <ShareModal project={currentProject} isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
       </div>
     </DndContext>
   );
@@ -656,9 +587,7 @@ export default function BuilderPage() {
         <div className="flex items-center justify-center h-screen">
           <div className="text-center">
             <div className="text-lg font-medium">빌더 로딩 중...</div>
-            <div className="text-sm text-muted-foreground mt-2">
-              잠시만 기다려주세요.
-            </div>
+            <div className="text-sm text-muted-foreground mt-2">잠시만 기다려주세요.</div>
           </div>
         </div>
       }

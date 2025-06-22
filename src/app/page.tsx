@@ -5,23 +5,11 @@ import { useId } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
 export default function Home() {
@@ -36,14 +24,7 @@ export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
+        <Image className="dark:invert" src="/next.svg" alt="Next.js logo" width={180} height={38} priority />
 
         {/* AIDEV-NOTE: Button 컴포넌트 테스트 섹션 - shadcn/ui 동작 확인 */}
         <div className="flex flex-col gap-4 p-6 border rounded-lg bg-card">
@@ -79,9 +60,7 @@ export default function Home() {
         {/* AIDEV-NOTE: 어댑터 패턴 테스트 섹션 - ComponentRegistry 동작 확인 */}
         <div className="flex flex-col gap-4 p-6 border rounded-lg bg-card">
           <h2 className="text-lg font-semibold mb-2">Adapter Pattern Test</h2>
-          <p className="text-sm text-muted-foreground mb-4">
-            개발자 도구 콘솔에서 어댑터 초기화 로그를 확인하세요.
-          </p>
+          <p className="text-sm text-muted-foreground mb-4">개발자 도구 콘솔에서 어댑터 초기화 로그를 확인하세요.</p>
 
           {/* 어댑터 정보 표시 */}
           <div className="space-y-2 text-sm">
@@ -91,9 +70,7 @@ export default function Home() {
             </div>
             <div className="flex justify-between">
               <span className="font-medium">등록된 컴포넌트:</span>
-              <span>
-                7개 (Button, Input, Badge, Checkbox, Switch, Avatar, Label)
-              </span>
+              <span>7개 (Button, Input, Badge, Checkbox, Switch, Avatar, Label)</span>
             </div>
             <div className="flex justify-between">
               <span className="font-medium">카테고리:</span>
@@ -105,16 +82,11 @@ export default function Home() {
             variant="outline"
             onClick={() => {
               // 어댑터 테스트를 위한 임시 코드
-              import("@/adapters/shadcn").then(
-                ({ initializeShadcnAdapter }) => {
-                  const adapter = initializeShadcnAdapter();
-                  console.log("Adapter initialized:", adapter);
-                  console.log(
-                    "Registered components:",
-                    adapter.registry.getAll(),
-                  );
-                },
-              );
+              import("@/adapters/shadcn").then(({ initializeShadcnAdapter }) => {
+                const adapter = initializeShadcnAdapter();
+                console.log("Adapter initialized:", adapter);
+                console.log("Registered components:", adapter.registry.getAll());
+              });
             }}
           >
             어댑터 초기화 테스트
@@ -124,9 +96,7 @@ export default function Home() {
         {/* AIDEV-NOTE: 스토리지 시스템 테스트 섹션 - LocalStorage & ProjectStorage 동작 확인 */}
         <div className="flex flex-col gap-4 p-6 border rounded-lg bg-card">
           <h2 className="text-lg font-semibold mb-2">Storage System Test</h2>
-          <p className="text-sm text-muted-foreground mb-4">
-            localStorage 기반 프로젝트 CRUD 기능을 테스트합니다.
-          </p>
+          <p className="text-sm text-muted-foreground mb-4">localStorage 기반 프로젝트 CRUD 기능을 테스트합니다.</p>
 
           <div className="space-y-2">
             <Button
@@ -171,12 +141,9 @@ export default function Home() {
 
         {/* AIDEV-NOTE: 확장된 ComponentRegistry 테스트 섹션 - Sprint 2 */}
         <div className="flex flex-col gap-4 p-6 border rounded-lg bg-card">
-          <h2 className="text-lg font-semibold mb-2">
-            Enhanced Registry Test (Sprint 2)
-          </h2>
+          <h2 className="text-lg font-semibold mb-2">Enhanced Registry Test (Sprint 2)</h2>
           <p className="text-sm text-muted-foreground mb-4">
-            확장된 ComponentRegistry의 이벤트 시스템, 검증, 통계 기능을
-            테스트합니다.
+            확장된 ComponentRegistry의 이벤트 시스템, 검증, 통계 기능을 테스트합니다.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -187,9 +154,7 @@ export default function Home() {
                 variant="outline"
                 onClick={async () => {
                   try {
-                    const { getComponentRegistry } = await import(
-                      "@/lib/component-registry"
-                    );
+                    const { getComponentRegistry } = await import("@/lib/component-registry");
                     const registry = getComponentRegistry();
 
                     if ("getStats" in registry) {
@@ -218,24 +183,17 @@ export default function Home() {
                 variant="outline"
                 onClick={async () => {
                   try {
-                    const { getComponentRegistry } = await import(
-                      "@/lib/component-registry"
-                    );
+                    const { getComponentRegistry } = await import("@/lib/component-registry");
                     const registry = getComponentRegistry();
 
                     if ("addEventListener" in registry) {
                       // 이벤트 리스너 추가
                       const listener = (event: any) => {
                         console.log("🎉 Registry Event:", event);
-                        alert(
-                          `이벤트 발생: ${event.type}\n컴포넌트: ${event.component?.type || "N/A"}`,
-                        );
+                        alert(`이벤트 발생: ${event.type}\n컴포넌트: ${event.component?.type || "N/A"}`);
                       };
 
-                      (registry as any).addEventListener(
-                        "component-registered",
-                        listener,
-                      );
+                      (registry as any).addEventListener("component-registered", listener);
 
                       // 테스트용 컴포넌트 등록
                       const testWrapper = {
@@ -263,10 +221,7 @@ export default function Home() {
 
                       // 리스너 제거
                       setTimeout(() => {
-                        (registry as any).removeEventListener(
-                          "component-registered",
-                          listener,
-                        );
+                        (registry as any).removeEventListener("component-registered", listener);
                         registry.unregister("TestComponent" as any);
                       }, 2000);
                     } else {
@@ -289,57 +244,45 @@ export default function Home() {
                 variant="outline"
                 onClick={async () => {
                   try {
-                    const { getComponentRegistry } = await import(
-                      "@/lib/component-registry"
-                    );
+                    const { getComponentRegistry } = await import("@/lib/component-registry");
                     const registry = getComponentRegistry();
 
                     if ("registerMany" in registry) {
                       const beforeCount = registry.getAll().length;
 
                       // 여러 테스트 컴포넌트 생성
-                      const testWrappers = ["Test1", "Test2", "Test3"].map(
-                        (name) => ({
+                      const testWrappers = ["Test1", "Test2", "Test3"].map((name) => ({
+                        type: name,
+                        component: () => null,
+                        metadata: {
                           type: name,
-                          component: () => null,
-                          metadata: {
-                            type: name,
-                            displayName: `${name} 컴포넌트`,
-                            description: `벌크 테스트용 ${name}`,
-                            category: "Basic",
-                            icon: "Package",
-                            defaultProps: {},
-                            canHaveChildren: false,
-                            draggable: true,
-                            deletable: true,
-                          },
-                          propsSchema: {
-                            type: name,
-                            schema: null,
-                            fields: [],
-                          },
-                        }),
-                      );
+                          displayName: `${name} 컴포넌트`,
+                          description: `벌크 테스트용 ${name}`,
+                          category: "Basic",
+                          icon: "Package",
+                          defaultProps: {},
+                          canHaveChildren: false,
+                          draggable: true,
+                          deletable: true,
+                        },
+                        propsSchema: {
+                          type: name,
+                          schema: null,
+                          fields: [],
+                        },
+                      }));
 
                       // 벌크 등록
                       (registry as any).registerMany(testWrappers);
 
                       const afterCount = registry.getAll().length;
-                      alert(
-                        `벌크 등록 완료!\n이전: ${beforeCount}개 → 이후: ${afterCount}개`,
-                      );
+                      alert(`벌크 등록 완료!\n이전: ${beforeCount}개 → 이후: ${afterCount}개`);
 
                       // 벌크 제거
                       setTimeout(() => {
-                        (registry as any).unregisterMany([
-                          "Test1",
-                          "Test2",
-                          "Test3",
-                        ]);
+                        (registry as any).unregisterMany(["Test1", "Test2", "Test3"]);
                         const finalCount = registry.getAll().length;
-                        console.log(
-                          `Bulk unregister completed. Final count: ${finalCount}`,
-                        );
+                        console.log(`Bulk unregister completed. Final count: ${finalCount}`);
                       }, 3000);
                     } else {
                       alert("Enhanced registry features not available");
@@ -361,9 +304,7 @@ export default function Home() {
                 variant="outline"
                 onClick={async () => {
                   try {
-                    const { getComponentRegistry } = await import(
-                      "@/lib/component-registry"
-                    );
+                    const { getComponentRegistry } = await import("@/lib/component-registry");
                     const registry = getComponentRegistry();
 
                     if ("validateComponent" in registry) {
@@ -375,9 +316,7 @@ export default function Home() {
                         propsSchema: null,
                       };
 
-                      const result = (registry as any).validateComponent(
-                        invalidWrapper,
-                      );
+                      const result = (registry as any).validateComponent(invalidWrapper);
                       console.log("🔍 Validation Result:", result);
 
                       alert(
@@ -399,20 +338,15 @@ export default function Home() {
 
           <div className="mt-4 p-3 bg-muted/50 rounded-md">
             <p className="text-xs text-muted-foreground">
-              💡 확장된 기능: 이벤트 시스템, 벌크 작업, 컴포넌트 검증, 성능
-              최적화된 카테고리 조회, 통계 정보
+              💡 확장된 기능: 이벤트 시스템, 벌크 작업, 컴포넌트 검증, 성능 최적화된 카테고리 조회, 통계 정보
             </p>
           </div>
         </div>
 
         {/* AIDEV-NOTE: 새로운 shadcn/ui 컴포넌트 테스트 섹션 - Sprint 2 */}
         <div className="flex flex-col gap-6 p-6 border rounded-lg bg-card">
-          <h2 className="text-lg font-semibold mb-2">
-            New Components Test (Sprint 2)
-          </h2>
-          <p className="text-sm text-muted-foreground mb-4">
-            새로 설치한 shadcn/ui 컴포넌트들의 동작을 확인합니다.
-          </p>
+          <h2 className="text-lg font-semibold mb-2">New Components Test (Sprint 2)</h2>
+          <p className="text-sm text-muted-foreground mb-4">새로 설치한 shadcn/ui 컴포넌트들의 동작을 확인합니다.</p>
 
           {/* Input 컴포넌트 테스트 */}
           <div className="space-y-2">
@@ -420,19 +354,11 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor={emailId}>Email</Label>
-                <Input
-                  id={emailId}
-                  type="email"
-                  placeholder="Enter your email"
-                />
+                <Input id={emailId} type="email" placeholder="Enter your email" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor={passwordId}>Password</Label>
-                <Input
-                  id={passwordId}
-                  type="password"
-                  placeholder="Enter your password"
-                />
+                <Input id={passwordId} type="password" placeholder="Enter your password" />
               </div>
             </div>
           </div>
@@ -514,10 +440,7 @@ export default function Home() {
             <h3 className="font-medium">Avatar Component</h3>
             <div className="flex gap-4 items-center">
               <Avatar>
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
+                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <Avatar>
@@ -556,9 +479,7 @@ export default function Home() {
                     </Avatar>
                     <div>
                       <p className="font-medium">John Doe</p>
-                      <p className="text-sm text-muted-foreground">
-                        john@example.com
-                      </p>
+                      <p className="text-sm text-muted-foreground">john@example.com</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -579,9 +500,7 @@ export default function Home() {
             </code>
             .
           </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
+          <li className="tracking-[-.01em]">Save and see your changes instantly.</li>
         </ol>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
@@ -614,13 +533,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
+          <Image aria-hidden src="/file.svg" alt="File icon" width={16} height={16} />
           Learn
         </a>
         <a
@@ -629,13 +542,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
+          <Image aria-hidden src="/window.svg" alt="Window icon" width={16} height={16} />
           Examples
         </a>
         <a
@@ -644,13 +551,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
+          <Image aria-hidden src="/globe.svg" alt="Globe icon" width={16} height={16} />
           Go to nextjs.org →
         </a>
       </footer>

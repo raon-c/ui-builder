@@ -8,9 +8,13 @@
     "start": "next start",
     "lint": "biome check",
     "lint:fix": "biome check --write",
+    "format": "biome format --write",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "check": "pnpm run typecheck && pnpm run lint && pnpm run test",
+    "check:fix": "pnpm run lint:fix && pnpm run format"
   },
   "dependencies": {
     "@dnd-kit/core": "6.3.1",

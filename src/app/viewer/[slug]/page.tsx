@@ -43,10 +43,7 @@ export default function ViewerPage({ params }: ViewerPageProps) {
           }
         }
 
-        if (
-          foundProject.settings.shareVersion &&
-          foundProject.settings.shareVersion !== foundProject.version
-        ) {
+        if (foundProject.settings.shareVersion && foundProject.settings.shareVersion !== foundProject.version) {
           // 버전 체크
           setError("version-mismatch");
           return;
@@ -84,29 +81,22 @@ export default function ViewerPage({ params }: ViewerPageProps) {
             {error === "expired" ? (
               <>
                 <div className="text-6xl mb-4">⏰</div>
-                <h2 className="text-2xl font-bold mb-2">
-                  링크가 만료되었습니다
-                </h2>
+                <h2 className="text-2xl font-bold mb-2">링크가 만료되었습니다</h2>
                 <p className="text-muted-foreground mb-6">
-                  이 공유 링크는 만료되어 더 이상 사용할 수 없습니다. 프로젝트
-                  소유자에게 새로운 링크를 요청해주세요.
+                  이 공유 링크는 만료되어 더 이상 사용할 수 없습니다. 프로젝트 소유자에게 새로운 링크를 요청해주세요.
                 </p>
               </>
             ) : (
               <>
                 <div className="text-6xl mb-4">🔄</div>
-                <h2 className="text-2xl font-bold mb-2">
-                  프로젝트가 업데이트되었습니다
-                </h2>
+                <h2 className="text-2xl font-bold mb-2">프로젝트가 업데이트되었습니다</h2>
                 <p className="text-muted-foreground mb-6">
-                  이 링크가 생성된 이후 프로젝트가 수정되었습니다. 최신 버전을
-                  보려면 프로젝트 소유자에게 새로운 링크를 요청해주세요.
+                  이 링크가 생성된 이후 프로젝트가 수정되었습니다. 최신 버전을 보려면 프로젝트 소유자에게 새로운 링크를
+                  요청해주세요.
                 </p>
               </>
             )}
-            <Button onClick={() => (window.location.href = "/")}>
-              홈으로 이동
-            </Button>
+            <Button onClick={() => (window.location.href = "/")}>홈으로 이동</Button>
           </div>
         </Card>
       </div>

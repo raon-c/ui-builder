@@ -11,12 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import type { ComponentMetadata, ComponentWrapper } from "@/types/component";
-import {
-  BUTTON_STATES,
-  BUTTON_VARIANTS,
-  INPUT_STATES,
-  INPUT_VARIANTS,
-} from "@/types/component";
+import { BUTTON_STATES, BUTTON_VARIANTS, INPUT_STATES, INPUT_VARIANTS } from "@/types/component";
 import {
   avatarPropsSchema,
   badgePropsSchema,
