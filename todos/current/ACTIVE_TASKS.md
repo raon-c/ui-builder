@@ -1,14 +1,25 @@
 # 현재 진행 중인 작업
 
 ## 🎯 Current Sprint
-- **Sprint 5**: 공유 기능 & 품질 개선 (Week 9-10) 🟡 **IN PROGRESS**
+- **Sprint 6**: 고급 기능 & 확장성 개선 (Week 11-12) 🟡 **IN PROGRESS**
 
 ## 🏃 Active Tasks
 
 ### 🎯 현재 진행 중
-- **Sprint 5 진행 중**: 아래 Sprint 5 백로그 항목 수행
+- **Sprint 6 시작**: 아래 Sprint 6 백로그 항목 수행
 
-### 🔨 Sprint 5 Backlog (30 SP)
+### 🔨 Sprint 6 Backlog (28 SP)
+- [ ] **A1** Undo/Redo 시스템 구현 (5 SP)
+- [ ] **A2** 종합적인 단축키 시스템 (4 SP)
+- [ ] **A3** 키보드 내비게이션 강화 (3 SP)
+- [ ] **B1** 어댑터 인터페이스 개선 (4 SP)
+- [ ] **B2** 커스텀 컴포넌트 등록 시스템 (3 SP)
+- [ ] **B3** 다중 라이브러리 지원 아키텍처 (3 SP)
+- [ ] **C1** 성능 모니터링 & 최적화 (3 SP)
+- [ ] **C2** 에러 경계 & 복구 시스템 (2 SP)
+- [ ] **C3** 사용자 피드백 개선 (1 SP)
+
+### 🔨 Sprint 5 완료 (30 SP) ✅
 - [x] **A1** Share API & Modal (5 SP) ✅ **공유 링크 생성 및 모달 구현 완료**
 - [x] **A2** Viewer Page (3 SP) ✅ **읽기 전용 뷰어 페이지 구현 완료**
 - [x] **A3** Expiry & Version Check (2 SP) ✅ **만료 시간 및 버전 체크 기능 구현 완료**
@@ -25,27 +36,38 @@
 - [x] **E1** Performance & Accessibility fixes (2 SP) ✅ **DnD 시각적 피드백 및 접근성 개선 완료**
 
 ### 🔨 Next Up
--.*
+- **우선순위 1**: A1 (Undo/Redo 시스템) - 가장 복잡하고 중요한 기능
+- **우선순위 2**: A2 (단축키 시스템) - 사용자 경험 핵심
+- **우선순위 3**: B1 (어댑터 개선) - 확장성 기반
 
 ## 🚧 Blockers
 - 없음
 
 ## 📝 Notes
-- **Sprint 4 완료**: 모든 주요 기능 구현 완료, Sprint 5 대기 중
+- **Sprint 5 완료**: 공유 기능 & 품질 개선 완료, Sprint 6 시작
+- **Sprint 6 목표**: 고급 기능 & 확장성 개선 (Undo/Redo, 단축키, 어댑터 확장)
 - AIDEV-NOTE 주석 규칙 준수
 - 커밋은 기능 단위로 작게
 - 300 LOC 이상 변경 시 확인 요청
 - **"use client" 지시자 필수** - 모든 React 컴포넌트와 클라이언트 로직
-- **Sprint 5 Kickoff**: 공유 기능 & 품질 개선 스프린트 진행 중
+- **Command Pattern 도입**: Undo/Redo 구현을 위한 액션 시스템 설계
 
 ## 🔗 References
-- [Sprint 4 상세 작업](../sprint-4/README.md)
+- [Sprint 6 상세 작업](../sprint-6/README.md)
+- [Sprint 5 완료 작업](../sprint-5/README.md)
 - [MVP 로드맵](../MVP_ROADMAP.md)
 - [ARCHITECTURE.md](../../ARCHITECTURE.md#5-빌더-데이터-구조)
 
 ---
 
 ## 📊 Progress
+
+### Sprint 6 Status 🟡
+- **Story Points**: 0/28 completed (0%)
+- **User Stories**: 0/3 completed (0%)
+- **Current Sprint**: 🟡 **SPRINT 6 IN PROGRESS**
+- **완료 작업**: 없음
+- **진행 중**: A1 (Undo/Redo 시스템) 시작 예정
 
 ### Sprint 5 Status ✅
 - **Story Points**: 30/30 completed (100% ✅ **COMPLETED!**)
