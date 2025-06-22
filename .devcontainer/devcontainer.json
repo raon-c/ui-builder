@@ -1,0 +1,120 @@
+{
+  "name": "ui-builder",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // TypeScript & React
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+        "formulahendry.auto-rename-tag",
+        "dsznajder.es7-react-js-snippets",
+        
+        // Biome (Linter & Formatter)
+        "biomejs.biome",
+        
+        // Git & GitHub
+        "github.vscode-pull-request-github",
+        "github.copilot",
+        "github.copilot-chat",
+        
+        // Development Tools
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-playwright.playwright",
+        "vitest.explorer",
+        
+        // UI/UX
+        "pkief.material-icon-theme",
+        "github.github-vscode-theme"
+      ],
+      "settings": {
+        // Biome 설정
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "quickfix.biome": "explicit",
+          "source.organizeImports.biome": "explicit"
+        },
+        
+        // TypeScript 설정
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "typescript.updateImportsOnFileMove.enabled": "always",
+        
+        // Tailwind CSS 설정
+        "tailwindCSS.includeLanguages": {
+          "typescript": "javascript",
+          "typescriptreact": "javascript"
+        },
+        "tailwindCSS.experimental.classRegex": [
+          ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+          ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+        ],
+        
+        // 파일 연결 설정
+        "files.associations": {
+          "*.css": "tailwindcss"
+        },
+        
+        // 에디터 설정
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.rulers": [120],
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 120,
+        
+        // 탐색기 설정
+        "explorer.fileNesting.enabled": true,
+        "explorer.fileNesting.patterns": {
+          "*.ts": "${capture}.test.ts,${capture}.spec.ts,${capture}.d.ts",
+          "*.tsx": "${capture}.test.tsx,${capture}.spec.tsx,${capture}.module.css",
+          "package.json": "package-lock.json,pnpm-lock.yaml,yarn.lock"
+        },
+        
+        // 터미널 설정
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash"
+          }
+        }
+      }
+    }
+  },
+
+  "forwardPorts": [3000, 3001],
+  "portsAttributes": {
+    "3000": {
+      "label": "Next.js Dev Server",
+      "onAutoForward": "notify"
+    },
+    "3001": {
+      "label": "Next.js Dev Server (Alt)",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "postCreateCommand": "npm install -g pnpm@9 && pnpm install",
+  
+  "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"
+  ],
+
+  "remoteUser": "node",
+  
+  "containerEnv": {
+    "NODE_ENV": "development",
+    "NEXT_TELEMETRY_DISABLED": "1"
+  }
+} 
