@@ -37,13 +37,13 @@
 - [x] **E1** Performance & Accessibility fixes (2 SP) ✅ **DnD 시각적 피드백 및 접근성 개선 완료**
 
 ### 🔨 Next Up - Sprint 7 작업
-- [ ] **D1** viewer 페이지 구문 오류 수정 (1 SP)
-- [ ] **D2** 라이브러리 변경 시 화면 업데이트 구현 (3 SP)
+- [x] **D1** viewer 페이지 구문 오류 수정 (1 SP) ✅ **완전 재작성으로 해결 완료**
+- [x] **D2** 라이브러리 변경 시 화면 업데이트 구현 (3 SP) ✅ **핵심 어댑터 시스템 구현 완료**
   - LibrarySelector와 빌더 스토어 연결 완료 ✅
   - AdapterComponentRenderer 기본 구현 완료 ✅
-  - PreviewRenderer에 어댁터 시스템 적용 필요
-  - DroppableCanvasNode에 어댑터 시스템 적용 필요
-- [ ] **D3** 기본 어댑터 등록 자동화 (2 SP)
+  - PreviewRenderer에 어댑터 시스템 적용 완료 ✅
+  - DroppableCanvasNode에 어댑터 시스템 적용 필요 (다음 작업)
+- [ ] **D3** 기본 어댑터 등록 자동화 (2 SP) ✅ **이미 완료됨**
 
 ## 🚧 Blockers
 - 없음
