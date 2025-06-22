@@ -8,9 +8,11 @@ export * from "./component";
 export * from "./component-base";
 export * from "./component-registry";
 export * from "./component-variants";
-
+// 커스텀 컴포넌트 관련 타입들
+export * from "./custom-component";
+// 다중 라이브러리 관련 타입들
+export * from "./multi-library";
 // 프로젝트 관련 타입들
 export * from "./project";
-
 // 스토리지 관련 타입들
 export * from "./storage";

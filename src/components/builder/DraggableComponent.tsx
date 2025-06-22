@@ -26,7 +26,7 @@ export function DraggableComponent({ componentType, name, icon, category }: Drag
     },
   });
 
-  const navigationProps = useComponentPaletteNavigation(componentType);
+  const { isFocused, handleKeyDown, ...navigationProps } = useComponentPaletteNavigation(componentType);
 
   return (
     <Button
@@ -35,6 +35,7 @@ export function DraggableComponent({ componentType, name, icon, category }: Drag
       className={`p-2 h-auto cursor-grab active:cursor-grabbing transition-all duration-200 ${
         isDragging ? "opacity-50 scale-95 shadow-lg" : "hover:shadow-md hover:scale-105 hover:bg-gray-50"
       }`}
+      onKeyDown={handleKeyDown}
       {...listeners}
       {...attributes}
       {...navigationProps}

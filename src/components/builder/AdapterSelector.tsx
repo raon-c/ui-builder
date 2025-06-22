@@ -1,6 +1,7 @@
 "use client";
 
-import { AlertCircle, CheckCircle, Loader2, Palette } from "lucide-react";
+import { AlertCircle, CheckCircle, Layers, Loader2, Palette } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAdapterManager } from "@/hooks/useAdapterManager";
+import { useMultiLibrary } from "@/hooks/useMultiLibrary";
 
 interface AdapterSelectorProps {
   /** 컴팩트 모드 (아이콘만 표시) */
@@ -25,6 +27,7 @@ interface AdapterSelectorProps {
  */
 export function AdapterSelector({ compact = false, className }: AdapterSelectorProps) {
   const { registrations, activeAdapterId, isLoading, error, setActiveAdapter } = useAdapterManager();
+  const { adapters: multiLibraryAdapters, stats } = useMultiLibrary();
 
   const activeAdapter = registrations.find((reg) => reg.metadata.id === activeAdapterId);
 
@@ -128,6 +131,24 @@ export function AdapterSelector({ compact = false, className }: AdapterSelectorP
             </DropdownMenuItem>
           ))
         )}
+
+        <DropdownMenuSeparator />
+        <Link href="/multi-library">
+          <DropdownMenuItem className="flex items-center justify-between p-3 cursor-pointer">
+            <div className="flex items-center space-x-3">
+              <Layers className="h-4 w-4" />
+              <div>
+                <div className="font-medium">다중 라이브러리 관리</div>
+                <div className="text-xs text-muted-foreground">
+                  {multiLibraryAdapters.length}개 어댑터 • {stats?.totalComponents || 0}개 컴포넌트
+                </div>
+              </div>
+            </div>
+            <Badge variant="outline" className="text-xs">
+              고급
+            </Badge>
+          </DropdownMenuItem>
+        </Link>
 
         {error && (
           <>

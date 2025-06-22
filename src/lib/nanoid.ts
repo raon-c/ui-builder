@@ -3,6 +3,9 @@
 
 import { nanoid } from "nanoid";
 
+// nanoid를 re-export
+export { nanoid };
+
 /**
  * nanoid 생성 (기본 8자리, 커스텀 길이 지원)
  * URL-safe하고 충돌 확률이 낮은 식별자
