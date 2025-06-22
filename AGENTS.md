@@ -1,5 +1,5 @@
 # AGENTS.md – ui-builder 프로젝트 핸드북
-*Last updated 2025-06-20*
+*Last updated 2025-01-25*
 
 > **문서 목적** – 본 파일은 모든 AI 어시스턴트(Claude, Cursor, GPT 등)와 인간 개발자를 위한 온보딩 매뉴얼입니다.  
 > 프로젝트의 코딩 규칙, 가드레일, 워크플로우 노하우를 정의하여 **아키텍처·테스트·도메인 판단**과 같은 *휴먼 30 %* 영역을 보호합니다.
@@ -32,6 +32,7 @@
 | G-4 | 300 LOC↑ 또는 3파일↑ 변경 시 **사전 확인 요청** | ❌ 대규모 리팩터를 독단적으로 추진 |
 | G-5 | 현재 태스크 범위 내에서 작업. 필요 시 새 세션 제안 | ❌ "New task" 이후 이전 컨텍스트 끌고 가기 |
 | G-6 | `todos/current/ACTIVE_TASKS.md`에서 **작업 1개씩만** 진행 | ❌ 여러 작업을 동시에 진행하거나 작업 목록 무시 |
+| G-7 | 커밋 전 **`pnpm check`** 실행으로 CI 실패 사전 방지 | ❌ 로컬 검증 없이 커밋하여 CI 실패 유발 |
 
 ---
 
@@ -44,20 +45,38 @@
 pnpm dev                # Next.js dev server (http://localhost:3000)
 
 # Lint & Format (biome)
-pnpm lint               # biome check + format
+pnpm lint               # biome check
+pnpm lint:fix           # biome check --write
+pnpm format             # biome format --write
 
 # 타입 체크
 pnpm typecheck          # tsc --noEmit
 
 # 단위 / 컴포넌트 테스트
-pnpm test               # vitest run --coverage
+pnpm test               # vitest run
+pnpm test:watch         # vitest (watch mode)
+pnpm test:coverage      # vitest run --coverage
 
-# Build  (CI)
-pnpm build  # out/ 디렉터리에 정적 파일 출력
+# 통합 검증
+pnpm check              # typecheck + lint + test (CI와 동일)
+pnpm check:fix          # lint:fix + format
 
+# Build (CI)
+pnpm build              # out/ 디렉터리에 정적 파일 출력
 ```
 
-CI 파이프라인: `pnpm lint` → `pnpm test` → `pnpm build` → GitHub Pages 배포(`actions/deploy-pages`).
+### 2.1. CI/CD 파이프라인 (GitHub Actions)
+
+프로젝트는 4개의 워크플로우로 구성된 포괄적인 CI/CD 시스템을 제공합니다:
+
+| 워크플로우 | 트리거 | 주요 기능 |
+|-----------|--------|----------|
+| **ci.yml** | push/PR to main, master, develop | 린트, 타입체크, 테스트, 빌드 (병렬 실행) |
+| **security.yml** | push/PR + 매주 월요일 | 의존성 감사, CodeQL 보안 분석 |
+| **pr-check.yml** | PR 생성/업데이트 | 커버리지 리포트, 변경파일 분석 |
+| **validate.yml** | 워크플로우 파일 변경 시 | YAML 문법 검증, 액션 버전 체크 |
+
+**로컬 검증**: 커밋 전 반드시 `pnpm check`를 실행하여 CI 실패를 사전 방지합니다.
 
 ---
 
@@ -71,6 +90,7 @@ CI 파이프라인: `pnpm lint` → `pnpm test` → `pnpm build` → GitHub Page
 * **Schema Validation**: Zod (런타임·컴파일타임 동시 보장)
 * **Naming**: `PascalCase`(컴포넌트), `camelCase`(변수·함수), `SCREAMING_SNAKE`(상수)
 * **File Organization**: 기능 폴더 내부에 컴포넌트·스타일·테스트를 **co-locate**
+* **Type Imports**: 모듈화된 타입 시스템 활용 (`@/types` 통합 import 권장)
 * **Error Handling**: Fail-fast – 명시적 오류 throw 후 `ErrorBoundary`로 표면화
 
 ### 3.1. "use client" 지시자 규칙
@@ -99,6 +119,31 @@ export function MyComponent() {
 - 유틸리티 함수만 있는 파일 (단, 브라우저 API 미사용)
 - `layout.tsx` (metadata 포함으로 서버 컴포넌트 유지)
 
+### 3.2. 타입 Import 가이드라인
+
+모듈화된 타입 시스템을 효율적으로 활용하기 위한 import 규칙:
+
+```typescript
+// ✅ 권장: 통합 import
+import type { BuilderComponentType, ComponentWrapper } from '@/types';
+
+// ✅ 특정 모듈 import (필요시)
+import type { ComponentRegistry } from '@/types/component-registry';
+
+// ✅ 변형 정의 import
+import { BUTTON_VARIANTS, INPUT_STATES } from '@/types/component-variants';
+
+// ❌ 지양: 개별 파일 직접 import
+import type { BuilderComponentType } from '@/types/component-base';
+```
+
+**타입 파일 구조**:
+- `component-base.ts`: 기본 컴포넌트 타입들
+- `component-registry.ts`: 레지스트리 관련 타입들  
+- `component-variants.ts`: PRD 표준 변형 정의
+- `component.ts`: 통합 re-export 파일
+- `index.ts`: 전체 타입 통합 export
+
 ---
 
 ## 4. 디렉터리 구조 & 핵심 컴포넌트
@@ -110,8 +155,8 @@ export function MyComponent() {
 | `src/adapters/` | 빌더 추상 타입 → 실제 컴포넌트·Zod 스키마 매핑 계층 |
 | `src/features/` | 도메인 로직 (`builder/`, `projects/` 등) |
 | `src/store/` | Zustand 스토어 |
-| `src/lib/` | 전역 유틸리티 (`storage.ts` 등) |
-| `src/types/` | 글로벌 TypeScript 타입 |
+| `src/lib/` | 전역 유틸리티 (`storage/`, `component-registry.ts`, `utils.ts`, `nanoid.ts`) |
+| `src/types/` | 글로벌 TypeScript 타입 (모듈화됨: `component-base.ts`, `component-registry.ts`, `component-variants.ts` 등) |
 | `out/` | GitHub Pages용 정적 결과물 (CI 자동 생성) |
 | `todos/` | **Sprint 기반 작업 관리** (current/ACTIVE_TASKS.md 필수 확인) |
 
@@ -174,7 +219,40 @@ IE 미지원, 모바일 대응 빌더는 MVP 범위 외
 
 ---
 
-## 10. AI 어시스턴트 작업 절차
+## 10. GitHub Actions 워크플로우 가이드라인
+
+### 10.1. 워크플로우 파일 수정 시 주의사항
+
+`.github/workflows/` 디렉터리의 파일들을 수정할 때는 다음 사항을 준수해야 합니다:
+
+```bash
+# 워크플로우 파일 검증
+pnpm run validate:workflows  # (예정) 또는 수동 검증
+
+# YAML 문법 확인
+python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"
+```
+
+**수정 가능한 항목**:
+- 타임아웃 시간 조정
+- 새로운 검증 단계 추가
+- 환경 변수 추가
+
+**수정 금지 항목**:
+- 기본 워크플로우 구조 변경
+- 보안 관련 권한 설정 변경
+- 브랜치 트리거 조건 변경
+
+### 10.2. CI 실패 대응 절차
+
+1. **로컬 재현**: `pnpm check`로 동일한 오류 재현
+2. **원인 분석**: 린트/타입/테스트 중 어느 단계에서 실패했는지 확인
+3. **수정 후 재검증**: `pnpm check` 통과 확인 후 커밋
+4. **워크플로우 재실행**: GitHub에서 수동으로 재실행 (필요시)
+
+---
+
+## 11. AI 어시스턴트 작업 절차
 
 > 이하 절차는 **AI 어시스턴트·인간 개발자 공통**으로 따르는 *최소 단계 체크리스트*입니다.
 
@@ -190,7 +268,8 @@ IE 미지원, 모바일 대응 빌더는 MVP 범위 외
    - 관련 문서(AGENTS / ARCHITECTURE / PRD)를 준수한다.
 
 4. **품질 검증**
-   - `pnpm lint && pnpm typecheck && pnpm test`가 **모두 통과**해야 한다.
+   - `pnpm check` (typecheck + lint + test)가 **모두 통과**해야 한다.
+   - 대규모 변경 시 `pnpm build`로 빌드 성공 확인한다.
 
 5. **작업 완료 & 커밋**
    - `ACTIVE_TASKS.md`의 체크박스를 ✅ 로 변경한다.
@@ -207,7 +286,7 @@ IE 미지원, 모바일 대응 빌더는 MVP 범위 외
 
 ---
 
-## 11. 작업 분해 예시 (Task Decomposition Examples)
+## 12. 작업 분해 예시 (Task Decomposition Examples)
 
 ### 예시 1: "프로젝트 대시보드 UI 구현" (복잡도 8)
 ```markdown
