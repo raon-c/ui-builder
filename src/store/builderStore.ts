@@ -30,9 +30,13 @@ interface BuilderState {
     position: "top" | "bottom" | "inside";
   } | null;
 
+  // 활성 라이브러리 (다중 라이브러리 지원)
+  activeLibrary: string;
+
   // 액션들
   setCurrentScreen: (screen: Screen | null) => void;
   setSelectedNode: (nodeId: string | null) => void;
+  setActiveLibrary: (library: string) => void;
 
   // 노드 조작
   addNode: (parentId: string, componentType: BuilderComponentType, index?: number) => void;
@@ -68,6 +72,7 @@ export const useBuilderStore = create<BuilderState>()(
     draggedComponentType: null,
     dragOverNodeId: null,
     dropPosition: null,
+    activeLibrary: "shadcn",
 
     // 현재 화면 설정
     setCurrentScreen: (screen: Screen | null) => {
@@ -81,6 +86,13 @@ export const useBuilderStore = create<BuilderState>()(
     setSelectedNode: (nodeId: string | null) => {
       set((state) => {
         state.selectedNodeId = nodeId;
+      });
+    },
+
+    // 활성 라이브러리 설정
+    setActiveLibrary: (library: string) => {
+      set((state) => {
+        state.activeLibrary = library;
       });
     },
 

@@ -153,6 +153,8 @@ function BuilderPageContent() {
     currentScreen,
     setCurrentScreen,
     selectedNodeId,
+    activeLibrary,
+    setActiveLibrary,
     findNode,
     addNode,
     moveNode,
@@ -185,25 +187,25 @@ function BuilderPageContent() {
     loadProjects();
   }, [loadProjects]);
 
-    // 기본 어댑터 등록 (일단 주석 처리)
-  // useEffect(() => {
-  //   const initializeAdapters = async () => {
-  //     try {
-  //       // shadcn 어댑터 등록
-  //       await registerAdapter("shadcn", shadcnAdapter);
+  // 기본 어댑터 등록
+  useEffect(() => {
+    const initializeAdapters = async () => {
+      try {
+        // shadcn 어댑터 등록 (임시 타입 단언)
+        await registerAdapter("shadcn", shadcnAdapter as any);
 
-  //       // mui 어댑터 등록
-  //       const muiAdapterInstance = new MuiAdapter();
-  //       await registerAdapter("mui", muiAdapterInstance);
+        // mui 어댑터 등록
+        const muiAdapterInstance = new MuiAdapter();
+        await registerAdapter("mui", muiAdapterInstance);
 
-  //       console.log("기본 어댑터 등록 완료");
-  //     } catch (error) {
-  //       console.error("어댑터 등록 실패:", error);
-  //     }
-  //   };
+        console.log("기본 어댑터 등록 완료");
+      } catch (error) {
+        console.error("어댑터 등록 실패:", error);
+      }
+    };
 
-  //   initializeAdapters();
-  // }, [registerAdapter]);
+    initializeAdapters();
+  }, [registerAdapter]);
 
   // 현재 프로젝트 찾기
   useEffect(() => {
@@ -412,7 +414,13 @@ function BuilderPageContent() {
                   <h3 className="font-medium mb-3">컴포넌트</h3>
 
                   {/* 라이브러리 선택기 */}
-                  <LibrarySelector className="mb-4" />
+                  <LibrarySelector
+                    className="mb-4"
+                    onLibraryChange={(library) => {
+                      setActiveLibrary(library);
+                      console.log("라이브러리 변경됨:", library);
+                    }}
+                  />
 
                   <div className="space-y-4">
                     {["Layout", "Basic", "Form"].map((category) => (

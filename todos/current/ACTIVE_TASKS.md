@@ -36,10 +36,14 @@
 - [x] **D4** Dev-container Setup (1 SP) ✅ **VS Code Dev Container 환경 구축 완료**
 - [x] **E1** Performance & Accessibility fixes (2 SP) ✅ **DnD 시각적 피드백 및 접근성 개선 완료**
 
-### 🔨 Next Up
-- **우선순위 1**: A1 (Undo/Redo 시스템) - 가장 복잡하고 중요한 기능
-- **우선순위 2**: A2 (단축키 시스템) - 사용자 경험 핵심
-- **우선순위 3**: B1 (어댑터 개선) - 확장성 기반
+### 🔨 Next Up - Sprint 7 작업
+- [ ] **D1** viewer 페이지 구문 오류 수정 (1 SP)
+- [ ] **D2** 라이브러리 변경 시 화면 업데이트 구현 (3 SP)
+  - LibrarySelector와 빌더 스토어 연결 완료 ✅
+  - AdapterComponentRenderer 기본 구현 완료 ✅
+  - PreviewRenderer에 어댁터 시스템 적용 필요
+  - DroppableCanvasNode에 어댑터 시스템 적용 필요
+- [ ] **D3** 기본 어댑터 등록 자동화 (2 SP)
 
 ## 🚧 Blockers
 - 없음
