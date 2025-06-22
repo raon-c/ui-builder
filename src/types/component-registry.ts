@@ -119,21 +119,4 @@ export interface ComponentRegistry {
   preloadComponents(types: BuilderComponentType[]): Promise<void>;
 }
 
-/**
- * 어댑터 인터페이스
- * 각 디자인 라이브러리(shadcn, mui 등)가 구현해야 하는 인터페이스
- */
-export interface DesignLibraryAdapter {
-  /** 어댑터 이름 */
-  name: string;
-  /** 어댑터 버전 */
-  version: string;
-  /** 설명 */
-  description: string;
-  /** 컴포넌트 레지스트리 */
-  registry: ComponentRegistry;
-  /** 초기화 함수 */
-  initialize(): void;
-  /** 정리 함수 */
-  cleanup(): void;
-}
+// DesignLibraryAdapter는 adapter.ts로 이동됨

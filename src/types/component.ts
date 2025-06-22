@@ -22,7 +22,6 @@ export type {
   ComponentRegistryEventType,
   ComponentRegistryStats,
   ComponentValidationResult,
-  DesignLibraryAdapter,
 } from "./component-registry";
 
 // PRD 표준 변형 및 상태 정의
