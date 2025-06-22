@@ -6,6 +6,7 @@
 
 import { useDraggable } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
+import { useComponentPaletteNavigation } from "@/hooks/useKeyboardNavigation";
 import type { BuilderComponentType } from "@/types/component";
 
 interface DraggableComponentProps {
@@ -25,6 +26,8 @@ export function DraggableComponent({ componentType, name, icon, category }: Drag
     },
   });
 
+  const navigationProps = useComponentPaletteNavigation(componentType);
+
   return (
     <Button
       ref={setNodeRef}
@@ -34,6 +37,7 @@ export function DraggableComponent({ componentType, name, icon, category }: Drag
       }`}
       {...listeners}
       {...attributes}
+      {...navigationProps}
     >
       <div className="text-center">
         <div className="text-lg mb-1">{icon}</div>

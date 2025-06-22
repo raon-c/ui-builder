@@ -34,6 +34,13 @@ import { ShareModal } from "@/components/builder/ShareModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import {
+  useAccessibilityEnhancements,
+  useComponentPaletteNavigation,
+  useGlobalNavigationShortcuts,
+  useKeyboardNavigation,
+  usePropertiesNavigation,
+} from "@/hooks/useKeyboardNavigation";
 import { useBuilderStore } from "@/store/builderStore";
 import { useProjectStore } from "@/store/projectStore";
 import type { BuilderComponentType } from "@/types/component";
@@ -147,6 +154,13 @@ function BuilderPageContent() {
     setDraggedComponentType,
     setDragOverNode,
   } = useBuilderStore();
+
+  // 키보드 내비게이션 Hook들
+  const { focusState } = useKeyboardNavigation();
+  const { liveRegionProps } = useAccessibilityEnhancements();
+
+  // 전역 내비게이션 단축키 등록
+  useGlobalNavigationShortcuts();
 
   // 드래그 앤 드롭 센서 설정
   const sensors = useSensors(
@@ -312,8 +326,15 @@ function BuilderPageContent() {
       onDragEnd={handleDragEnd}
     >
       <div className="h-screen flex flex-col bg-background">
+        {/* 접근성을 위한 ARIA live region */}
+        <div {...liveRegionProps} />
+
         {/* 상단 헤더 */}
-        <header className="h-14 border-b bg-card flex items-center justify-between px-4">
+        <header
+          className="h-14 border-b bg-card flex items-center justify-between px-4"
+          data-toolbar="true"
+          tabIndex={focusState.currentArea === "toolbar" ? 0 : -1}
+        >
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
@@ -357,7 +378,11 @@ function BuilderPageContent() {
                 />
 
                 {/* 컴포넌트 팔레트 */}
-                <div className="flex-1 p-4 overflow-y-auto">
+                <div
+                  className="flex-1 p-4 overflow-y-auto"
+                  data-component-palette="true"
+                  tabIndex={focusState.currentArea === "component-palette" ? 0 : -1}
+                >
                   <h3 className="font-medium mb-3">컴포넌트</h3>
                   <div className="space-y-4">
                     {["Layout", "Basic", "Form"].map((category) => (
@@ -411,7 +436,11 @@ function BuilderPageContent() {
                 {/* 캔버스 영역 */}
                 <div className="flex-1 p-8 overflow-auto">
                   <div className="max-w-4xl mx-auto">
-                    <Card className="min-h-[600px] bg-white shadow-lg">
+                    <Card
+                      className="min-h-[600px] bg-white shadow-lg"
+                      data-canvas="true"
+                      tabIndex={focusState.currentArea === "canvas" ? 0 : -1}
+                    >
                       <div className="p-8">
                         {currentScreen ? (
                           <SortableContext items={[currentScreen.content.id]} strategy={verticalListSortingStrategy}>
@@ -460,7 +489,11 @@ function BuilderPageContent() {
                 {/* 탭 콘텐츠 */}
                 <div className="flex-1 overflow-y-auto">
                   {activeTab === "structure" ? (
-                    <div className="p-4">
+                    <div
+                      className="p-4"
+                      data-structure-tree="true"
+                      tabIndex={focusState.currentArea === "structure-tree" ? 0 : -1}
+                    >
                       <h3 className="font-medium mb-3">화면 구조</h3>
                       {currentScreen ? (
                         <StructureTree node={currentScreen.content} />
@@ -469,7 +502,11 @@ function BuilderPageContent() {
                       )}
                     </div>
                   ) : (
-                    <div className="p-4">
+                    <div
+                      className="p-4"
+                      data-properties="true"
+                      tabIndex={focusState.currentArea === "properties" ? 0 : -1}
+                    >
                       {selectedNodeId && currentScreen ? (
                         (() => {
                           const selectedNode = findNode(selectedNodeId);

@@ -161,7 +161,7 @@ export function ScreenManager({ project, selectedScreenId, onScreenSelect }: Scr
   };
 
   return (
-    <div className="p-4 border-b">
+    <div className="p-4 border-b" data-screen-tabs="true">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-medium">화면 목록</h3>
         <Button variant="outline" size="sm" onClick={() => setIsAddDialogOpen(true)}>

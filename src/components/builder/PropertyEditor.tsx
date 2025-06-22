@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { usePropertiesNavigation } from "@/hooks/useKeyboardNavigation";
 import { useBuilderStore } from "@/store/builderStore";
 import type { BuilderComponentType } from "@/types/component";
 import type { CanvasNode } from "@/types/project";
@@ -564,6 +565,7 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const properties = COMPONENT_PROPERTIES[node.type as BuilderComponentType] || [];
+  const navigationProps = usePropertiesNavigation();
 
   // 속성을 그룹별로 분류
   const groupedProperties = properties.reduce(
@@ -780,7 +782,7 @@ export function PropertyEditor({ node }: PropertyEditorProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" {...navigationProps}>
       {/* 컴포넌트 정보 헤더 */}
       <div className="pb-3 border-b">
         <div className="flex items-center justify-between">

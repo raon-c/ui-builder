@@ -12,9 +12,18 @@ export {
   selectionShortcuts,
   viewShortcuts,
 } from "./builderShortcuts";
-
+// 키보드 내비게이션 시스템
+export {
+  type FocusableArea,
+  type FocusState,
+  type KeyboardNavigationManager,
+  keyboardNavigationManager,
+  type NavigationDirection,
+  NavigationUtils,
+} from "./navigation";
 // 단축키 핸들러
 export { ShortcutHandlerImpl, shortcutHandler } from "./shortcutHandler";
+
 // 타입 정의
 export type {
   KeyboardShortcut,
