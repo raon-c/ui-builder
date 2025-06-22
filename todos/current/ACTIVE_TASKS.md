@@ -10,7 +10,7 @@
 
 ### 🔨 Sprint 6 Backlog (28 SP)
 - [x] **A1** Undo/Redo 시스템 구현 (5 SP) ✅ **Command Pattern 기반 완전한 Undo/Redo 시스템 구현 완료**
-- [ ] **A2** 종합적인 단축키 시스템 (4 SP)
+- [x] **A2** 종합적인 단축키 시스템 (4 SP) ✅ **포괄적인 키보드 단축키 시스템 구현 완료**
 - [ ] **A3** 키보드 내비게이션 강화 (3 SP)
 - [ ] **B1** 어댑터 인터페이스 개선 (4 SP)
 - [ ] **B2** 커스텀 컴포넌트 등록 시스템 (3 SP)
@@ -63,11 +63,11 @@
 ## 📊 Progress
 
 ### Sprint 6 Status 🟡
-- **Story Points**: 5/28 completed (17.9%)
+- **Story Points**: 9/28 completed (32.1%)
 - **User Stories**: 0/3 completed (0%)
 - **Current Sprint**: 🟡 **SPRINT 6 IN PROGRESS**
-- **완료 작업**: A1 (Undo/Redo 시스템)
-- **진행 중**: A2 (종합적인 단축키 시스템) 시작 예정
+- **완료 작업**: A1 (Undo/Redo 시스템), A2 (종합적인 단축키 시스템)
+- **진행 중**: A3 (키보드 내비게이션 강화) 시작 예정
 
 ### Sprint 5 Status ✅
 - **Story Points**: 30/30 completed (100% ✅ **COMPLETED!**)
