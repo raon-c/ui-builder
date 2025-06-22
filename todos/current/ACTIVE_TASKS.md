@@ -20,7 +20,7 @@
 - [x] **C3** GitHub Actions CI (2 SP) ✅ **CI/CD 파이프라인 구축 완료**
 - [x] **D1** ARCHITECTURE.md Update (1 SP) ✅ **아키텍처 문서 업데이트 완료**
 - [x] **D2** AGENTS.md Checklist Update (1 SP) ✅ **개발 가이드라인 업데이트 완료**
-- [ ] **D3** README Badges & Guide (1 SP)
+- [x] **D3** README Badges & Guide (1 SP) ✅ **README 문서 완전 개편 완료**
 - [ ] **D4** Dev-container Setup (1 SP)
 - [x] **E1** Performance & Accessibility fixes (2 SP) ✅ **DnD 시각적 피드백 및 접근성 개선 완료**
 
@@ -48,10 +48,10 @@
 ## 📊 Progress
 
 ### Sprint 5 Status 🟡
-- **Story Points**: 28/30 completed (93.3%)
+- **Story Points**: 29/30 completed (96.7%)
 - **User Stories**: 2/2 completed (100%)
 - **Current Sprint**: 🟡 **SPRINT 5 IN PROGRESS**
-- **완료 작업**: C1 (Test Environment Setup), C2 (Core Unit Tests), B3 (Dead Code Cleanup), E1 (Performance & Accessibility fixes), A1 (Share API & Modal), A2 (Viewer Page), A3 (Expiry & Version Check), B1 (Lint Rule Consolidation), B2 (Path/Naming Refactor), C3 (GitHub Actions CI), D1 (ARCHITECTURE.md Update), D2 (AGENTS.md Checklist Update)
+- **완료 작업**: C1 (Test Environment Setup), C2 (Core Unit Tests), B3 (Dead Code Cleanup), E1 (Performance & Accessibility fixes), A1 (Share API & Modal), A2 (Viewer Page), A3 (Expiry & Version Check), B1 (Lint Rule Consolidation), B2 (Path/Naming Refactor), C3 (GitHub Actions CI), D1 (ARCHITECTURE.md Update), D2 (AGENTS.md Checklist Update), D3 (README Badges & Guide)
 - **진행 중**: 다음 작업 대기 중
 
 ### Sprint 4 Status ✅
