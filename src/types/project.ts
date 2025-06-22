@@ -86,6 +86,10 @@ export interface ProjectSettings {
   theme?: string;
   /** 읽기 전용 공개 링크 slug (7자리) */
   shareSlug?: string;
+  /** 공유 링크 만료 시간 (ISO 8601) */
+  shareExpiresAt?: string;
+  /** 공유 시점의 프로젝트 버전 */
+  shareVersion?: string;
 }
 
 /**
@@ -175,6 +179,8 @@ export const projectSettingsSchema = z.object({
   designLibrary: z.string().min(1),
   theme: z.string().optional(),
   shareSlug: z.string().length(7).optional(),
+  shareExpiresAt: z.string().datetime().optional(),
+  shareVersion: z.string().optional(),
 });
 
 /**

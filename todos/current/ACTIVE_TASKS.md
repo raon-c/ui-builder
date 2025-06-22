@@ -9,8 +9,8 @@
 - **Sprint 5 진행 중**: 아래 Sprint 5 백로그 항목 수행
 
 ### 🔨 Sprint 5 Backlog (30 SP)
-- [ ] **A1** Share API & Modal (5 SP)
-- [ ] **A2** Viewer Page (3 SP)
+- [x] **A1** Share API & Modal (5 SP) ✅ **공유 링크 생성 및 모달 구현 완료**
+- [x] **A2** Viewer Page (3 SP) ✅ **읽기 전용 뷰어 페이지 구현 완료**
 - [ ] **A3** Expiry & Version Check (2 SP)
 - [ ] **B1** Lint Rule Consolidation (3 SP)
 - [ ] **B2** Path/Naming Refactor (2 SP)
@@ -48,10 +48,10 @@
 ## 📊 Progress
 
 ### Sprint 5 Status 🟡
-- **Story Points**: 9/30 completed (30.0%)
-- **User Stories**: 0/2 completed (0%)
+- **Story Points**: 17/30 completed (56.7%)
+- **User Stories**: 1/2 completed (50%)
 - **Current Sprint**: 🟡 **SPRINT 5 IN PROGRESS**
-- **완료 작업**: C1 (Test Environment Setup), C2 (Core Unit Tests), B3 (Dead Code Cleanup), E1 (Performance & Accessibility fixes)
+- **완료 작업**: C1 (Test Environment Setup), C2 (Core Unit Tests), B3 (Dead Code Cleanup), E1 (Performance & Accessibility fixes), A1 (Share API & Modal), A2 (Viewer Page)
 - **진행 중**: 다음 작업 대기 중
 
 ### Sprint 4 Status ✅

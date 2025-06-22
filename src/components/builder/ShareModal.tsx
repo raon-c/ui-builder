@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,6 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useProjectStore } from "@/store/projectStore";
 import type { Project } from "@/types/project";
 
@@ -21,11 +28,20 @@ interface ShareModalProps {
   onClose: () => void;
 }
 
+// 만료 시간 옵션
+const EXPIRY_OPTIONS = [
+  { value: "7", label: "7일" },
+  { value: "30", label: "30일" },
+  { value: "90", label: "90일" },
+  { value: "never", label: "무제한" },
+];
+
 export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
   const { updateProject } = useProjectStore();
   const [shareLink, setShareLink] = useState("");
   const [isCopied, setIsCopied] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [expiryDays, setExpiryDays] = useState("30");
   const shareLinkId = useId();
 
   // 공유 링크 생성
@@ -43,20 +59,21 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
         );
       }
 
-      // 프로젝트에 shareSlug 저장
-      const updatedProject = {
-        ...project,
-        settings: {
-          ...project.settings,
-          shareSlug: slug,
-        },
-        updatedAt: new Date().toISOString(),
-      };
+      // 만료 시간 계산
+      let expiresAt: string | undefined;
+      if (expiryDays !== "never") {
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + parseInt(expiryDays));
+        expiresAt = expiryDate.toISOString();
+      }
 
-      updateProject(project.id, {
+      // 프로젝트에 shareSlug, 만료 시간, 공유 시점 버전 저장
+      await updateProject(project.id, {
         settings: {
           ...project.settings,
           shareSlug: slug,
+          shareExpiresAt: expiresAt,
+          shareVersion: project.version,
         },
         updatedAt: new Date().toISOString(),
       });
@@ -84,12 +101,29 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
   };
 
   // 모달이 열릴 때 기존 shareSlug가 있으면 링크 표시
-  useState(() => {
+  useEffect(() => {
     if (project.settings.shareSlug) {
       const baseUrl = window.location.origin;
       setShareLink(`${baseUrl}/viewer/${project.settings.shareSlug}`);
     }
-  });
+  }, [project.settings.shareSlug]);
+
+  // 만료 시간 표시
+  const getExpiryText = () => {
+    if (!project.settings.shareExpiresAt) return null;
+
+    const expiryDate = new Date(project.settings.shareExpiresAt);
+    const now = new Date();
+
+    if (expiryDate < now) {
+      return "만료됨";
+    }
+
+    const daysLeft = Math.ceil(
+      (expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+    );
+    return `${daysLeft}일 남음`;
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -106,6 +140,24 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
             <Label>프로젝트 이름</Label>
             <div className="text-sm text-muted-foreground">{project.name}</div>
           </div>
+
+          {!shareLink && (
+            <div className="space-y-2">
+              <Label htmlFor="expiry">만료 기간</Label>
+              <Select value={expiryDays} onValueChange={setExpiryDays}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {EXPIRY_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor={shareLinkId}>공유 링크</Label>
@@ -127,6 +179,11 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
                 </Button>
               )}
             </div>
+            {shareLink && project.settings.shareExpiresAt && (
+              <p className="text-xs text-muted-foreground">
+                만료: {getExpiryText()}
+              </p>
+            )}
           </div>
 
           {!shareLink && (
@@ -140,11 +197,29 @@ export function ShareModal({ project, isOpen, onClose }: ShareModalProps) {
           )}
 
           {shareLink && (
-            <div className="rounded-lg bg-muted p-3">
+            <div className="rounded-lg bg-muted p-3 space-y-2">
               <p className="text-sm text-muted-foreground">
                 💡 이 링크로 접속한 사용자는 프로젝트를 볼 수만 있고 편집할 수
                 없습니다.
               </p>
+              {project.settings.shareVersion && (
+                <p className="text-xs text-muted-foreground">
+                  공유 버전: {project.settings.shareVersion}
+                </p>
+              )}
+            </div>
+          )}
+
+          {shareLink && (
+            <div className="pt-2 border-t">
+              <Button
+                variant="destructive"
+                size="sm"
+                className="w-full"
+                onClick={handleGenerateLink}
+              >
+                새로운 링크 생성 (기존 링크는 무효화됩니다)
+              </Button>
             </div>
           )}
         </div>

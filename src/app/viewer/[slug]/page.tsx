@@ -6,7 +6,7 @@ import { PreviewRenderer } from "@/components/builder/PreviewRenderer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useProjectStore } from "@/store/projectStore";
-import type { Project, Screen } from "@/types/project";
+import type { Project } from "@/types/project";
 
 interface ViewerPageProps {
   params: {
@@ -14,17 +14,20 @@ interface ViewerPageProps {
   };
 }
 
+type ViewerError = "expired" | "version-mismatch" | null;
+
 export default function ViewerPage({ params }: ViewerPageProps) {
   const { projects, loadProjects, isLoading } = useProjectStore();
   const [project, setProject] = useState<Project | null>(null);
   const [selectedScreenId, setSelectedScreenId] = useState<string | null>(null);
+  const [error, setError] = useState<ViewerError>(null);
 
   // 프로젝트 로드
   useEffect(() => {
     loadProjects();
   }, [loadProjects]);
 
-  // shareSlug로 프로젝트 찾기
+  // shareSlug로 프로젝트 찾기 및 유효성 검사
   useEffect(() => {
     if (!isLoading && projects.length > 0) {
       const foundProject = projects.find(
@@ -32,6 +35,23 @@ export default function ViewerPage({ params }: ViewerPageProps) {
       );
 
       if (foundProject) {
+        // 만료 시간 체크
+          const expiryDate = new Date(foundProject.settings.shareExpiresAt);
+          if (expiryDate < new Date()) {
+            setError("expired");
+            return;
+          }
+        }
+
+        if (
+          foundProject.settings.shareVersion &&
+          foundProject.settings.shareVersion !== foundProject.version
+        ) {
+          // 버전 체크
+          setError("version-mismatch");
+          return;
+        }
+
         setProject(foundProject);
         if (foundProject.screens.length > 0) {
           setSelectedScreenId(foundProject.screens[0].id);
@@ -56,6 +76,43 @@ export default function ViewerPage({ params }: ViewerPageProps) {
     );
   }
 
+  // 에러 상태 표시
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Card className="max-w-md w-full mx-4 p-8">
+          <div className="text-center">
+            {error === "expired" ? (
+              <>
+                <div className="text-6xl mb-4">⏰</div>
+                <h2 className="text-2xl font-bold mb-2">
+                  링크가 만료되었습니다
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  이 공유 링크는 만료되어 더 이상 사용할 수 없습니다. 프로젝트
+                  소유자에게 새로운 링크를 요청해주세요.
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="text-6xl mb-4">🔄</div>
+                <h2 className="text-2xl font-bold mb-2">
+                  프로젝트가 업데이트되었습니다
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  이 링크가 생성된 이후 프로젝트가 수정되었습니다. 최신 버전을
+                  보려면 프로젝트 소유자에게 새로운 링크를 요청해주세요.
+                </p>
+              </>
+            )}
+            <Button onClick={() => (window.location.href = "/")}>
+              홈으로 이동
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   if (!project) {
     return null; // notFound()가 처리함
   }
@@ -68,7 +125,11 @@ export default function ViewerPage({ params }: ViewerPageProps) {
       <header className="h-14 border-b bg-card flex items-center justify-between px-4">
         <div>
           <h1 className="font-semibold text-lg">{project.name}</h1>
-          <p className="text-xs text-muted-foreground">읽기 전용 모드</p>
+          <p className="text-xs text-muted-foreground">
+            읽기 전용 모드
+            {project.settings.shareVersion &&
+              ` • 버전 ${project.settings.shareVersion}`}
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -116,6 +177,14 @@ export default function ViewerPage({ params }: ViewerPageProps) {
             이 페이지는 읽기 전용입니다. 편집 권한이 필요하신 경우 프로젝트
             소유자에게 문의하세요.
           </p>
+          {project.settings.shareExpiresAt && (
+            <p className="text-xs text-muted-foreground mt-1">
+              만료일:{" "}
+              {new Date(project.settings.shareExpiresAt).toLocaleDateString(
+                "ko-KR",
+              )}
+            </p>
+          )}
         </div>
       </footer>
     </div>
