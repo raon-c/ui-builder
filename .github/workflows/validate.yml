@@ -1,0 +1,58 @@
+name: Validate Workflows
+
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+
+jobs:
+  validate:
+    name: Validate Workflow Syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate workflow files
+        run: |
+          echo "🔍 Validating GitHub Actions workflow files..."
+          
+          # 워크플로우 파일들이 올바른 YAML 형식인지 확인
+          for file in .github/workflows/*.yml .github/workflows/*.yaml; do
+            if [ -f "$file" ]; then
+              echo "Checking $file..."
+              # 기본 YAML 문법 체크 (python이 기본 설치되어 있음)
+              python3 -c "
+          import yaml
+          import sys
+          try:
+              with open('$file', 'r') as f:
+                  yaml.safe_load(f)
+              print('✅ $file is valid YAML')
+          except yaml.YAMLError as e:
+              print('❌ $file has YAML syntax error:', e)
+              sys.exit(1)
+          except Exception as e:
+              print('❌ Error reading $file:', e)
+              sys.exit(1)
+              "
+            fi
+          done
+          
+          echo "✅ All workflow files are valid!"
+
+      - name: Check for common issues
+        run: |
+          echo "🔍 Checking for common workflow issues..."
+          
+          # 사용된 액션들의 버전이 최신인지 확인
+          echo "📋 Actions used in workflows:"
+          grep -h "uses:" .github/workflows/*.yml | sort | uniq | sed 's/^[[:space:]]*/- /'
+          
+          echo ""
+          echo "💡 Consider keeping actions up to date for security and features." 

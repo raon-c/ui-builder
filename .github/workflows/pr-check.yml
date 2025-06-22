@@ -1,0 +1,160 @@
+name: PR Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: pr-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # PR이 draft가 아닌 경우에만 실행
+  pr-validation:
+    name: PR Validation
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # PR의 전체 히스토리를 가져와서 변경사항 분석
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run full check suite
+        run: pnpm run check
+
+      - name: Build application
+        run: pnpm run build
+
+      - name: Run tests with coverage
+        run: pnpm run test:coverage
+
+      - name: Upload coverage to PR
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-coverage-${{ github.event.pull_request.number }}
+          path: coverage/
+          retention-days: 14
+
+      - name: Comment coverage summary
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            try {
+              // coverage 폴더가 존재하는지 확인
+              const coverageDir = 'coverage';
+              if (fs.existsSync(coverageDir)) {
+                console.log('✅ Coverage reports generated successfully');
+                
+                // PR에 코멘트 추가
+                const comment = `## 🧪 Test Coverage Report
+                
+                Coverage reports have been generated for this PR.
+                
+                📊 **Coverage Summary:**
+                - Reports are available in the artifacts section
+                - Download the \`pr-coverage-${{ github.event.pull_request.number }}\` artifact to view detailed coverage
+                
+                🔍 **Next Steps:**
+                - Review the coverage reports
+                - Ensure critical paths are tested
+                - Add tests for any uncovered code if necessary
+                `;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              } else {
+                console.log('⚠️ Coverage directory not found');
+              }
+            } catch (error) {
+              console.log('❌ Error processing coverage:', error.message);
+            }
+
+  # 변경된 파일 분석
+  changed-files:
+    name: Analyze Changed Files
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            src/**/*.{ts,tsx,js,jsx}
+            *.{ts,js,json}
+            package.json
+            pnpm-lock.yaml
+
+      - name: Analyze changes
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          echo "## 📝 Changed Files Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Modified Files:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "- \`$file\`" >> $GITHUB_STEP_SUMMARY
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### File Type Analysis:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # TypeScript/JavaScript 파일 수
+          ts_files=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.(ts|tsx|js|jsx)$' | wc -l)
+          echo "- TypeScript/JavaScript files: $ts_files" >> $GITHUB_STEP_SUMMARY
+          
+          # 설정 파일 수
+          config_files=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.(json|yaml|yml)$' | wc -l)
+          echo "- Configuration files: $config_files" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔍 Review Recommendations:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ $ts_files -gt 10 ]; then
+            echo "- 🚨 Large number of code files changed. Consider breaking into smaller PRs." >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ $config_files -gt 0 ]; then
+            echo "- ⚙️ Configuration files changed. Verify compatibility and test thoroughly." >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q "package.json\|pnpm-lock.yaml"; then
+            echo "- 📦 Dependencies changed. Review for security and compatibility." >> $GITHUB_STEP_SUMMARY
+          fi 
