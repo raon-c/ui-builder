@@ -12,6 +12,7 @@
 | 0.2 | 2025-06-21 | raon.c | 스토리지 추상화 / GitHub Pages 배포 반영 |
 | 0.3 | 2025-06-22 | raon.c | UI 빌더 레이아웃(Structure/Property 탭) & 어댑터 전환 흐름 추가 |
 | 0.4 | 2025-06-22 | raon.c | 기술 스택 섹션 추가, 최신 버전 업데이트 (Next.js 15+, Zustand 5+, Zod 4+, Tailwind 4+), biome 도입, IndexedDB 저장소 옵션 추가 |
+| 0.5 | 2025-01-25 | raon.c | 타입 파일 구조 개선 (component.ts 분할) & GitHub Actions CI/CD 파이프라인 추가 |
 
 ---
 
@@ -176,8 +177,20 @@ flowchart LR
 │       ├── schema.ts      #      - 속성 편집 스키마 정의
 │       └── index.ts       #      - 어댑터 엔트리포인트
 ├── /lib                 # 전역 유틸리티 함수
+│   ├── /storage         #    - 스토리지 추상화 계층
+│   ├── component-registry.ts #    - 컴포넌트 레지스트리 구현
+│   ├── utils.ts         #    - 공통 유틸리티 함수
+│   ├── nanoid.ts        #    - ID 생성 함수
+│   └── index.ts         #    - 통합 export
 ├── /store               # Zustand 스토어 (상태 관리)
-└── /types               # 전역 타입 정의
+└── /types               # 전역 타입 정의 (모듈화됨)
+    ├── component-base.ts    #    - 기본 컴포넌트 타입들
+    ├── component-registry.ts #    - 레지스트리 관련 타입들
+    ├── component-variants.ts #    - PRD 표준 변형 정의
+    ├── component.ts     #    - 컴포넌트 타입 통합 export
+    ├── project.ts       #    - 프로젝트 데이터 구조
+    ├── storage.ts       #    - 스토리지 인터페이스
+    └── index.ts         #    - 전체 타입 통합 export
 ```
 
 #### 실제 디자인 라이브러리 컴포넌트 위치
@@ -301,13 +314,54 @@ export type ButtonPropsSchema = z.infer<typeof buttonSchema>;
 
 > **런타임 주입**: `DesignLibraryProvider`(React Context)에서 *현재 선택된 어댑터*의 `ComponentRegistry`와 `SchemaRegistry`를 제공한다. 라이브러리 변경 시 Provider만 교체하면 Canvas & Panel이 자동으로 재렌더링된다.
 
-### 4.6. 새 컴포넌트 추가 플로우 (Adapter Pattern 기반)
+### 4.6. 타입 시스템 모듈화 (Type System Modularity)
+
+코드베이스의 유지보수성과 확장성을 위해 타입 정의를 논리적 단위로 분할하여 관리합니다.
+
+#### 4.6.1. 타입 파일 구조
+
+```
+/src/types/
+├── component-base.ts       # 기본 컴포넌트 타입들
+├── component-registry.ts   # 레지스트리 관련 타입들
+├── component-variants.ts   # PRD 표준 변형 정의
+├── component.ts           # 컴포넌트 타입 통합 export
+├── project.ts             # 프로젝트 데이터 구조
+├── storage.ts             # 스토리지 인터페이스
+└── index.ts               # 전체 타입 통합 export
+```
+
+#### 4.6.2. 모듈별 책임
+
+| 파일 | 주요 타입 | 책임 범위 |
+| :--- | :--- | :--- |
+| **component-base.ts** | `BuilderComponentType`, `ComponentMetadata`, `ComponentWrapper` | 빌더 핵심 컴포넌트 타입 정의 |
+| **component-registry.ts** | `ComponentRegistry`, `DesignLibraryAdapter` | 컴포넌트 등록 및 관리 시스템 |
+| **component-variants.ts** | `BUTTON_VARIANTS`, `INPUT_STATES` | PRD 표준 변형 및 상태 정의 |
+| **component.ts** | re-export | 컴포넌트 관련 타입 통합 제공 |
+
+#### 4.6.3. Import 경로 최적화
+
+```typescript
+// ✅ 통합 import (권장)
+import type { BuilderComponentType, ComponentWrapper } from '@/types';
+
+// ✅ 특정 모듈 import (필요시)
+import type { ComponentRegistry } from '@/types/component-registry';
+
+// ✅ 변형 정의 import
+import { BUTTON_VARIANTS, INPUT_STATES } from '@/types/component-variants';
+```
+
+> **장점**: 타입 정의의 논리적 분리로 코드 탐색성 향상, 순환 의존성 방지, 모듈별 독립적 개발 가능
+
+### 4.7. 새 컴포넌트 추가 플로우 (Adapter Pattern 기반)
 
 아래 절차는 **빌더 코어**에 완전히 새로운 컴포넌트(`Badge` 예시)를 도입할 때 수행하는 표준 순서입니다. 의존성 역방향(코어←어댑터←라이브러리)을 유지해, 코어 수정은 최소화하고 확장성을 보장합니다.
 
 | 단계 | 책임 영역 | 파일 예시 | 설명 |
 | :--- | :--- | :--- | :--- |
-| 1 | **타입 정의** | `/types/component.ts` | `export type ComponentType = 'Button' \| 'Input' \| 'Badge';` – 코어에서 인식할 추상 타입 추가 |
+| 1 | **타입 정의** | `/types/component-base.ts` | `export type BuilderComponentType = 'Button' \| 'Input' \| 'Badge';` – 코어에서 인식할 추상 타입 추가 |
 | 2 | **Schema 작성** | `/adapters/shadcn/schema.ts` | `badgeSchema` Zod 스키마 정의 (variant, color 등) |
 | 3 | **컴포넌트 매핑** | `/adapters/shadcn/components.ts` | `Badge: ShadBadge` React 컴포넌트 바인딩 추가 |
 | 4 | **레지스트리 등록** | `/adapters/shadcn/index.ts` | `ComponentRegistry.set('Badge', { component, schema })` |
@@ -483,13 +537,77 @@ export interface Project {
 
 ## 8. DevOps 및 배포 (Deployment & CI/CD)
 
+### 8.1. 배포 환경
+
 - **프론트엔드 배포**: **GitHub Pages** (정적 사이트 — `next build && next export` 결과물을 `/docs` 또는 `gh-pages` 브랜치로 배포)
-- **CI/CD**: GitHub Actions
-    1. **Lint & Test** → `pnpm lint`, `pnpm test`
-    2. **Build & Export** → `pnpm build && pnpm export`
-    3. **Deploy** → `actions/deploy-pages` 액션으로 `gh-pages` 브랜치에 업로드
+- **도메인**: GitHub Pages 기본 도메인 (`username.github.io/repository`)
 
 > GitHub Pages 제약으로 인해 서버 사이드 렌더링(SSR) 기능은 사용하지 않고, **정적 HTML** + **브라우저 런타임 hydration** 방식으로 동작합니다.
+
+### 8.2. CI/CD 파이프라인 (GitHub Actions)
+
+프로젝트는 4개의 GitHub Actions 워크플로우로 구성된 포괄적인 CI/CD 파이프라인을 제공합니다.
+
+#### 8.2.1. 메인 CI 파이프라인 (`ci.yml`)
+
+```yaml
+# 트리거: push/PR to main, master, develop 브랜치
+# 병렬 실행: 린트&타입체크 | 테스트 | 빌드
+```
+
+| Job | 실행 내용 | 타임아웃 |
+| :--- | :--- | :--- |
+| **lint-and-typecheck** | `pnpm run typecheck`, `pnpm run lint` | 10분 |
+| **test** | `pnpm run test`, 커버리지 아티팩트 업로드 | 10분 |
+| **build** | `pnpm run build`, 빌드 아티팩트 업로드 | 15분 |
+| **ci-status** | 모든 job 상태 통합 확인 | 5분 |
+
+#### 8.2.2. 보안 검사 파이프라인 (`security.yml`)
+
+```yaml
+# 트리거: push/PR + 매주 월요일 정기 실행
+# 보안: 의존성 감사 | CodeQL 정적 분석
+```
+
+| Job | 실행 내용 | 설명 |
+| :--- | :--- | :--- |
+| **dependency-audit** | `pnpm audit`, `pnpm outdated` | 의존성 보안 취약점 검사 |
+| **codeql** | GitHub CodeQL 정적 분석 | JavaScript/TypeScript 코드 보안 분석 |
+
+#### 8.2.3. PR 전용 체크 (`pr-check.yml`)
+
+```yaml
+# 트리거: PR 생성/업데이트 (draft 제외)
+# 상세 분석: 커버리지 | 변경파일 분석
+```
+
+| Job | 실행 내용 | 기능 |
+| :--- | :--- | :--- |
+| **pr-validation** | 전체 체크 스위트 + 커버리지 | PR별 커버리지 리포트 생성 및 코멘트 |
+| **changed-files** | 변경파일 유형 분석 | 파일 변경 패턴 분석 및 리뷰 가이드 제공 |
+
+#### 8.2.4. 워크플로우 검증 (`validate.yml`)
+
+```yaml
+# 트리거: 워크플로우 파일 변경 시
+# 검증: YAML 문법 | 액션 버전 체크
+```
+
+### 8.3. 성능 최적화
+
+| 최적화 항목 | 구현 방식 | 효과 |
+| :--- | :--- | :--- |
+| **pnpm 캐싱** | `actions/setup-node` cache 옵션 | 의존성 설치 시간 단축 |
+| **병렬 실행** | 독립적인 job들을 동시 실행 | 전체 CI 시간 단축 |
+| **조건부 실행** | Draft PR 건너뛰기, 파일 변경 감지 | 불필요한 리소스 사용 방지 |
+| **아티팩트 관리** | 커버리지/빌드 결과물 자동 보존 | 디버깅 및 분석 지원 |
+
+### 8.4. 품질 관리
+
+- **커버리지 추적**: 테스트 커버리지 자동 생성 및 PR 코멘트
+- **보안 모니터링**: 정기적인 의존성 보안 검사
+- **코드 품질**: Biome 린터를 통한 일관된 코드 스타일
+- **타입 안정성**: TypeScript 컴파일러를 통한 타입 검증
 
 ### 지원 브라우저
 
