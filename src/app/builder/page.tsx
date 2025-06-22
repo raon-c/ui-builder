@@ -24,13 +24,17 @@ import {
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { MuiAdapter } from "@/adapters/mui";
+import { shadcnAdapter } from "@/adapters/shadcn";
 import { DraggableComponent } from "@/components/builder/DraggableComponent";
 import { DroppableCanvasNode } from "@/components/builder/DroppableCanvasNode";
 import { ImportExportManager } from "@/components/builder/ImportExportManager";
+import { LibrarySelector } from "@/components/builder/LibrarySelector";
 import { PreviewModal } from "@/components/builder/PreviewModal";
 import { PropertyEditor, PropertyEditorEmpty } from "@/components/builder/PropertyEditor";
 import { ScreenManager } from "@/components/builder/ScreenManager";
 import { ShareModal } from "@/components/builder/ShareModal";
+import { MultiLibraryErrorBoundary } from "@/components/error/ErrorBoundary";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -41,6 +45,7 @@ import {
   useKeyboardNavigation,
   usePropertiesNavigation,
 } from "@/hooks/useKeyboardNavigation";
+import { useMultiLibrary } from "@/hooks/useMultiLibrary";
 import { useBuilderStore } from "@/store/builderStore";
 import { useProjectStore } from "@/store/projectStore";
 import type { BuilderComponentType } from "@/types/component";
@@ -136,6 +141,7 @@ function BuilderPageContent() {
   const projectId = searchParams.get("id");
 
   const { projects, loadProjects, isLoading } = useProjectStore();
+  const { registerAdapter } = useMultiLibrary();
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [selectedScreenId, setSelectedScreenId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -178,6 +184,26 @@ function BuilderPageContent() {
   useEffect(() => {
     loadProjects();
   }, [loadProjects]);
+
+    // 기본 어댑터 등록 (일단 주석 처리)
+  // useEffect(() => {
+  //   const initializeAdapters = async () => {
+  //     try {
+  //       // shadcn 어댑터 등록
+  //       await registerAdapter("shadcn", shadcnAdapter);
+
+  //       // mui 어댑터 등록
+  //       const muiAdapterInstance = new MuiAdapter();
+  //       await registerAdapter("mui", muiAdapterInstance);
+
+  //       console.log("기본 어댑터 등록 완료");
+  //     } catch (error) {
+  //       console.error("어댑터 등록 실패:", error);
+  //     }
+  //   };
+
+  //   initializeAdapters();
+  // }, [registerAdapter]);
 
   // 현재 프로젝트 찾기
   useEffect(() => {
@@ -384,6 +410,10 @@ function BuilderPageContent() {
                   tabIndex={focusState.currentArea === "component-palette" ? 0 : -1}
                 >
                   <h3 className="font-medium mb-3">컴포넌트</h3>
+
+                  {/* 라이브러리 선택기 */}
+                  <LibrarySelector className="mb-4" />
+
                   <div className="space-y-4">
                     {["Layout", "Basic", "Form"].map((category) => (
                       <div key={category}>
@@ -615,21 +645,24 @@ function StructureTree({ node }: { node: any }) {
 }
 
 /**
- * 빌더 페이지 (Suspense 래퍼)
+ * 빌더 페이지 (Suspense 래퍼 + 에러 경계)
+ * AIDEV-NOTE: 성능 & 안정성 - MultiLibraryErrorBoundary로 다중 라이브러리 시스템 에러 처리
  */
 export default function BuilderPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center h-screen">
-          <div className="text-center">
-            <div className="text-lg font-medium">빌더 로딩 중...</div>
-            <div className="text-sm text-muted-foreground mt-2">잠시만 기다려주세요.</div>
+    <MultiLibraryErrorBoundary>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center h-screen">
+            <div className="text-center">
+              <div className="text-lg font-medium">빌더 로딩 중...</div>
+              <div className="text-sm text-muted-foreground mt-2">잠시만 기다려주세요.</div>
+            </div>
           </div>
-        </div>
-      }
-    >
-      <BuilderPageContent />
-    </Suspense>
+        }
+      >
+        <BuilderPageContent />
+      </Suspense>
+    </MultiLibraryErrorBoundary>
   );
 }
